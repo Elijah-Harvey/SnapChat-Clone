@@ -17,7 +17,16 @@ const DiscoverHeader = ({ title, rightIcon, onPress }) => {
       <StatusBar hidden={true} />
       <View style={styles.Header}>
         <View style={styles.title}>
-          <Text style={{ fontWeight: 'bold', fontSize: 30, color: 'white' }}>{title}</Text>
+          <Text
+            style={{
+              fontWeight: 'bold',
+              fontSize: 30,
+              color: 'white',
+              left: '10%',
+            }}
+          >
+            {title}
+          </Text>
         </View>
         <TouchableOpacity style={styles.profilePic} onPress={onPress}>
           <Image
@@ -47,6 +56,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     top: '9%',
     marginBottom: '20%',
+    flex: 1,
   },
   search: {
     width: 45,
@@ -59,14 +69,18 @@ const styles = StyleSheet.create({
     backgroundColor: 'lightgray',
   },
   profilePic: {
-    width: 45,
-    height: 45,
-    borderRadius: 45 / 2,
+    width: 50,
+    height: 50,
+    borderRadius: 50 / 2,
     position: 'absolute',
     left: 10,
-    backgroundColor: 'lightgray',
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  
+
   ellipsis: {
     width: 45,
     height: 45,

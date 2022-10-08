@@ -19,7 +19,7 @@ const Tab = createBottomTabNavigator();
 const HomeNavigator = () => {
   return (
     <Tab.Navigator
-      initialRouteName="ProfileNav"
+      initialRouteName="Camera"
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused }) => {
           let iconName;

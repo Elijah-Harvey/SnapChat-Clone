@@ -9,12 +9,30 @@ import {
   KeyboardAvoidingView,
   Dimensions,
   Platform,
+  Button,
+  Image,
 } from 'react-native';
 import TouchableButton from '../components/TouchableButton';
+import { auth } from '../firebase';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import * as ImagePicker from 'expo-image-picker';
 
 const { height } = Dimensions.get('window');
 
 const SignUpScreen = ({ navigation }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSignUp = () => {
+    auth
+      .createUserWithEmailAndPassword(email, password)
+      .then((userCredentials) => {
+        const user = userCredentials.user;
+        console.log(user.email);
+      })
+      .catch((error) => alert('Username or password is incorrect'));
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
@@ -23,6 +41,12 @@ const SignUpScreen = ({ navigation }) => {
         style={{ flex: 1 }}
         keyboardVerticalOffset={height * 0.07}
       >
+        <TouchableOpacity
+          style={{ top: Platform.OS === 'android' ? '5%' : '1%', left: 10 }}
+          onPress={() => navigation.goBack()}
+        >
+          <Ionicons name="chevron-back-outline" size={30} />
+        </TouchableOpacity>
         <View
           style={{
             alignItems: 'center',
@@ -31,7 +55,7 @@ const SignUpScreen = ({ navigation }) => {
           }}
         >
           <Text style={{ fontSize: 25, position: 'absolute', top: 55 }}>
-            What Your Name?
+            Sign Up
           </Text>
         </View>
         <View
@@ -50,13 +74,13 @@ const SignUpScreen = ({ navigation }) => {
               color: '#6CA6DC',
             }}
           >
-            First Name
+            Email
           </Text>
           <TextInput
             style={styles.input}
-            keyboardType={
-              Platform.OS === 'ios' ? 'ascii-capable' : 'email-address'
-            }
+            keyboardType={'email-address'}
+            value={email}
+            onChangeText={(text) => setEmail(text)}
           />
           <Text
             style={{
@@ -65,13 +89,14 @@ const SignUpScreen = ({ navigation }) => {
               color: '#6CA6DC',
             }}
           >
-            Last Name
+            Password
           </Text>
           <TextInput
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            secureTextEntry={true}
             style={styles.input}
-            keyboardType={
-              Platform.OS === 'ios' ? 'ascii-capable' : 'email-address'
-            }
+            keyboardType={'default'}
           />
         </View>
         <View
@@ -83,17 +108,19 @@ const SignUpScreen = ({ navigation }) => {
             left: '11%',
           }}
         >
-          <Text style={{color: 'gray', fontSize: Platform.OS === 'android' ? null : 18}}>
+          <Text
+            style={{
+              color: 'gray',
+              fontSize: Platform.OS === 'android' ? null : 18,
+            }}
+          >
             By tapping "Sign Up & Accept". you acknowledge that you have read
             the <Text style={{ color: '#10ACFF' }}>Privacy Policy</Text> and
             agree to the
             <Text style={{ color: '#10ACFF' }}>Terms of Service</Text>.
           </Text>
         </View>
-        <TouchableButton
-          text="Sign up & Accept"
-          onPress={() => navigation.navigate('Birth')}
-        />
+        <TouchableButton text="Sign up & Accept" onPress={handleSignUp} />
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

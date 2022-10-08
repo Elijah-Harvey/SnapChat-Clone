@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { KeyboardAvoidingView, StyleSheet, Text, View } from 'react-native';
 
@@ -10,9 +11,12 @@ import { navigationRef } from './navigation/rootNavigation';
 import OnboardingNavigator from './navigation/OnboardingNavigator';
 import AppNavigator from './navigation/AppNavigator';
 
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+
+
   return (
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>

@@ -13,13 +13,14 @@ import DiscoverList from '../components/DiscoverList';
 import WeatherBox from '../components/WeatherBox';
 import HappeningNow from '../components/HappeningNow';
 
-const DiscoverScreen = () => {
+const DiscoverScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
       <DiscoverHeader
         title="Discover"
         rightIcon={'ellipsis-horizontal-outline'}
+        onPress={() => navigation.navigate('Profile')}
       />
       <HappeningNow />
       <WeatherBox />

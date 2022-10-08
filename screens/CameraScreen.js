@@ -12,8 +12,6 @@ import {
 import { Camera, CameraType, Constants } from 'expo-camera';
 import * as MedialLibrary from 'expo-media-library';
 
-
-
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function CameraScreen({ navigation }) {
@@ -70,7 +68,10 @@ export default function CameraScreen({ navigation }) {
           ratio={'16:9'}
         >
           <View style={styles.Header}>
-            <TouchableOpacity style={styles.profilePic} onPress={() => navigation.navigate('Profile')}>
+            <TouchableOpacity
+              style={styles.profilePic}
+              onPress={() => navigation.navigate('Profile')}
+            >
               <Image
                 source={{ uri: 'https://picsum.photos/200/300' }}
                 style={{ width: 45, height: 45, borderRadius: 45 / 2 }}
@@ -123,30 +124,24 @@ export default function CameraScreen({ navigation }) {
           ></View>
         </Camera>
       ) : (
-        
         <Image source={{ uri: image }} style={styles.camera} />
       )}
       <View>
         {image ? (
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              paddingHorizontal: 50,
-            }}
-          >
-            <TouchableOpacity
-              onPress={() => setImage(null)}
-              style={{ top: -70, left: '57%', position: 'absolute' }}
+          <View style={{ flex: 1 }}>
+            <View style={{ bottom: '10%', left: '43%', position: 'absolute' }}>
+              <TouchableOpacity onPress={() => setImage(null)}>
+                <Ionicons name="reload-outline" size={60} color="white" />
+              </TouchableOpacity>
+            </View>
+            <View
             >
-              <Ionicons name="reload-outline" size={60} color="white" />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={savePicture}
-              style={{ top: Platform.OS === 'android' ? -640 : -750, left: '120%', position: 'absolute' }}
-            >
-              <Ionicons name="arrow-redo-outline" size={35} color="white" />
-            </TouchableOpacity>
+              <TouchableOpacity onPress={savePicture}>
+                <View style={{flexDirection: 'row', alignItems: 'center', position: 'absolute', bottom: 7, left: '85%'}}>
+                  <Ionicons name="arrow-redo-outline" size={45} color="white" />
+                </View>
+              </TouchableOpacity>
+            </View>
           </View>
         ) : (
           <View
@@ -225,12 +220,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   profilePic: {
-    width: 45,
-    height: 45,
-    borderRadius: 45 / 2,
+    width: 50,
+    height: 50,
+    borderRadius: 50 / 2,
     position: 'absolute',
     left: 10,
     backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   addFriend: {
     width: 45,

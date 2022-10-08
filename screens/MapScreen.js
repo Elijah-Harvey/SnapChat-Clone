@@ -3,7 +3,7 @@ import { SafeAreaView, StyleSheet, Text, View, Dimensions } from 'react-native';
 import Header from '../components/Header';
 import MapView, { Marker } from 'react-native-maps';
 
-const MapScreen = (props) => {
+const MapScreen = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <Header
@@ -11,6 +11,7 @@ const MapScreen = (props) => {
         title="Map"
         backgroundColor='gray'
         color= 'ghostwhite'
+        onPress={() => navigation.navigate('Profile')}
       />
       <MapView
         style={styles.map}

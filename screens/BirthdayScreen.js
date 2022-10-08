@@ -14,7 +14,7 @@ import {
 import TouchableButton from '../components/TouchableButton';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
-import moment from 'moment';
+
 
 const { height } = Dimensions.get('window');
 
@@ -32,7 +32,7 @@ const Birthday = ({ navigation }) => {
  
   const onChangeIos = (event, selectedDate) => {
     const currentDate = selectedDate;
-    setShowIos(true);
+    setShowIos(false);
     setDate(currentDate);
   };
 
@@ -134,7 +134,7 @@ const Birthday = ({ navigation }) => {
                   value={date}
                   mode={mode}
                   is24Hour={true}
-                  onChange={onChange}
+                  onChange={onChangeIos}
                   style={styles.iosPicker}
                 />
               )
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     position: 'absolute',
-    left: 280,
+    left: '65%',
     top: '46%',
     width: 90,
   },

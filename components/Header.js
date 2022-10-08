@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Constants from 'expo-constants';
 import {
   Image,
@@ -11,8 +11,27 @@ import {
   View,
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { auth } from '../firebase';
 
-const Header = ({ title, rightIcon, color, onPress }) => {
+const Header = ({ title, rightIcon, color, onPress, navigation }) => {
+  const [image, setImage] = useState(null);
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar hidden={true} />
@@ -51,7 +70,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    top: Platform.OS === 'android' ? "5%" : '7%',
+    top: Platform.OS === 'android' ? '5%' : '7%',
     marginBottom: '14%',
   },
   search: {
@@ -65,12 +84,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'lightgray',
   },
   profilePic: {
-    width: 45,
-    height: 45,
-    borderRadius: 45 / 2,
+    width: 50,
+    height: 50,
+    borderRadius: 50 / 2,
     position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
     left: 10,
-    backgroundColor: 'lightgray',
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: 'black',
   },
   addFriend: {
     width: 45,

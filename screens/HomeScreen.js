@@ -18,10 +18,10 @@ import SubRow from '../components/SubRow';
 import ForYou from '../components/ForYou';
 import ForYouRow from '../components/ForYouRow';
 
-function HomeScreen(props) {
+function HomeScreen({navigation}) {
   return (
     <SafeAreaView>
-      <Header title="Stories" rightIcon="ellipsis-horizontal-outline" />
+      <Header title="Stories" rightIcon="ellipsis-horizontal-outline" onPress={() => navigation.navigate('Profile')}/>
       <ScrollView showsVerticalScrollIndicator={false}>
       <FriendsRow />
       <SubRow />

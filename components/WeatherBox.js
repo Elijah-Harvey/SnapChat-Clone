@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Platform } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 const WeatherBox = (props) => {
@@ -35,7 +35,7 @@ const WeatherBox = (props) => {
           <Ionicons name="checkbox-outline" size={15} color="white" />
           <Text style={{ fontWeight: '600', color: 'white' }}> Weather </Text>
           <Text style={{ color: 'white' }}>- Local News</Text>
-          <Text style={{ left: 230, position: 'absolute', color: 'lightgray' }}>
+          <Text style={{ left: Platform.OS === 'android' ? '105%' : '130%', position: 'absolute', color: 'lightgray' }}>
             1h
           </Text>
         </View>
