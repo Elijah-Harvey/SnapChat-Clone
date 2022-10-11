@@ -29,7 +29,7 @@ const SignUpScreen = ({ navigation }) => {
       .then((userCredentials) => {
         const user = userCredentials.user;
         console.log(user.email);
-      })
+      }).then(() => navigation.navigate('name'))
       .catch((error) => alert('Username or password is incorrect'));
   };
 

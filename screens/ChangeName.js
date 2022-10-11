@@ -16,9 +16,8 @@ import { auth } from '../firebase';
 
 const { height } = Dimensions.get('window');
 
-const UsernameScreen = ({ navigation }) => {
+const ChangeName = (props) => {
   const [name, setName] = useState('');
-
 
   const update = {
     displayName: name,
@@ -29,7 +28,6 @@ const UsernameScreen = ({ navigation }) => {
       auth.currentUser.updateProfile(update);
     }
   }, [name]);
-
 
   const handleUsername = () => {
     auth.currentUser
@@ -53,7 +51,7 @@ const UsernameScreen = ({ navigation }) => {
           }}
         >
           <Text style={{ fontSize: 25, position: 'absolute', top: 55 }}>
-            Your Username?
+            Change Username
           </Text>
         </View>
         <View
@@ -74,19 +72,19 @@ const UsernameScreen = ({ navigation }) => {
           >
             Username
           </Text>
-          <TouchableOpacity>
+          <View>
             <TextInput
               placeholderTextColor={'black'}
               style={styles.input}
               value={name}
               onChangeText={(text) => setName(text)}
             />
-          </TouchableOpacity>
+          </View>
         </View>
 
         <TouchableButton
           text="Continue"
-          onPressIn={() => navigation.navigate('HomeNav')}
+          onPressIn={() => navigation.goBack()}
           onPress={handleUsername}
         />
       </KeyboardAvoidingView>
@@ -113,4 +111,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UsernameScreen;
+export default ChangeName;

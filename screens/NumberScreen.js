@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   StyleSheet,
   View,
@@ -9,7 +9,6 @@ import {
   KeyboardAvoidingView,
   Dimensions,
   Platform,
-  Button,
 } from 'react-native';
 import TouchableButton from '../components/TouchableButton';
 

@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { auth } from '../firebase';
 
 const DiscoverHeader = ({ title, rightIcon, onPress }) => {
   return (
@@ -31,7 +32,7 @@ const DiscoverHeader = ({ title, rightIcon, onPress }) => {
         <TouchableOpacity style={styles.profilePic} onPress={onPress}>
           <Image
             Image
-            source={{ uri: 'https://picsum.photos/200/300' }}
+            source={{ uri: auth.currentUser.photoURL }}
             style={{ width: 45, height: 45, borderRadius: 45 / 2 }}
           />
         </TouchableOpacity>

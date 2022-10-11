@@ -42,7 +42,7 @@ const Header = ({ title, rightIcon, color, onPress, navigation }) => {
         <TouchableOpacity style={styles.profilePic} onPress={onPress}>
           <Image
             Image
-            source={{ uri: 'https://picsum.photos/200/300' }}
+            source={{ uri: auth.currentUser.photoURL }}
             style={{ width: 45, height: 45, borderRadius: 45 / 2 }}
           />
         </TouchableOpacity>

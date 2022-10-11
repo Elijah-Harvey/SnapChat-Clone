@@ -13,6 +13,7 @@ import { Camera, CameraType, Constants } from 'expo-camera';
 import * as MedialLibrary from 'expo-media-library';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { auth } from '../firebase';
 
 export default function CameraScreen({ navigation }) {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
@@ -73,7 +74,7 @@ export default function CameraScreen({ navigation }) {
               onPress={() => navigation.navigate('Profile')}
             >
               <Image
-                source={{ uri: 'https://picsum.photos/200/300' }}
+                source={{ uri: auth.currentUser.photoURL }}
                 style={{ width: 45, height: 45, borderRadius: 45 / 2 }}
               />
             </TouchableOpacity>

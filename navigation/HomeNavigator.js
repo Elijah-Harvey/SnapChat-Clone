@@ -1,17 +1,17 @@
 import * as React from 'react';
-import { View, Text } from 'react-native';
+
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 import HomeScreen from '../screens/HomeScreen';
-import CameraScreen from '../screens/CameraScreen';
-import MessageScreen from '../screens/MessageScreen';
 import MapScreen from '../screens/MapScreen';
 import DiscoverScreen from '../screens/DiscoverScreen';
 
 
 import ProfileNavigator from './ProfileNavigation';
+import MessageNavigator from './MessageNavigator';
+
 
 
 const Tab = createBottomTabNavigator();
@@ -19,7 +19,7 @@ const Tab = createBottomTabNavigator();
 const HomeNavigator = () => {
   return (
     <Tab.Navigator
-      initialRouteName="Camera"
+      initialRouteName="ProfileNav"
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused }) => {
           let iconName;
@@ -55,7 +55,7 @@ const HomeNavigator = () => {
       })}
     >
       <Tab.Screen name="Map" component={MapScreen} />
-      <Tab.Screen name="Message" component={MessageScreen} />
+      <Tab.Screen name="Message" component={MessageNavigator} />
       <Tab.Screen name="ProfileNav" component={ProfileNavigator} />
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Discover" component={DiscoverScreen} />

@@ -9,9 +9,9 @@ import {
 } from 'react-native';
 import NewSnapEmoji from './NewSnapEmoji';
 
-const MessageRow = ({ image, streak, name }) => {
+const MessageRow = ({ image, streak, name, onPress, onPressOut }) => {
   return (
-    <TouchableOpacity style={styles.row}>
+    <TouchableOpacity style={styles.row} onPress={onPress} onPressOut={onPressOut}>
       <Image
         style={styles.image}
         source={{ uri: image }}
