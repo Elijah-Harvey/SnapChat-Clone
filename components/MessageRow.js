@@ -21,7 +21,7 @@ const MessageRow = ({ image, streak, name, onPress, onPressOut }) => {
         <View style={styles.bottomText}>
           <NewSnapEmoji />
           <Text style={{color: 'darkgray', fontWeight: '800'}}>2m - </Text>
-          <Text>{streak} 🔥</Text>
+          <Text>🔥 {streak}</Text>
         </View>
       </View>
     </TouchableOpacity>

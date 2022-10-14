@@ -1,7 +1,9 @@
-import React from 'react';
+import { setStatusBarHidden } from 'expo-status-bar';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, ScrollView, FlatList } from 'react-native';
 import Header from '../components/Header';
 import MessageRow from '../components/MessageRow';
+import { auth, db, usersCollection } from '../firebase';
 
 const DUMMY_DATA = [
   {
@@ -67,6 +69,26 @@ const DUMMY_DATA = [
 ];
 
 const MessageScreen = ({ navigation }) => {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const subscriber = usersCollection
+      .onSnapshot(querySnapshot => {
+        const users = [];
+  
+        querySnapshot.forEach(documentSnapshot => {
+          users.push({
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id,
+          });
+        });
+  
+        setUsers(users);  
+      });
+
+    return () => subscriber();
+  }, []);
+
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -75,16 +97,14 @@ const MessageScreen = ({ navigation }) => {
           title="Chat"
           onPress={() => navigation.navigate('Profile')}
         />
-
-        <FlatList
-          data={DUMMY_DATA}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <MessageRow
-              image={item.image}
-              name={item.name}
-              streak={item.streak}
-              onPress={() => navigation.navigate('Chat', { name: item.name, image: item.image })}
+        <FlatList 
+          data={users}
+          renderItem={({item}) => (
+            <MessageRow 
+            name={item.name}
+            image={item.image}
+            streak={100}
+            onPress={() => navigation.navigate('Chat', { name: item.name, image: item.image })}
             />
           )}
         />

@@ -10,7 +10,7 @@ import {
   RefreshControl,
   ScrollView,
 } from 'react-native';
-import { auth } from '../firebase';
+import { auth, db, storage, usersCollection } from '../firebase';
 import Constants from 'expo-constants';
 import * as ImagePicker from 'expo-image-picker';
 
@@ -40,7 +40,16 @@ const ProfileScreen = ({ navigation }) => {
 
   useEffect(() => {
     if (auth.currentUser) {
-      auth.currentUser.updateProfile(update);
+      auth.currentUser.updateProfile(update).then(() => {
+        usersCollection
+          .doc(auth.currentUser.uid)
+          .update({
+            image: image,
+          })
+          .then(() => {
+            console.log('success');
+          });
+      });
     }
   }, [image]);
 
@@ -59,12 +68,14 @@ const ProfileScreen = ({ navigation }) => {
       .then(() => navigation.replace('LogIn'))
       .catch((error) => error.message);
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
         style={{ flex: 1 }}
+        // onMomentumScrollEnd={() => storage.refFromURL('gs://snapchat-clone-8d45b.appspot.com').child('https://picsum.photos/200/300').getDownloadURL()}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} on/>
         }
       >
         <View style={{ flex: 1 }}>
@@ -76,7 +87,7 @@ const ProfileScreen = ({ navigation }) => {
               source={{
                 uri:
                   image === null
-                    ? auth.currentUser.photoURL
+                    ? 'https://picsum.photos/200/300'
                     : auth.currentUser.photoURL,
               }}
               style={{ height: 150, width: 150, borderRadius: 100 / 2 }}
@@ -92,33 +103,36 @@ const ProfileScreen = ({ navigation }) => {
             <Text>Pull down to refresh</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => navigation.navigate('name')}>
+        <TouchableOpacity
+          style={{ alignItems: 'center' }}
+          onPress={() => navigation.navigate('Change')}
+        >
           <Text style={{ fontSize: 20 }}>
             {auth?.currentUser?.displayName
               ? auth?.currentUser?.displayName
               : auth?.currentUser?.email}
           </Text>
+        </TouchableOpacity>
+        <View
+          style={{
+            alignSelf: 'center',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderWidth: 1,
+            height: 50,
+            width: '70%',
+            borderRadius: 10,
+            backgroundColor: '#10ACFF',
+          }}
+        >
+          <TouchableOpacity onPress={handleSignOut}>
+            <Text
+              style={{ fontSize: 25, color: 'ghostwhite', fontWeight: '600' }}
+            >
+              Sign Out
+            </Text>
           </TouchableOpacity>
-          <View
-            style={{
-              alignSelf: 'center',
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderWidth: 1,
-              height: 50,
-              width: '70%',
-              borderRadius: 10,
-              backgroundColor: '#10ACFF',
-            }}
-          >
-            <TouchableOpacity onPress={handleSignOut}>
-              <Text
-                style={{ fontSize: 25, color: 'ghostwhite', fontWeight: '600' }}
-              >
-                Sign Out
-              </Text>
-            </TouchableOpacity>
-          </View>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

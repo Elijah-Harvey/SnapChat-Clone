@@ -12,12 +12,13 @@ import {
   Button,
 } from 'react-native';
 import TouchableButton from '../components/TouchableButton';
-import { auth } from '../firebase';
+import { auth, db, usersCollection } from '../firebase';
 
 const { height } = Dimensions.get('window');
 
-const ChangeName = (props) => {
+const UsernameScreen = ({ navigation }) => {
   const [name, setName] = useState('');
+
 
   const update = {
     displayName: name,
@@ -29,9 +30,15 @@ const ChangeName = (props) => {
     }
   }, [name]);
 
+
   const handleUsername = () => {
     auth.currentUser
-      .updateProfile(update)
+      .updateProfile(update).then(() => {
+        usersCollection.doc(auth.currentUser.uid)
+        .update({
+          name: name
+        }).then(() => {console.log('success')})
+      })
       .catch((error) => alert('Username or password is incorrect'));
   };
 
@@ -51,7 +58,7 @@ const ChangeName = (props) => {
           }}
         >
           <Text style={{ fontSize: 25, position: 'absolute', top: 55 }}>
-            Change Username
+            Your Username?
           </Text>
         </View>
         <View
@@ -72,20 +79,20 @@ const ChangeName = (props) => {
           >
             Username
           </Text>
-          <View>
+          <TouchableOpacity>
             <TextInput
               placeholderTextColor={'black'}
               style={styles.input}
               value={name}
               onChangeText={(text) => setName(text)}
             />
-          </View>
+          </TouchableOpacity>
         </View>
 
         <TouchableButton
           text="Continue"
-          onPressIn={() => navigation.goBack()}
-          onPress={handleUsername}
+          onPress={() => navigation.goBack()}
+          onPressIn={handleUsername}
         />
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -111,4 +118,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ChangeName;
+export default UsernameScreen;

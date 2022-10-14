@@ -74,7 +74,11 @@ export default function CameraScreen({ navigation }) {
               onPress={() => navigation.navigate('Profile')}
             >
               <Image
-                source={{ uri: auth.currentUser.photoURL }}
+                source={{
+                  uri: !auth.currentUser.photoURL
+                    ? 'https://picsum.photos/200/300'
+                    : auth.currentUser.photoURL,
+                }}
                 style={{ width: 45, height: 45, borderRadius: 45 / 2 }}
               />
             </TouchableOpacity>
@@ -135,10 +139,17 @@ export default function CameraScreen({ navigation }) {
                 <Ionicons name="reload-outline" size={60} color="white" />
               </TouchableOpacity>
             </View>
-            <View
-            >
+            <View>
               <TouchableOpacity onPress={savePicture}>
-                <View style={{flexDirection: 'row', alignItems: 'center', position: 'absolute', bottom: 7, left: '85%'}}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    position: 'absolute',
+                    bottom: 7,
+                    left: '85%',
+                  }}
+                >
                   <Ionicons name="arrow-redo-outline" size={45} color="white" />
                 </View>
               </TouchableOpacity>

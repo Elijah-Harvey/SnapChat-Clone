@@ -12,7 +12,7 @@ import {
   Button,
 } from 'react-native';
 import TouchableButton from '../components/TouchableButton';
-import { auth } from '../firebase';
+import { auth, db, usersCollection } from '../firebase';
 
 const { height } = Dimensions.get('window');
 
@@ -33,7 +33,12 @@ const UsernameScreen = ({ navigation }) => {
 
   const handleUsername = () => {
     auth.currentUser
-      .updateProfile(update)
+      .updateProfile(update).then(() => {
+        usersCollection.doc(auth.currentUser.displayName)
+        .update({
+          name: name
+        }).then(() => {console.log(usersCollection.doc(auth.currentUser))})
+      })
       .catch((error) => alert('Username or password is incorrect'));
   };
 

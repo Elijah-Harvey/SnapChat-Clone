@@ -11,26 +11,52 @@ import {
   Platform,
   Button,
   Image,
+  Alert,
 } from 'react-native';
 import TouchableButton from '../components/TouchableButton';
-import { auth } from '../firebase';
+import { auth, db, usersCollection } from '../firebase';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as ImagePicker from 'expo-image-picker';
+import { v4 as uuid } from 'uuid';
 
 const { height } = Dimensions.get('window');
 
 const SignUpScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
 
   const handleSignUp = () => {
     auth
       .createUserWithEmailAndPassword(email, password)
-      .then((userCredentials) => {
-        const user = userCredentials.user;
-        console.log(user.email);
-      }).then(() => navigation.navigate('name'))
-      .catch((error) => alert('Username or password is incorrect'));
+      .then(() => {
+        auth.currentUser.updateProfile({
+          displayName: name,
+        });
+      })
+      .then(() => {
+        usersCollection.doc(auth.currentUser.uid)
+          .set({
+            email: email,
+            password: password,
+            name: name,
+            image: 'https://picsum.photos/200/300',
+            uid: auth.currentUser.uid,
+            date: new Date().toDateString()
+          });
+      })
+      .then(() => navigation.navigate('HomeNav'))
+      .catch(error => {
+        if (error.code === 'auth/email-already-in-use') {
+          Alert.alert('That email address is already in use!');
+        }
+    
+        if (error.code === 'auth/invalid-email') {
+          Alert.alert('That email address is invalid!');
+        }
+    
+        console.error(error);
+      });
   };
 
   return (
@@ -74,11 +100,26 @@ const SignUpScreen = ({ navigation }) => {
               color: '#6CA6DC',
             }}
           >
+            Name
+          </Text>
+          <TextInput
+            style={styles.input}
+            value={name}
+            onChangeText={(text) => setName(text)}
+          />
+          <Text
+            style={{
+              fontSize: 15,
+              left: 40,
+              color: '#6CA6DC',
+            }}
+          >
             Email
           </Text>
           <TextInput
             style={styles.input}
             keyboardType={'email-address'}
+            autoCapitalize={false}
             value={email}
             onChangeText={(text) => setEmail(text)}
           />
@@ -101,7 +142,7 @@ const SignUpScreen = ({ navigation }) => {
         </View>
         <View
           style={{
-            top: Platform.OS === 'android' ? '42%' : '41%',
+            bottom: Platform.OS === 'android' ? '37%' : '40%',
             position: 'absolute',
             width: 300,
             height: 100,

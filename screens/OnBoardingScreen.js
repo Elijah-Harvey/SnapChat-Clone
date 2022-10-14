@@ -17,14 +17,15 @@ function OnBoardingScreen({ navigation }) {
         style={{
           flex: 1,
           alignItems: 'center',
-          justifyContent: 'center',
+          top: '20%'
         }}
       >
         <Image
           source={require('../assets/snapchatlogo.png')}
           style={{
-            width: 200,
-            height: 200,
+            width: '30%',
+            height: '30%',
+            resizeMode: 'contain'
           }}
         />
       </View>

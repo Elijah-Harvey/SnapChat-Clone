@@ -10,6 +10,7 @@ import {
 import { auth } from '../firebase';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
+
 const ChatScreen = ({ navigation, route }) => {
   return (
     <SafeAreaView style={styles.container}>
@@ -69,6 +70,7 @@ const ChatScreen = ({ navigation, route }) => {
         </TouchableOpacity>
       </View>
       <Text>ChatScreen</Text>
+      
     </SafeAreaView>
   );
 };

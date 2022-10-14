@@ -32,7 +32,7 @@ const DiscoverHeader = ({ title, rightIcon, onPress }) => {
         <TouchableOpacity style={styles.profilePic} onPress={onPress}>
           <Image
             Image
-            source={{ uri: auth.currentUser.photoURL }}
+            source={{ uri: !auth.currentUser.photoURL? 'https://picsum.photos/200/300' : auth.currentUser.photoURL }}
             style={{ width: 45, height: 45, borderRadius: 45 / 2 }}
           />
         </TouchableOpacity>
