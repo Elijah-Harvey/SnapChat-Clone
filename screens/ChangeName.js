@@ -37,7 +37,7 @@ const UsernameScreen = ({ navigation }) => {
         usersCollection.doc(auth.currentUser.uid)
         .update({
           name: name
-        }).then(() => {console.log('success')})
+        }).then(() => {console .log('success')})
       })
       .catch((error) => alert('Username or password is incorrect'));
   };

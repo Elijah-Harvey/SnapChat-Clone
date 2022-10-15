@@ -23,7 +23,7 @@ const OnboardingNavigator = (props) => {
       <Stack.Screen component={OnBoardingScreen} name="OnBoard" />
       <Stack.Screen component={SignUpScreen} name="SignUp" />
       <Stack.Screen component={BirthdayScreen} name="Birth" />
-      <Stack.Screen component={UsernameScreen} name="name" />
+      <Stack.Screen component={UsernameScreen} name="Name" />
       <Stack.Screen component={NumberScreen} name="Number" />
       <Stack.Screen component={LogInScreen} name="LogIn" />
       <Stack.Screen component={ForgotPasswordScreen} name="Password" />

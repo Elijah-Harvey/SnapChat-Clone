@@ -24,37 +24,29 @@ const { height } = Dimensions.get('window');
 const SignUpScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
 
   const handleSignUp = () => {
     auth
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
-        auth.currentUser.updateProfile({
-          displayName: name,
+        usersCollection.doc(auth.currentUser.uid).set({
+          Email: email,
+          Last_Know_Password: password,
+          Profile_Picture: 'https://picsum.photos/200/300',
+          UID: auth.currentUser.uid,
+          Date_Joined: new Date().toDateString(),
         });
       })
-      .then(() => {
-        usersCollection.doc(auth.currentUser.uid)
-          .set({
-            email: email,
-            password: password,
-            name: name,
-            image: 'https://picsum.photos/200/300',
-            uid: auth.currentUser.uid,
-            date: new Date().toDateString()
-          });
-      })
-      .then(() => navigation.navigate('HomeNav'))
-      .catch(error => {
+      .then(() => navigation.navigate('Name'))
+      .catch((error) => {
         if (error.code === 'auth/email-already-in-use') {
           Alert.alert('That email address is already in use!');
         }
-    
+
         if (error.code === 'auth/invalid-email') {
           Alert.alert('That email address is invalid!');
         }
-    
+
         console.error(error);
       });
   };
@@ -100,20 +92,6 @@ const SignUpScreen = ({ navigation }) => {
               color: '#6CA6DC',
             }}
           >
-            Name
-          </Text>
-          <TextInput
-            style={styles.input}
-            value={name}
-            onChangeText={(text) => setName(text)}
-          />
-          <Text
-            style={{
-              fontSize: 15,
-              left: 40,
-              color: '#6CA6DC',
-            }}
-          >
             Email
           </Text>
           <TextInput
@@ -142,7 +120,7 @@ const SignUpScreen = ({ navigation }) => {
         </View>
         <View
           style={{
-            bottom: Platform.OS === 'android' ? '37%' : '40%',
+            top: Platform.OS === 'android' ? '42%' : '42%',
             position: 'absolute',
             width: 300,
             height: 100,

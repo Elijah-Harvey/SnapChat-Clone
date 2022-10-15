@@ -34,10 +34,10 @@ const UsernameScreen = ({ navigation }) => {
   const handleUsername = () => {
     auth.currentUser
       .updateProfile(update).then(() => {
-        usersCollection.doc(auth.currentUser.displayName)
+        usersCollection.doc(auth.currentUser.uid)
         .update({
           name: name
-        }).then(() => {console.log(usersCollection.doc(auth.currentUser))})
+        }).then(() => {console.log('success')})
       })
       .catch((error) => alert('Username or password is incorrect'));
   };

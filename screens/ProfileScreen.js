@@ -10,8 +10,7 @@ import {
   RefreshControl,
   ScrollView,
 } from 'react-native';
-import { auth, db, storage, usersCollection } from '../firebase';
-import Constants from 'expo-constants';
+import { auth, storage, usersCollection } from '../firebase';
 import * as ImagePicker from 'expo-image-picker';
 
 const ProfileScreen = ({ navigation }) => {
@@ -46,12 +45,17 @@ const ProfileScreen = ({ navigation }) => {
           .update({
             image: image,
           })
+          // .then(async () => {
+          //   await storage.refFromURL('gs://snapchat-clone-8d45b.appspot.com/' + auth.currentUser.uid).child(image).put()
+          // })
           .then(() => {
             console.log('success');
           });
       });
     }
   }, [image]);
+
+
 
   const wait = (timeout) => {
     return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -69,11 +73,14 @@ const ProfileScreen = ({ navigation }) => {
       .catch((error) => error.message);
   };
 
+ 
+
+  
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
         style={{ flex: 1 }}
-        // onMomentumScrollEnd={() => storage.refFromURL('gs://snapchat-clone-8d45b.appspot.com').child('https://picsum.photos/200/300').getDownloadURL()}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} on/>
         }

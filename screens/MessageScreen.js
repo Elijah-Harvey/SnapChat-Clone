@@ -102,9 +102,9 @@ const MessageScreen = ({ navigation }) => {
           renderItem={({item}) => (
             <MessageRow 
             name={item.name}
-            image={item.image}
+            image={'https://picsum.photos/200/300'}
             streak={100}
-            onPress={() => navigation.navigate('Chat', { name: item.name, image: item.image })}
+            onPress={() => navigation.navigate('Chat', { name: item.name, image: 'https://picsum.photos/200/300' })}
             />
           )}
         />

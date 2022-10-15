@@ -22,12 +22,13 @@ const ForgotPasswordScreen = (props) => {
     auth
       .sendPasswordResetEmail(email)
       .then(() => {
-        alert('reset email sent to ' + email);
+        Alert.alert('reset email sent to ' + email);
       })
-      .catch(function (e) {
-        console.log(e);
+      .catch(() => {
+        if (error.code === 'auth/invalid-email') {
+          Alert.alert('That email address is invalid!');
+        }
       });
-    console.log('reset email sent to ' + email);
   };
 
   useEffect(() => {
