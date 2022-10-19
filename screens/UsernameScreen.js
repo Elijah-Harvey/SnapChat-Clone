@@ -12,13 +12,12 @@ import {
   Button,
 } from 'react-native';
 import TouchableButton from '../components/TouchableButton';
-import { auth, db, usersCollection } from '../firebase';
+import { auth, chatCollection, db, usersCollection } from '../firebase';
 
 const { height } = Dimensions.get('window');
 
 const UsernameScreen = ({ navigation }) => {
   const [name, setName] = useState('');
-
 
   const update = {
     displayName: name,
@@ -30,16 +29,20 @@ const UsernameScreen = ({ navigation }) => {
     }
   }, [name]);
 
-
   const handleUsername = () => {
     auth.currentUser
-      .updateProfile(update).then(() => {
-        usersCollection.doc(auth.currentUser.uid)
-        .update({
-          name: name
-        }).then(() => {console.log('success')})
+      .updateProfile(update)
+      .then(() => {
+        usersCollection
+          .doc(auth.currentUser.uid)
+          .update({
+            name: name,
+          })
+          .then(() => {
+            console.log('success');
+          });
       })
-      .catch((error) => alert('Username or password is incorrect'));
+      .catch((error) => alert('Something went wrong try again'));
   };
 
   return (
@@ -91,7 +94,7 @@ const UsernameScreen = ({ navigation }) => {
 
         <TouchableButton
           text="Continue"
-          onPressIn={() => navigation.navigate('HomeNav')}
+          onPressIn={() => navigation.navigate('Number')}
           onPress={handleUsername}
         />
       </KeyboardAvoidingView>

@@ -52,11 +52,10 @@ const ForgotPasswordScreen = (props) => {
     <View style={styles.container}>
       <Text>Enter Your Email: {email}</Text>
       <TextInput
-        autoCapitalize={false}
+        autoCapitalize='none'
         style={styles.input}
         value={email}
         onChangeText={(value) => setEmail(value)}
-        keyboardType={'email-address'}
       />
       {disable === false ? (
         <TouchableOpacity

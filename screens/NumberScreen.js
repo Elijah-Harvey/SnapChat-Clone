@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -11,14 +11,27 @@ import {
   Platform,
 } from 'react-native';
 import TouchableButton from '../components/TouchableButton';
+import { auth, usersCollection } from '../firebase';
 
 const { height } = Dimensions.get('window');
 
 const NumberScreen = ({ navigation }) => {
+  const [number, setNumber] = useState();
+
+  const HandleNumber = () => {
+    usersCollection.doc(auth.currentUser.uid).update({
+      Number: number
+    })
+      .then(() => {
+        console.log('success');
+      })
+
+      .catch((error) => alert('Number is invalid'));
+  };
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView
-        enabled={Platform.OS === 'android' ? false : true}
+       <KeyboardAvoidingView
+        enabled={false}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{ flex: 1 }}
         keyboardVerticalOffset={height * 0.07}
@@ -60,6 +73,8 @@ const NumberScreen = ({ navigation }) => {
                 style={styles.smallinput}
                 maxLength={2}
                 keyboardType="number-pad"
+                placeholder="+ 1"
+                editable={false}
               />
             </TouchableOpacity>
             <TouchableOpacity>
@@ -68,6 +83,8 @@ const NumberScreen = ({ navigation }) => {
                 style={styles.input}
                 maxLength={10}
                 keyboardType="phone-pad"
+                value={number}
+                onChangeText={text => setNumber(text)}
               />
             </TouchableOpacity>
           </View>
@@ -90,10 +107,7 @@ const NumberScreen = ({ navigation }) => {
           </View>
         </View>
 
-        <TouchableButton
-          text="Continue"
-          onPress={() => navigation.navigate('HomeNav')}
-        />
+        <TouchableButton text="Continue" onPress={HandleNumber} onPressIn={() => navigation.navigate('HomeNav')}/>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -124,6 +138,7 @@ const styles = StyleSheet.create({
     borderRightColor: 'transparent',
     paddingLeft: 10,
     left: 0,
+    fontSize: 20,
   },
 });
 

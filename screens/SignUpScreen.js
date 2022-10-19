@@ -9,21 +9,19 @@ import {
   KeyboardAvoidingView,
   Dimensions,
   Platform,
-  Button,
-  Image,
   Alert,
 } from 'react-native';
 import TouchableButton from '../components/TouchableButton';
-import { auth, db, usersCollection } from '../firebase';
+import { auth, usersCollection } from '../firebase';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import * as ImagePicker from 'expo-image-picker';
-import { v4 as uuid } from 'uuid';
+
 
 const { height } = Dimensions.get('window');
 
 const SignUpScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
 
   const handleSignUp = () => {
     auth
@@ -50,6 +48,7 @@ const SignUpScreen = ({ navigation }) => {
         console.error(error);
       });
   };
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -97,7 +96,7 @@ const SignUpScreen = ({ navigation }) => {
           <TextInput
             style={styles.input}
             keyboardType={'email-address'}
-            autoCapitalize={false}
+            autoCapitalize={'none'}
             value={email}
             onChangeText={(text) => setEmail(text)}
           />

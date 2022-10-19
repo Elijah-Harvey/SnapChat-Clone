@@ -72,7 +72,7 @@ const MessageScreen = ({ navigation }) => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    const subscriber = usersCollection
+    const subscriber = usersCollection.where('UID', '!=', auth.currentUser.uid)
       .onSnapshot(querySnapshot => {
         const users = [];
   
@@ -89,6 +89,9 @@ const MessageScreen = ({ navigation }) => {
     return () => subscriber();
   }, []);
 
+
+
+
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -104,7 +107,7 @@ const MessageScreen = ({ navigation }) => {
             name={item.name}
             image={'https://picsum.photos/200/300'}
             streak={100}
-            onPress={() => navigation.navigate('Chat', { name: item.name, image: 'https://picsum.photos/200/300' })}
+            onPress={() => navigation.navigate('Chat', { name: item.name, image: 'https://picsum.photos/200/300', number:item.Number, uid: item.UID })}
             />
           )}
         />

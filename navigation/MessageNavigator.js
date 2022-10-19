@@ -7,7 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 const Stack = createStackNavigator();
 
-const ProfileNavigator = (props) => {
+const ProfileNavigator = ({ user }) => {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -15,7 +15,7 @@ const ProfileNavigator = (props) => {
       }}
     >
       <Stack.Screen component={MessageScreen} name="Message" />
-      <Stack.Screen component={ChatScreen} name="Chat" />
+      <Stack.Screen component={ChatScreen} name="Chat" key={user}/>
      
     </Stack.Navigator>
   );

@@ -84,7 +84,7 @@ const LoginScreen = ({ navigation }) => {
             USERNAME OR EMAIL
           </Text>
           <TextInput
-            autoCapitalize={false}
+            autoCapitalize={'none'}
             style={styles.input}
             value={email}
             onChangeText={(text) => setEmail(text)}
@@ -100,7 +100,7 @@ const LoginScreen = ({ navigation }) => {
             Password
           </Text>
           <TextInput
-            autoCapitalize={false}
+            autoCapitalize={'none'}
             value={password}
             onChangeText={(text) => setPassword(text)}
             style={styles.input}

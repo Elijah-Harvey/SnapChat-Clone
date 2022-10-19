@@ -32,7 +32,11 @@ const DiscoverHeader = ({ title, rightIcon, onPress }) => {
         <TouchableOpacity style={styles.profilePic} onPress={onPress}>
           <Image
             Image
-            source={{ uri: !auth.currentUser.photoURL? 'https://picsum.photos/200/300' : auth.currentUser.photoURL }}
+            source={{
+              uri: !auth.currentUser.photoURL
+                ? 'https://picsum.photos/200/300'
+                : auth.currentUser.photoURL,
+            }}
             style={{ width: 45, height: 45, borderRadius: 45 / 2 }}
           />
         </TouchableOpacity>
@@ -75,7 +79,6 @@ const styles = StyleSheet.create({
     borderRadius: 50 / 2,
     position: 'absolute',
     left: 10,
-    backgroundColor: 'transparent',
     borderWidth: 1,
     borderColor: 'white',
     alignItems: 'center',

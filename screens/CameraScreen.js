@@ -180,7 +180,7 @@ export default function CameraScreen({ navigation }) {
 const styles = StyleSheet.create({
   cameraContainer: {
     flex: 1,
-    backgroundColor: '#transparent',
+    backgroundColor: 'transparent',
   },
   camera: {
     flex: 1,

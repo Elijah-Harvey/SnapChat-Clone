@@ -12,6 +12,7 @@ web-build/
 firebase.js
 SignUpScreen.jk
 LogInScreen.js
+.env
 
 # macOS
 .DS_Store
