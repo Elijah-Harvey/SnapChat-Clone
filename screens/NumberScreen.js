@@ -85,6 +85,7 @@ const NumberScreen = ({ navigation }) => {
                 keyboardType="phone-pad"
                 value={number}
                 onChangeText={text => setNumber(text)}
+                returnKeyType={ 'done' } 
               />
             </TouchableOpacity>
           </View>
@@ -140,6 +141,9 @@ const styles = StyleSheet.create({
     left: 0,
     fontSize: 20,
   },
+  button: {
+    bottom: 10
+  }
 });
 
 export default NumberScreen;
