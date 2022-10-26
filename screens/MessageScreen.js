@@ -87,7 +87,7 @@ const MessageScreen = ({ navigation }) => {
       });
 
     return () => subscriber();
-  }, []);
+  }, [setUsers]);
 
 
 

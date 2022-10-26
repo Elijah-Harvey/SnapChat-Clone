@@ -16,7 +16,7 @@ import {
   TextInput,
   Alert,
 } from 'react-native';
-import { auth, db, chatCollection, currentTime } from '../firebase';
+import { auth, db, chatCollection, messageCollection } from '../firebase';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as Linking from 'expo-linking';
 import SenderMessage from '../components/SenderMessage';
@@ -26,7 +26,7 @@ import ReciverMessage from '../components/ReciverMessage';
 const ChatScreen = ({ navigation, route }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
-
+  const [disable, setDisable] = useState(false)
 
   const handleCall = () => {
     const user = route.params.number;
@@ -35,11 +35,9 @@ const ChatScreen = ({ navigation, route }) => {
   };
 
   useEffect(() => {
-    const subscriber = chatCollection
-      .doc(`${route.params.name} and ${auth.currentUser.displayName}`)
-      .collection(
-        `${route.params.name} and ${auth.currentUser.displayName} Messages`
-      )
+    const subscriber = messageCollection
+      .where('userId', '==', auth.currentUser.uid)
+      .where('userId2', '==', route.params.uid)
       .orderBy('createdAt', 'desc')
       .onSnapshot((querySnapshot) => {
         const allMessages = [];
@@ -57,39 +55,26 @@ const ChatScreen = ({ navigation, route }) => {
     return () => subscriber();
   }, [chatCollection]);
 
-  console.log(auth.currentUser.displayName);
+  useEffect(() => {
+    if (input === "") {
+      setDisable(true)
+    } else {
+      setDisable(false)
+    }
+  }, [input])
 
   const sendMessage = () => {
-    chatCollection
-      .doc(`${route.params.name} and ${auth.currentUser.displayName}`)
-      .collection(
-        `${route.params.name} and ${auth.currentUser.displayName} Messages`
-      )
-      .add({
-        message: input,
-        userId: auth.currentUser.uid,
-        sentTo: route.params.name,
-        displayName: auth.currentUser.displayName,
-        createdAt: new Date(),
-        id: uuid(),
-      });
-    setInput('');
-  };
+    chatCollection.doc('Messages').collection('Messages').add({
+      message: input,
 
-  const send = () => {
-    chatCollection
-      .doc(`${auth.currentUser.displayName} and ${route.params.name}`)
-      .collection(
-        `${auth.currentUser.displayName} and ${route.params.name} Messages`
-      )
-      .add({
-        message: input,
-        userId: auth.currentUser.uid,
-        sentTo: route.params.name,
-        sentFrom: auth.currentUser.displayName,
-        createdAt: new Date(),
-        id: uuid(),
-      });
+      userId: auth.currentUser.uid,
+      userId2: route.params.uid,
+
+      email: auth.currentUser.email,
+      createdAt: new Date(),
+      id: uuid(),
+    });
+    setInput('');
   };
 
   return (
@@ -160,17 +145,26 @@ const ChatScreen = ({ navigation, route }) => {
           }}
         >
           <FlatList
-          showsVerticalScrollIndicator={false} 
-
+            showsVerticalScrollIndicator={false}
             data={messages}
             inverted={-1}
             style={{ bottom: '2%' }}
             keyExtractor={(item) => item.id}
             renderItem={({ item: message }) =>
-              message.userId === auth.currentUser.uid ? (
-                <SenderMessage key={message.id} message={message}  setcolor={'#E04D5C'} text={'Me'}/>
+              message.userId === route.params.uid ? (
+                <SenderMessage
+                  key={message.id}
+                  message={message}
+                  setcolor={'#E04D5C'}
+                  text={'Me'}
+                />
               ) : (
-                <ReciverMessage key={message.id} message={message}  setcolor={'#4FAAF9'} text={route.params.name}/>
+                <ReciverMessage
+                  key={message.id}
+                  message={message}
+                  setcolor={'#4FAAF9'}
+                  text={route.params.name}
+                />
               )
             }
           />
@@ -196,12 +190,12 @@ const ChatScreen = ({ navigation, route }) => {
             style={{ height: 50, width: '85%' }}
             multiline={true}
           />
-          <TouchableOpacity title="Send" onPress={sendMessage} onPressIn={send}>
+          <TouchableOpacity title="Send" onPress={sendMessage} disabled={disable}>
             <Ionicons
               name="send"
               size={25}
               style={{ top: '20%', right: 15, position: 'absolute' }}
-              color="#40AFE5"
+              color={disable === true ? 'gray' : "#40AFE5"}
             />
           </TouchableOpacity>
         </View>

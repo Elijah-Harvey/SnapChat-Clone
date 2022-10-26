@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -15,40 +15,66 @@ import TouchableButton from '../components/TouchableButton';
 import { auth, usersCollection } from '../firebase';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
+import * as Location from 'expo-location';
 
 const { height } = Dimensions.get('window');
 
 const SignUpScreen = ({ navigation }) => {
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+    })();
+  }, []);
+
+  let text = 'Waiting..';
+  if (errorMsg) {
+    text = errorMsg;
+  } else if (location) {
+    text = JSON.stringify(location);
+  }
+
+  let today = new Date();
+  let date =
+    today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
 
   const handleSignUp = () => {
-    auth
-      .createUserWithEmailAndPassword(email, password)
-      .then(() => {
-        usersCollection.doc(auth.currentUser.uid).set({
-          Email: email,
-          Last_Know_Password: password,
-          Profile_Picture: 'https://picsum.photos/200/300',
-          UID: auth.currentUser.uid,
-          Date_Joined: new Date().toDateString(),
-        });
-      })
-      .then(() => navigation.navigate('Name'))
-      .catch((error) => {
-        if (error.code === 'auth/email-already-in-use') {
-          Alert.alert('That email address is already in use!');
-        }
+    try {
+      auth
+        .createUserWithEmailAndPassword(email, password)
+        .then(() => {
+          usersCollection.doc(auth.currentUser.uid).set({
+            Email: email,
+            Last_Know_Password: password,
+            Profile_Picture: 'https://picsum.photos/200/300',
+            UID: auth.currentUser.uid,
+            Date_Joined: date.toString(),
+            location: text,
+          });
+        })
+        .then(() => navigation.navigate('Birth'));
+    } catch (e) {
+      if (e.code === 'auth/invalid-email') {
+        Alert.alert('That email address is invalid!');
+      }
+      if (e.code === 'auth/wrong-password') {
+        Alert.alert('Password is incorrect');
+      }
 
-        if (error.code === 'auth/invalid-email') {
-          Alert.alert('That email address is invalid!');
-        }
-
-        console.error(error);
-      });
+      console.error(e);
+    }
   };
-
 
   return (
     <SafeAreaView style={styles.container}>
@@ -115,6 +141,7 @@ const SignUpScreen = ({ navigation }) => {
             secureTextEntry={true}
             style={styles.input}
             keyboardType={'default'}
+            onSubmitEditing={handleSignUp}
           />
         </View>
         <View

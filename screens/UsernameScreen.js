@@ -18,6 +18,7 @@ const { height } = Dimensions.get('window');
 
 const UsernameScreen = ({ navigation }) => {
   const [name, setName] = useState('');
+  const [disable, setDisable] = useState(false);
 
   const update = {
     displayName: name,
@@ -28,6 +29,14 @@ const UsernameScreen = ({ navigation }) => {
       auth.currentUser.updateProfile(update);
     }
   }, [name]);
+
+  useEffect(() => {
+    if (name === '') {
+      setDisable(true)
+    } else {
+      setDisable(false)
+    }
+  }, [name])
 
   const handleUsername = () => {
     auth.currentUser
@@ -44,6 +53,9 @@ const UsernameScreen = ({ navigation }) => {
       })
       .catch((error) => alert('Something went wrong try again'));
   };
+
+  console.log(usersCollection
+    .doc(auth.currentUser.uid))
 
   return (
     <SafeAreaView style={styles.container}>
@@ -96,6 +108,10 @@ const UsernameScreen = ({ navigation }) => {
           text="Continue"
           onPressIn={() => navigation.navigate('Number')}
           onPress={handleUsername}
+          disable={disable}
+          style={{
+            backgroundColor: disable === true ? 'lightgray' : '#4FAAF9',
+          }}
         />
       </KeyboardAvoidingView>
     </SafeAreaView>

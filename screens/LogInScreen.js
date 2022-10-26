@@ -106,6 +106,7 @@ const LoginScreen = ({ navigation }) => {
             style={styles.input}
             secureTextEntry={true}
             maxLength={20}
+            onSubmitEditing={handleLogin}
           />
         </View>
         <View
@@ -118,7 +119,7 @@ const LoginScreen = ({ navigation }) => {
             alignItems: 'center',
           }}
         >
-          <TouchableOpacity onPress={() => navigation.navigate('Password')}>
+          <TouchableOpacity onPress={() => navigation.navigate('PasswordViaEmail')}>
             <Text
               style={{
                 color: '#10ACFF',
