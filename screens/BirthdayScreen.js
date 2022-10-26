@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -10,26 +10,46 @@ import {
   Dimensions,
   Platform,
   Button,
+  Alert,
 } from 'react-native';
 import TouchableButton from '../components/TouchableButton';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
-
+import { auth, usersCollection } from '../firebase';
 
 const { height } = Dimensions.get('window');
 
 const Birthday = ({ navigation }) => {
-  const [date, setDate] = useState(new Date('10/06/2022'));
+  const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
   const [showIos, setShowIos] = useState(false);
 
+let today = new Date();
+
+console.log((date.getMonth()+1)+'/'+ date.getDate() +'/'+ (date.getFullYear()).toString())
+
+  const addBirthday = () => {
+    if ((today.getMonth()+1)+'/'+ today.getDate() +'/'+ (today.getFullYear()).toString() <= (date.getMonth()+1)+'/'+ date.getDate() +'/'+ (date.getFullYear()-13).toString()) {
+      Alert.alert('You must be 13 years of age');
+    }
+    if ((today.getMonth()+1)+'/'+ today.getDate() +'/'+ (today.getFullYear()).toString() >= (date.getMonth()+1)+'/'+ date.getDate() +'/'+ (date.getFullYear()-13).toString()) {
+      usersCollection
+        .doc(auth.currentUser.uid)
+        .update({
+          Date_Of_Birth: (date.getMonth()+1)+'/'+ date.getDate() +'/'+ (date.getFullYear()).toString(),
+        })
+        .then(() => navigation.navigate('Name'));
+      }
+      
+    };
+    
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
     setShow(false);
     setDate(currentDate);
   };
- 
+
   const onChangeIos = (event, selectedDate) => {
     const currentDate = selectedDate;
     setShowIos(false);
@@ -37,11 +57,10 @@ const Birthday = ({ navigation }) => {
   };
 
   const showMode = (currentMode) => {
-    if (Platform.OS === 'android') {
+    if (Platform.OS == 'android') {
       setShow(true);
-      // for iOS, add a button that closes the picker
     }
-    setMode('currentMode');
+    setMode(currentMode);
   };
 
   const showModeIOS = (currentMode) => {
@@ -103,7 +122,7 @@ const Birthday = ({ navigation }) => {
                 placeholderTextColor={'black'}
                 editable={false}
                 style={styles.input}
-                value={date.toLocaleString()}
+                value={(date.getMonth()+1)+'/'+ date.getDate() +'/'+ (date.getFullYear()).toString()}
               />
             </TouchableOpacity>
           ) : null}
@@ -112,7 +131,7 @@ const Birthday = ({ navigation }) => {
               placeholderTextColor={'black'}
               editable={false}
               style={styles.input}
-              value={date.toLocaleString()}
+              value={(date.getMonth()+1)+'/'+ date.getDate() +'/'+ (date.getFullYear()).toString()}
               onPressIn={showDatepickerIOS}
             />
           ) : null}
@@ -124,6 +143,10 @@ const Birthday = ({ navigation }) => {
                   mode={mode}
                   is24Hour={true}
                   onChange={onChange}
+                  display="spinner"
+                  maximumDate={new Date()}
+                  textColor='red'
+                  style={{ color: 'red'}}
                 />
               )
             : null}
@@ -136,15 +159,13 @@ const Birthday = ({ navigation }) => {
                   is24Hour={true}
                   onChange={onChangeIos}
                   style={styles.iosPicker}
+
                 />
               )
             : null}
         </View>
 
-        <TouchableButton
-          text="Continue"
-          onPress={() => navigation.navigate('Username')}
-        />
+        <TouchableButton text="Continue" onPressIn={addBirthday} />
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
