@@ -16,6 +16,7 @@ import TouchableButton from '../components/TouchableButton';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { auth, usersCollection } from '../firebase';
+import CustomTextinput from '../components/CustomTextinput';
 
 const { height } = Dimensions.get('window');
 
@@ -24,26 +25,35 @@ const Birthday = ({ navigation }) => {
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
   const [showIos, setShowIos] = useState(false);
+  const [disable, setDisable] = useState(false);
 
-let today = new Date();
+  let today = new Date();
 
-console.log((date.getMonth()+1)+'/'+ date.getDate() +'/'+ (date.getFullYear()).toString())
+  //((today.getMonth()+1)+'/'+ today.getDate() +'/'+ (today.getFullYear()) > (date.getMonth()+1)+'/'+ date.getDate() +'/'+ (date.getFullYear()-13))
+  
+useEffect(() => {
+  if (date.getFullYear() >= today.getFullYear() - 12 ) {
+    Alert.alert('Must be 13 years of age')
+    setDisable(true)
+  } else setDisable(false)
+}, [date])
 
-  const addBirthday = () => {
-    if ((today.getMonth()+1)+'/'+ today.getDate() +'/'+ (today.getFullYear()).toString() <= (date.getMonth()+1)+'/'+ date.getDate() +'/'+ (date.getFullYear()-13).toString()) {
-      Alert.alert('You must be 13 years of age');
-    }
-    if ((today.getMonth()+1)+'/'+ today.getDate() +'/'+ (today.getFullYear()).toString() >= (date.getMonth()+1)+'/'+ date.getDate() +'/'+ (date.getFullYear()-13).toString()) {
-      usersCollection
-        .doc(auth.currentUser.uid)
-        .update({
-          Date_Of_Birth: (date.getMonth()+1)+'/'+ date.getDate() +'/'+ (date.getFullYear()).toString(),
-        })
-        .then(() => navigation.navigate('Name'));
-      }
-      
-    };
-    
+console.log(auth.currentUser.uid)
+  const addBirthday = async () => {
+     usersCollection
+          .doc(auth.currentUser.uid)
+          .update({
+            Date_Of_Birth:
+              date.getMonth() +
+              1 +
+              '/' +
+              date.getDate() +
+              '/' +
+              date.getFullYear().toString(),
+          })
+          .then( () => navigation.navigate('Name'))
+  };
+
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
     setShow(false);
@@ -101,37 +111,43 @@ console.log((date.getMonth()+1)+'/'+ date.getDate() +'/'+ (date.getFullYear()).t
         <View
           style={{
             flex: 1,
-            flexDirection: 'column',
-            justifyContent: 'space-evenly',
             bottom: '50%',
             justifyContent: 'center',
           }}
         >
-          <Text
-            style={{
-              fontSize: 15,
-              left: 40,
-              color: '#6CA6DC',
-            }}
-          >
-            BIRTHDAY
-          </Text>
           {Platform.OS === 'android' ? (
             <TouchableOpacity onPress={showDatepicker}>
-              <TextInput
-                placeholderTextColor={'black'}
+              <CustomTextinput
+                textstyle={{ marginBottom: 5 }}
+                viewStyle={{ top: '44%' }}
+                text={'BIRTHDAY'}
                 editable={false}
-                style={styles.input}
-                value={(date.getMonth()+1)+'/'+ date.getDate() +'/'+ (date.getFullYear()).toString()}
+                textinputStyle={styles.input}
+                value={
+                  date.getMonth() +
+                  1 +
+                  '/' +
+                  date.getDate() +
+                  '/' +
+                  date.getFullYear().toString()
+                }
               />
             </TouchableOpacity>
           ) : null}
           {Platform.OS === 'ios' ? (
-            <TextInput
-              placeholderTextColor={'black'}
+            <CustomTextinput
+              viewStyle={{ top: '54%' }}
+              text={'BIRTHDAY'}
               editable={false}
-              style={styles.input}
-              value={(date.getMonth()+1)+'/'+ date.getDate() +'/'+ (date.getFullYear()).toString()}
+              textinputStyle={styles.inputIOS}
+              value={
+                date.getMonth() +
+                1 +
+                '/' +
+                date.getDate() +
+                '/' +
+                date.getFullYear().toString()
+              }
               onPressIn={showDatepickerIOS}
             />
           ) : null}
@@ -145,8 +161,6 @@ console.log((date.getMonth()+1)+'/'+ date.getDate() +'/'+ (date.getFullYear()).t
                   onChange={onChange}
                   display="spinner"
                   maximumDate={new Date()}
-                  textColor='red'
-                  style={{ color: 'red'}}
                 />
               )
             : null}
@@ -159,13 +173,13 @@ console.log((date.getMonth()+1)+'/'+ date.getDate() +'/'+ (date.getFullYear()).t
                   is24Hour={true}
                   onChange={onChangeIos}
                   style={styles.iosPicker}
-
+                  maximumDate={new Date()}
                 />
               )
             : null}
         </View>
 
-        <TouchableButton text="Continue" onPressIn={addBirthday} />
+        <TouchableButton text="Continue" onPressIn={addBirthday} disable={disable} style={{backgroundColor: disable === true ? 'gray' : '#10ACFF'}}/>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -176,17 +190,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   input: {
-    height: 40,
+    height: '22%',
     width: '80%',
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderTopColor: 'transparent',
-    borderLeftColor: 'transparent',
-    borderRightColor: 'transparent',
-    paddingLeft: 10,
     alignSelf: 'center',
-    marginTop: 15,
-    marginBottom: 20,
+    paddingLeft: '3%',
+  },
+  inputIOS: {
+    height: '15%',
+    width: '80%',
+    alignSelf: 'center',
+    paddingLeft: '3%',
   },
   iosPicker: {
     alignItems: 'center',

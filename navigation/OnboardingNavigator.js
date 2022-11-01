@@ -9,6 +9,7 @@ import HomeNavigator from './HomeNavigator';
 import UsernameScreen from '../screens/UsernameScreen';
 import NumberScreen from '../screens/NumberScreen';
 import ForgotPasswordViaEmailScreen from '../screens/ForgotPasswordViaEmailScreen';
+import ForgotPasswordViaPhoneScreen from '../screens/ForgotPasswordViaPhoneScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -27,6 +28,7 @@ const OnboardingNavigator = (props) => {
       <Stack.Screen component={NumberScreen} name="Number" />
       <Stack.Screen component={LogInScreen} name="LogIn" />
       <Stack.Screen component={ForgotPasswordViaEmailScreen} name="PasswordViaEmail" />
+      <Stack.Screen component={ForgotPasswordViaPhoneScreen} name="PasswordViaPhone" />
       <Stack.Screen component={HomeNavigator} name="HomeNav" />
     </Stack.Navigator>
   );

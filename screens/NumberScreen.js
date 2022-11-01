@@ -85,8 +85,7 @@ const NumberScreen = ({ navigation }) => {
                 keyboardType="phone-pad"
                 value={number}
                 onChangeText={text => setNumber(text)}
-                returnKeyType={ 'done' } 
-              />
+                returnKeyType={ 'done' }               />
             </TouchableOpacity>
           </View>
           <View
@@ -108,7 +107,7 @@ const NumberScreen = ({ navigation }) => {
           </View>
         </View>
 
-        <TouchableButton text="Continue" onPress={HandleNumber} onPressIn={() => navigation.navigate('HomeNav')}/>
+        <TouchableButton text="Continue" onPress={HandleNumber} onPressIn={() => navigation.navigate('HomeNav')} disable={number === '' ? true : false} style={{backgroundColor: number === '' ? 'gray': '#10ACFF'}}/>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -142,7 +141,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   button: {
-    bottom: 10
+    bottom: 10,
   }
 });
 

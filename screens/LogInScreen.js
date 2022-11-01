@@ -14,6 +14,7 @@ import TouchableButton from '../components/TouchableButton';
 import { auth } from '../firebase';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
+import CustomTextinput from '../components/CustomTextinput';
 
 const { height } = Dimensions.get('window');
 
@@ -68,58 +69,41 @@ const LoginScreen = ({ navigation }) => {
         <View
           style={{
             flex: 1,
-            flexDirection: 'column',
-            justifyContent: 'space-evenly',
             bottom: '45%',
             justifyContent: 'center',
           }}
         >
-          <Text
-            style={{
-              fontSize: 15,
-              left: 40,
-              color: '#6CA6DC',
-            }}
-          >
-            USERNAME OR EMAIL
-          </Text>
-          <TextInput
-            autoCapitalize={'none'}
-            style={styles.input}
-            value={email}
+          <CustomTextinput
+            viewStyle={{ top: Platform.OS === 'android' ? '38%' : '40%' }}
+            keyBoardType={'email-address'}
+            text={'USERNAME OR EMAIL'}
             onChangeText={(text) => setEmail(text)}
-            keyboardType={'email-address'}
+            value={email}
+            textinputStyle={styles.input}
           />
-          <Text
-            style={{
-              fontSize: 15,
-              left: 40,
-              color: '#6CA6DC',
-            }}
-          >
-            Password
-          </Text>
-          <TextInput
-            autoCapitalize={'none'}
-            value={password}
+          <CustomTextinput
+            viewStyle={{ top: Platform.OS === 'android' ? '66%' : '67%' }}
+            text={'PASSWORD'}
             onChangeText={(text) => setPassword(text)}
-            style={styles.input}
-            secureTextEntry={true}
+            value={password}
+            textinputStyle={styles.input}
             maxLength={20}
+            secureTextEntry={true}
             onSubmitEditing={handleLogin}
           />
         </View>
         <View
           style={{
-            top: Platform.OS === 'android' ? 310 : 350,
+            top: Platform.OS === 'android' ? '42%' : '43%',
             position: 'absolute',
-            width: 300,
-            height: 100,
-            left: Platform.OS === 'android' ? 20 : 70,
             alignItems: 'center',
+            justifyContent: 'center',
+            alignSelf: 'center',
           }}
         >
-          <TouchableOpacity onPress={() => navigation.navigate('PasswordViaEmail')}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('PasswordViaEmail')}
+          >
             <Text
               style={{
                 color: '#10ACFF',
@@ -141,17 +125,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   input: {
-    height: 40,
+    height: '12%',
     width: '80%',
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderTopColor: 'transparent',
-    borderLeftColor: 'transparent',
-    borderRightColor: 'transparent',
-    paddingLeft: 10,
     alignSelf: 'center',
     marginTop: 15,
     marginBottom: 20,
+    paddingLeft: '2%',
   },
 });
 

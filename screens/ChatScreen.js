@@ -1,8 +1,7 @@
 import React, {
   useState,
   useEffect,
-  useLayoutEffect,
-  useCallback,
+  useRef
 } from 'react';
 import {
   StyleSheet,
@@ -15,8 +14,9 @@ import {
   FlatList,
   TextInput,
   Alert,
+  ScrollView,
 } from 'react-native';
-import { auth, db, chatCollection, messageCollection } from '../firebase';
+import { auth, messageCollection } from '../firebase';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as Linking from 'expo-linking';
 import SenderMessage from '../components/SenderMessage';
@@ -24,9 +24,20 @@ import { v4 as uuid } from 'uuid';
 import ReciverMessage from '../components/ReciverMessage';
 
 const ChatScreen = ({ navigation, route }) => {
-  const [messages, setMessages] = useState([]);
+  const [receiving, setReceiving] = useState([]);
   const [input, setInput] = useState('');
-  const [disable, setDisable] = useState(false)
+  const [disable, setDisable] = useState(false);
+  const [sending, setSending] = useState([]);
+  const scrollViewRef = useRef()
+
+  const autoScroll = () => {
+    let offset = 0;
+    setInterval(()=> {
+        offset += 20
+        scrollViewRef.current?.scrollTo({x: 0, y: offset, animated: true})
+    }, 1000)
+}
+
 
   const handleCall = () => {
     const user = route.params.number;
@@ -36,43 +47,109 @@ const ChatScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     const subscriber = messageCollection
-      .where('userId', '==', auth.currentUser.uid)
-      .where('userId2', '==', route.params.uid)
+      .where(
+        'users.userId',
+        '==',
+        !route.params.uid ? auth.currentUser.uid : route.params.uid
+      )
+      .where(
+        'users.userId2',
+        '==',
+        !auth.currentUser.uid ? route.params.uid : auth.currentUser.uid
+      )
       .orderBy('createdAt', 'desc')
       .onSnapshot((querySnapshot) => {
-        const allMessages = [];
+        const allReceivedMessages = [];
 
         querySnapshot.forEach((documentSnapshot) => {
-          allMessages.push({
+          allReceivedMessages.push({
             ...documentSnapshot.data(),
             key: documentSnapshot.id,
           });
         });
 
-        setMessages(allMessages);
+        setSending(allReceivedMessages);
       });
 
     return () => subscriber();
-  }, [chatCollection]);
+  }, [messageCollection]);
 
   useEffect(() => {
-    if (input === "") {
-      setDisable(true)
+    const subscriber = messageCollection
+      .where(
+        'users.userId',
+        '==',
+        !auth.currentUser.uid ? route.params.uid : auth.currentUser.uid
+      )
+      .where(
+        'users.userId2',
+        '==',
+        !route.params.uid ? auth.currentUser.uid : route.params.uid
+      )
+      .orderBy('createdAt', 'desc')
+      .onSnapshot((querySnapshot) => {
+        const allSentMessages = [];
+
+        querySnapshot.forEach((documentSnapshot) => {
+          allSentMessages.push({
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id,
+          });
+        });
+
+        setReceiving(allSentMessages);
+      });
+
+    return () => subscriber();
+  }, [messageCollection]);
+
+  useEffect(() => {
+    if (input === '') {
+      setDisable(true);
     } else {
-      setDisable(false)
+      setDisable(false);
     }
-  }, [input])
+  }, [input]);
+
+  let date = new Date();
+
+  let TimeType;
+  let hour;
+
+  hour = date.getHours().toString();
+  let minutes = date.getMinutes().toString();
+
+  if (hour <= 12) {
+    TimeType = 'AM';
+  } else {
+    TimeType = 'PM';
+  }
+
+  if (hour > 12) {
+    hour = hour - 12;
+  }
+
+  if (hour == 0) {
+    hour = 12;
+  }
+
+  function makeTwoDigits(time) {
+    const timeString = `${time}`;
+    if (timeString.length === 2) return time;
+    return `0${time}`;
+  }
 
   const sendMessage = () => {
-    chatCollection.doc('Messages').collection('Messages').add({
+    messageCollection.add({
       message: input,
-
-      userId: auth.currentUser.uid,
-      userId2: route.params.uid,
-
+      users: {
+        userId: route.params.uid,
+        userId2: auth.currentUser.uid,
+      },
       email: auth.currentUser.email,
-      createdAt: new Date(),
       id: uuid(),
+      createdAt: new Date(),
+      time: makeTwoDigits(hour) + ':' + makeTwoDigits(minutes) + ` ${TimeType}`,
     });
     setInput('');
   };
@@ -138,36 +215,43 @@ const ChatScreen = ({ navigation, route }) => {
         <View
           style={{
             flex: 1,
-            top: 1,
-            height: '100%',
-            width: '100%',
             marginBottom: 53,
           }}
         >
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            data={messages}
-            inverted={-1}
-            style={{ bottom: '2%' }}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item: message }) =>
-              message.userId === route.params.uid ? (
-                <SenderMessage
-                  key={message.id}
-                  message={message}
-                  setcolor={'#E04D5C'}
-                  text={'Me'}
-                />
-              ) : (
+          <ScrollView style={{flex:1}} showsVerticalScrollIndicator={false} ref={scrollViewRef}>
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              data={receiving}
+              inverted={-1}
+              style={{ top: '0.5%' }}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item: message }) => (
                 <ReciverMessage
                   key={message.id}
                   message={message}
                   setcolor={'#4FAAF9'}
                   text={route.params.name}
+                  time={message.time}
                 />
-              )
-            }
-          />
+              )}
+            />
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              data={sending}
+              inverted={-1}
+              style={{ bottom: '0.5%' }}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item: message }) => (
+                <SenderMessage
+                  key={message.id}
+                  message={message}
+                  setcolor={'#E04D5C'}
+                  text={'Me'}
+                  time={message.time}
+                />
+              )}
+            />
+          </ScrollView>
         </View>
 
         <View
@@ -190,12 +274,17 @@ const ChatScreen = ({ navigation, route }) => {
             style={{ height: 50, width: '85%' }}
             multiline={true}
           />
-          <TouchableOpacity title="Send" onPress={sendMessage} disabled={disable}>
+          <TouchableOpacity
+            title="Send"
+            onPress={sendMessage}
+            disabled={disable}
+            onPressOut={autoScroll}
+          >
             <Ionicons
               name="send"
               size={25}
               style={{ top: '20%', right: 15, position: 'absolute' }}
-              color={disable === true ? 'gray' : "#40AFE5"}
+              color={disable === true ? 'gray' : '#40AFE5'}
             />
           </TouchableOpacity>
         </View>

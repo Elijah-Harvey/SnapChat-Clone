@@ -8,16 +8,18 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
 
 function OnBoardingScreen({ navigation }) {
+  
+
+
   return (
     <View style={{ flex: 1, backgroundColor: `#FFFB53` }}>
       <View
         style={{
           flex: 1,
           alignItems: 'center',
-          top: '20%'
+          top: '20%',
         }}
       >
         <Image
@@ -25,7 +27,7 @@ function OnBoardingScreen({ navigation }) {
           style={{
             width: '30%',
             height: '30%',
-            resizeMode: 'contain'
+            resizeMode: 'contain',
           }}
         />
       </View>

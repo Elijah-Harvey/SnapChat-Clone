@@ -12,13 +12,15 @@ import {
   Button,
 } from 'react-native';
 import TouchableButton from '../components/TouchableButton';
-import { auth, chatCollection, db, usersCollection } from '../firebase';
+import { auth, usersCollection } from '../firebase';
 
 const { height } = Dimensions.get('window');
 
 const UsernameScreen = ({ navigation }) => {
   const [name, setName] = useState('');
   const [disable, setDisable] = useState(false);
+
+  
 
   const update = {
     displayName: name,
@@ -54,8 +56,6 @@ const UsernameScreen = ({ navigation }) => {
       .catch((error) => alert('Something went wrong try again'));
   };
 
-  console.log(usersCollection
-    .doc(auth.currentUser.uid))
 
   return (
     <SafeAreaView style={styles.container}>

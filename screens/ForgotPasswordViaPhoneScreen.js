@@ -11,17 +11,17 @@ import { auth } from '../firebase';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 const ForgotPasswordViaPhoneScreen = ({ navigation}) => {
-  const [email, setEmail] = useState('');
+  const [number, setNumber] = useState('');
   const [disable, setDisable] = useState(false);
   const [seconds, setSeconds] = useState(60);
 
   const forgotPassword = () => {
-    if (email === '') {
+    if (number === '') {
       setDisable(false);
-      Alert.alert('Email is invalid');
+      Alert.alert('number is invalid');
     } else {
       auth
-        .sendPasswordResetEmail(email)
+        .sendPasswordResetEmail(number.toString())
         .then(() => {
           Alert.alert(
             `  🎉 success 🎉
@@ -31,9 +31,9 @@ const ForgotPasswordViaPhoneScreen = ({ navigation}) => {
           )
         })
         .catch((error) => {
-          if (error.code === 'auth/invalid-email') {
+          if (error.code === 'auth/invalid-number') {
             setDisable(false);
-            Alert.alert('That email address is invalid!');
+            Alert.alert('That number address is invalid!');
           }
         });
     }
@@ -48,7 +48,7 @@ const ForgotPasswordViaPhoneScreen = ({ navigation}) => {
         setDisable(false);
       }
       if (seconds === 60) {
-        setEmail('');
+        setNumber('');
       }
     }, 1000);
     return () => {
@@ -66,17 +66,17 @@ const ForgotPasswordViaPhoneScreen = ({ navigation}) => {
         </TouchableOpacity>
       <View>
         <Text style={{ fontSize: 30, bottom: 30, alignSelf: 'center' }}>
-          Enter Your Email
+          Enter Your number
         </Text>
         <Text style={{ alignSelf: 'center', fontSize: 12, bottom: 20 }}>
-          {email}
+          {number}
         </Text>
       </View>
       <TextInput
         autoCapitalize="none"
         style={styles.input}
-        value={email}
-        onChangeText={(value) => setEmail(value)}
+        value={number}
+        onChangeText={(value) => setNumber(value)}
       />
       {disable === false ? (
         <TouchableOpacity

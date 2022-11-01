@@ -99,6 +99,10 @@ const ProfileScreen = ({ navigation }) => {
               }}
               style={{ height: 150, width: 150, borderRadius: 100 / 2 }}
             />
+            <Image
+            source={require('../assets/pngwing.com.png')} 
+            style={{ height: 150, width: 150, position: 'absolute' }}
+            />
           </TouchableOpacity>
           <TouchableOpacity
             style={{

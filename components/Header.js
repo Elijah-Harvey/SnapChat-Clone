@@ -13,27 +13,9 @@ import {
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { auth } from '../firebase';
 
-const Header = ({ title, rightIcon, color, onPress, navigation }) => {
-  const [image, setImage] = useState(null);
-
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    console.log(result);
-
-    if (!result.cancelled) {
-      setImage(result.uri);
-    }
-  };
-
+const Header = ({ title, rightIcon, color, onPress, navigation, bgc }) => {
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={[{ backgroundColor: bgc }, styles.container]}>
       <StatusBar hidden={true} />
       <View style={styles.Header}>
         <View style={styles.title}>
@@ -42,7 +24,11 @@ const Header = ({ title, rightIcon, color, onPress, navigation }) => {
         <TouchableOpacity style={styles.profilePic} onPress={onPress}>
           <Image
             Image
-            source={{ uri: !auth.currentUser.photoURL? 'https://picsum.photos/200/300' : auth.currentUser.photoURL }}
+            source={{
+              uri: !auth.currentUser.photoURL
+                ? 'https://picsum.photos/200/300'
+                : auth.currentUser.photoURL,
+            }}
             style={{ width: 45, height: 45, borderRadius: 45 / 2 }}
           />
         </TouchableOpacity>
@@ -56,13 +42,13 @@ const Header = ({ title, rightIcon, color, onPress, navigation }) => {
           <Ionicons name={rightIcon} size={25} color={color} />
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: Constants.statusBarHeight,
+    paddingTop: Platform.OS === 'android' ? Constants.statusBarHeight : '10%',
     borderBottomColor: 'lightgray',
     borderBottomWidth: 1,
   },

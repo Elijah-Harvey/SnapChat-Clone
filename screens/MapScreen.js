@@ -1,26 +1,65 @@
-import * as React from 'react';
-import { SafeAreaView, StyleSheet, Text, View, Dimensions } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  FlatList,
+} from 'react-native';
 import Header from '../components/Header';
 import MapView, { Marker } from 'react-native-maps';
+import { usersCollection } from '../firebase';
+import * as Location from 'expo-location';
 
-const MapScreen = ({navigation}) => {
+const MapScreen = ({ navigation }) => {
+  const [users, setUsers] = useState([]);
+  const [color, setColor] = useState([]);
+
+  const generateColor = () => {
+    const randomColor = Math.floor(Math.random() * 16777215)
+      .toString(16)
+      .padStart(6, '0');
+    return `#${randomColor}`;
+  };
+
+
+
+  useEffect(() => {
+    const subscriber = usersCollection.onSnapshot((querySnapshot) => {
+      const users = [];
+
+      querySnapshot.forEach((documentSnapshot) => {
+        users.push({
+          ...documentSnapshot.data(),
+          key: documentSnapshot.id,
+        });
+      });
+
+      setUsers(users);
+    });
+
+    return () => subscriber();
+  }, [setUsers]);
+
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <Header
         rightIcon="settings-outline"
         title="Map"
-        backgroundColor='gray'
-        color= 'ghostwhite'
+        bgc='transparent'
+        color="ghostwhite"
         onPress={() => navigation.navigate('Profile')}
       />
       <MapView
         style={styles.map}
-        mapType={'standard'}
+        mapType={'satellite'}
         zoomEnabled={true}
         scrollEnabled={true}
         showsUserLocation={true}
         followUserLocation={true}
         showsScale={true}
+        customMapStyle={{}}
         initialRegion={{
           latitude: 30.3322,
           longitude: -81.6557,
@@ -28,17 +67,29 @@ const MapScreen = ({navigation}) => {
           longitudeDelta: 0.1,
         }}
       >
-        <Marker coordinate={{ latitude: 30.3322, longitude: -81.6557 }} />
-        <Marker coordinate={{ latitude: 32.7157, longitude: -117.1611 }} />
-        <Marker coordinate={{ latitude: 41.824, longitude: -71.4128 }} />
-        <Marker coordinate={{ latitude: 47.6062, longitude: -122.3321 }} />
-        <Marker coordinate={{ latitude: 39.0119, longitude: -98.4842 }} />
+        {users.map((e, i) => (
+          <Marker
+            pinColor={`${generateColor()}`}
+            title={`${e.name === undefined || null ? e.Email : e.name}'s location`}
+            key={i}
+            coordinate={{
+              latitude:
+                e.location.latitude != undefined ? e.location.latitude : 0,
+              longitude:
+                e.location.longitude != undefined ? e.location.longitude : 0,
+            }}
+            
+          />
+        ))}
       </MapView>
-    </SafeAreaView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container:{
+    backgroundColor: 'transparent'
+  },
   map: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,

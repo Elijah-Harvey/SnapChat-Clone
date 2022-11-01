@@ -1,3 +1,4 @@
+import { disableErrorHandling } from 'expo';
 import { setStatusBarHidden } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, ScrollView, FlatList } from 'react-native';
@@ -71,26 +72,33 @@ const DUMMY_DATA = [
 const MessageScreen = ({ navigation }) => {
   const [users, setUsers] = useState([]);
 
+
+
   useEffect(() => {
-    const subscriber = usersCollection.where('UID', '!=', auth.currentUser.uid)
-      .onSnapshot(querySnapshot => {
+    const subscriber = usersCollection
+      .where('UID', '!=', auth.currentUser.uid)
+      .onSnapshot((querySnapshot) => {
         const users = [];
-  
-        querySnapshot.forEach(documentSnapshot => {
+
+        querySnapshot.forEach((documentSnapshot) => {
           users.push({
             ...documentSnapshot.data(),
             key: documentSnapshot.id,
           });
         });
-  
-        setUsers(users);  
+
+        setUsers(users);
       });
 
     return () => subscriber();
   }, [setUsers]);
 
+  const UpdateStreak = (string) => {
+    const num = parseInt(string);
+    const newText = num.toLocaleString();
 
-
+    return newText;
+  };
 
   return (
     <View style={styles.container}>
@@ -100,14 +108,17 @@ const MessageScreen = ({ navigation }) => {
           title="Chat"
           onPress={() => navigation.navigate('Profile')}
         />
-        <FlatList 
+        <FlatList
           data={users}
-          renderItem={({item}) => (
-            <MessageRow 
-            name={item.name}
-            image={'https://picsum.photos/200/300'}
-            streak={100}
-            onPress={() => navigation.navigate('Chat', { name: item.name, image: 'https://picsum.photos/200/300', number:item.Number, uid: item.UID })}
+          renderItem={({ item }) => (
+            <MessageRow
+              name={item.name}
+              image={'https://picsum.photos/200/300'}
+              streak={UpdateStreak(Math.floor(Math.random() * 1000000) + 10000)}
+              onPress={() => {
+                navigation.navigate('Chat', { name: item.name, image: 'https://picsum.photos/200/300', number:item.Number, uid: item.UID })
+              }}
+              
             />
           )}
         />
