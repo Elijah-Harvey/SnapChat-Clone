@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 import { auth, storage, usersCollection } from '../firebase';
 import * as ImagePicker from 'expo-image-picker';
+import ProfileBox from '../components/ProfileBox';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 const ProfileScreen = ({ navigation }) => {
   const [image, setImage] = useState(auth.currentUser.photoURL);
@@ -55,8 +57,6 @@ const ProfileScreen = ({ navigation }) => {
     }
   }, [image]);
 
-
-
   const wait = (timeout) => {
     return new Promise((resolve) => setTimeout(resolve, timeout));
   };
@@ -73,16 +73,12 @@ const ProfileScreen = ({ navigation }) => {
       .catch((error) => error.message);
   };
 
- 
-
-  
-
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
         style={{ flex: 1 }}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} on/>
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} on />
         }
       >
         <View style={{ flex: 1 }}>
@@ -100,8 +96,8 @@ const ProfileScreen = ({ navigation }) => {
               style={{ height: 150, width: 150, borderRadius: 100 / 2 }}
             />
             <Image
-            source={require('../assets/pngwing.com.png')} 
-            style={{ height: 150, width: 150, position: 'absolute' }}
+              source={require('../assets/pngwing.com.png')}
+              style={{ height: 150, width: 150, position: 'absolute' }}
             />
           </TouchableOpacity>
           <TouchableOpacity
@@ -124,26 +120,76 @@ const ProfileScreen = ({ navigation }) => {
               : auth?.currentUser?.email}
           </Text>
         </TouchableOpacity>
-        <View
-          style={{
-            alignSelf: 'center',
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderWidth: 1,
-            height: 50,
-            width: '70%',
-            borderRadius: 10,
-            backgroundColor: '#10ACFF',
-          }}
-        >
-          <TouchableOpacity onPress={handleSignOut}>
-            <Text
-              style={{ fontSize: 25, color: 'ghostwhite', fontWeight: '600' }}
-            >
-              Sign Out
+        <ProfileBox
+          iconName={'document-outline'}
+          iconName2="close-outline"
+          title={'Find friends on Snapchat'}
+          subTitle={'Tap to sync your contacts'}
+          subTitleShow={true}
+          styleTitle={true}
+        />
+        <View style={{ top: '3%', left: '5%', flexDirection: 'row' }}>
+          <Text style={{ fontSize: '20%', fontWeight: '600' }}>Stories</Text>
+          <View
+            style={{
+              top: '3%',
+              right: '7%',
+              flexDirection: 'row',
+              position: 'absolute',
+              backgroundColor: '#e8edf2',
+              width: '25%',
+              alignItems: 'center',
+              borderRadius: '10%',
+              height: '100%',
+            }}
+          >
+            <Ionicons
+              name="add"
+              size={20}
+              style={{ left: '20%', color: '#4FAAF9' }}
+            />
+            <Text style={{ fontSize: '15%', fontWeight: '600', left: '20%' }}>
+              New Story
             </Text>
-          </TouchableOpacity>
+          </View>
         </View>
+        <ProfileBox
+          style={{ top: '4%' }}
+          iconColor="#4FAAF9"
+          iconName={'camera-outline'}
+          iconName2="ellipsis-vertical-outline"
+          title={'Add to My Story'}
+          styleTitle={{ alignSelf: 'center' }}
+        />
+        <ProfileBox
+          style={{ top: '8%' }}
+          iconColor="#4FAAF9"
+          iconName={'camera-outline'}
+          iconName2="ellipsis-vertical-outline"
+          title={'Add to Our Story'}
+          styleTitle={{ alignSelf: 'center' }}
+        />
+        <View style={{ top: '3%', left: '5%', flexDirection: 'row' }}>
+          <Text style={{ fontSize: '20%', fontWeight: '600', top: '8%' }}>Friends</Text>
+        </View>
+        <ProfileBox
+          style={{ top: '13%', }}
+          iconName={'person-add-outline'}
+          iconName2="chevron-forward-outline"
+          title={'Add Friends'}
+          styleTitle={{ alignSelf: 'center' }}
+          iconStyle={{transform: [{rotateY: '180deg'}]}}
+        />
+        <ProfileBox
+          style={{ top: '15%', height: '45%' }}
+          iconName={'people-circle-outline'}
+          iconName2="chevron-forward-outline"
+          title={'My Friends'}
+          styleTitle={{bottom: '11%' }}
+          iconStyle={{bottom: '5%', position: 'absolute', left: '4%'}}
+          iconStyle2={{bottom: '5%', position: 'absolute', right: '4%'}}
+          imageShow={true}
+        />
       </ScrollView>
     </SafeAreaView>
   );
@@ -152,6 +198,7 @@ const ProfileScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fafafa',
   },
 });
 

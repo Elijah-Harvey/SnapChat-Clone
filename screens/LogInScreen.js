@@ -11,7 +11,7 @@ import {
   Platform,
 } from 'react-native';
 import TouchableButton from '../components/TouchableButton';
-import { auth } from '../firebase';
+import { auth, usersCollection } from '../firebase';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 import CustomTextinput from '../components/CustomTextinput';
@@ -25,11 +25,16 @@ const LoginScreen = ({ navigation }) => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        navigation.navigate('HomeNav');
+        navigation.navigate('HomeNav')
+        // .then(() => {
+        //   usersCollection.doc(auth.currentUser.uid).update({
+        //     Last_Know_Password: password
+        //   })
+        // });
       }
     });
     return unsubscribe;
-  }, []);
+  }, [auth]);
 
   const handleLogin = () => {
     auth

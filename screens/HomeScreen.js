@@ -13,7 +13,7 @@ import ForYouRow from '../components/ForYouRow';
 function HomeScreen({ navigation }) {
   return (
     <SafeAreaView>
-      <Header
+      <Header 
         title="Stories"
         rightIcon="ellipsis-horizontal-outline"
         onPress={() => navigation.navigate('Profile')}

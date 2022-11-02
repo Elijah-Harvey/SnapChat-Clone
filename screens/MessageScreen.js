@@ -1,82 +1,18 @@
-import { disableErrorHandling } from 'expo';
-import { setStatusBarHidden } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, ScrollView, FlatList } from 'react-native';
 import Header from '../components/Header';
 import MessageRow from '../components/MessageRow';
-import { auth, db, usersCollection } from '../firebase';
+import { auth, db, messageCollection, usersCollection } from '../firebase';
+import { v4 as uuid } from 'uuid';
 
-const DUMMY_DATA = [
-  {
-    id: 1,
-    name: 'Father Harvey',
-    streak: '100',
-    image: 'https://picsum.photos/200/300',
-  },
-  {
-    id: 2,
-    name: 'Zeke Harvey',
-    streak: '51',
-    image: 'https://picsum.photos/200/300',
-  },
-  {
-    id: 3,
-    name: 'Lizzy Harvey',
-    streak: '5',
-    image: 'https://picsum.photos/200/300',
-  },
-  {
-    id: 4,
-    name: 'Ethan Harvey',
-    streak: '17',
-    image: 'https://picsum.photos/200/300',
-  },
-  {
-    id: 5,
-    name: 'Elijah Harvey',
-    streak: '1000',
-    image: 'https://picsum.photos/200/300',
-  },
-  {
-    id: 6,
-    name: 'Father Harvey',
-    streak: '100',
-    image: 'https://picsum.photos/200/300',
-  },
-  {
-    id: 7,
-    name: 'Zeke Harvey',
-    streak: '51',
-    image: 'https://picsum.photos/200/300',
-  },
-  {
-    id: 8,
-    name: 'Lizzy Harvey',
-    streak: '5',
-    image: 'https://picsum.photos/200/300',
-  },
-  {
-    id: 9,
-    name: 'Ethan Harvey',
-    streak: '17',
-    image: 'https://picsum.photos/200/300',
-  },
-  {
-    id: 10,
-    name: 'Elijah Harvey',
-    streak: '1000',
-    image: 'https://picsum.photos/200/300',
-  },
-];
-
-const MessageScreen = ({ navigation }) => {
+const MessageScreen = ({ navigation, route }) => {
   const [users, setUsers] = useState([]);
-
 
 
   useEffect(() => {
     const subscriber = usersCollection
       .where('UID', '!=', auth.currentUser.uid)
+      .orderBy('UID', 'desc')
       .onSnapshot((querySnapshot) => {
         const users = [];
 
@@ -100,10 +36,20 @@ const MessageScreen = ({ navigation }) => {
     return newText;
   };
 
+  const roomId = uuid.v4();
+
+  const addRommId = () => {
+    messageCollection.doc(auth.currentUser.uid).set({
+      roomId: roomId,
+      userId: auth.currentUser.uid,
+    });
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Header
+         top={'10%'}
           rightIcon="chatbubbles-outline"
           title="Chat"
           onPress={() => navigation.navigate('Profile')}
@@ -116,9 +62,15 @@ const MessageScreen = ({ navigation }) => {
               image={'https://picsum.photos/200/300'}
               streak={UpdateStreak(Math.floor(Math.random() * 1000000) + 10000)}
               onPress={() => {
-                navigation.navigate('Chat', { name: item.name, image: 'https://picsum.photos/200/300', number:item.Number, uid: item.UID })
+                navigation.navigate('Chat', {
+                  name: item.name,
+                  image: 'https://picsum.photos/200/300',
+                  number: item.Number,
+                  uid: item.UID,
+                  roomId: roomId
+                });
               }}
-              
+              onPressIn={addRommId}
             />
           )}
         />

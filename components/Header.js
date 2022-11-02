@@ -13,9 +13,18 @@ import {
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { auth } from '../firebase';
 
-const Header = ({ title, rightIcon, color, onPress, navigation, bgc }) => {
+const Header = ({ title, rightIcon, color, onPress, navigation, bgc, top }) => {
   return (
-    <View style={[{ backgroundColor: bgc }, styles.container]}>
+    <View
+      style={[
+        {
+          backgroundColor: bgc,
+          paddingTop:
+            Platform.OS === 'android' ? Constants.statusBarHeight : top,
+        },
+        styles.container,
+      ]}
+    >
       <StatusBar hidden={true} />
       <View style={styles.Header}>
         <View style={styles.title}>
@@ -48,7 +57,6 @@ const Header = ({ title, rightIcon, color, onPress, navigation, bgc }) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: Platform.OS === 'android' ? Constants.statusBarHeight : '10%',
     borderBottomColor: 'lightgray',
     borderBottomWidth: 1,
   },

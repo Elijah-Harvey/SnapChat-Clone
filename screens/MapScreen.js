@@ -9,12 +9,12 @@ import {
 } from 'react-native';
 import Header from '../components/Header';
 import MapView, { Marker } from 'react-native-maps';
-import { usersCollection } from '../firebase';
+import { db, usersCollection } from '../firebase';
 import * as Location from 'expo-location';
 
 const MapScreen = ({ navigation }) => {
   const [users, setUsers] = useState([]);
-  const [color, setColor] = useState([]);
+
 
   const generateColor = () => {
     const randomColor = Math.floor(Math.random() * 16777215)
@@ -22,6 +22,7 @@ const MapScreen = ({ navigation }) => {
       .padStart(6, '0');
     return `#${randomColor}`;
   };
+
 
 
 

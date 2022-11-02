@@ -23,7 +23,7 @@ const UsernameScreen = ({ navigation }) => {
   
 
   const update = {
-    displayName: name,
+    displayName: `@${name}`,
   };
 
   useEffect(() => {
@@ -47,7 +47,7 @@ const UsernameScreen = ({ navigation }) => {
         usersCollection
           .doc(auth.currentUser.uid)
           .update({
-            name: name,
+            name: `@${name}`,
           })
           .then(() => {
             console.log('success');
