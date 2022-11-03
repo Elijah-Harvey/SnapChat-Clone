@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -6,24 +6,21 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Image,
-  Button,
   FlatList,
   TextInput,
-  Alert,
-  ScrollView,
-  SectionList,
 } from 'react-native';
 import { auth, messageCollection } from '../firebase';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as Linking from 'expo-linking';
 import SenderMessage from '../components/SenderMessage';
 import { v4 as uuid } from 'uuid';
-import ReciverMessage from '../components/ReciverMessage';
+import CustomDate from '../components/CustomDate';
 
 const ChatScreen = ({ navigation, route }) => {
   const [input, setInput] = useState('');
   const [disable, setDisable] = useState(false);
   const [messages, setMessages] = useState([]);
+  const messageId = uuid()
 
   useEffect(() => {
     messageCollection.doc(auth.currentUser.uid).update({
@@ -31,32 +28,27 @@ const ChatScreen = ({ navigation, route }) => {
     });
   });
 
-  const handleCall = () => {
-    const user = route.params.number;
-    const call = Linking.openURL(`tel:*67 +1 ${user}`);
-    return call;
-  };
-
+  
   useEffect(() => {
     const subscriber = messageCollection
-      .doc(auth.currentUser.uid)
-      .collection('Messages')
-      .orderBy('createdAt', 'desc')
-      .onSnapshot((querySnapshot) => {
-        const allSentMessages = [];
-
-        querySnapshot.forEach((documentSnapshot) => {
-          allSentMessages.push({
-            ...documentSnapshot.data(),
-            key: documentSnapshot.id,
-          });
+    .doc(auth.currentUser.uid)
+    .collection('Messages')
+    .orderBy('createdAt', 'desc')
+    .onSnapshot((querySnapshot) => {
+      const allSentMessages = [];
+      
+      querySnapshot.forEach((documentSnapshot) => {
+        allSentMessages.push({
+          ...documentSnapshot.data(),
+          key: documentSnapshot.id,
         });
-
-        setMessages(allSentMessages);
       });
+      
+      setMessages(allSentMessages);
+    });
     return () => subscriber();
   }, [messageCollection]);
-
+  
   useEffect(() => {
     if (input.trim()) {
       setDisable(false);
@@ -65,35 +57,12 @@ const ChatScreen = ({ navigation, route }) => {
     }
   }, [input]);
 
-  let date = new Date();
+  const handleCall = () => {
+    const user = route.params.number;
+    const call = Linking.openURL(`tel:*67 +1 ${user}`);
+    return call;
+  };
 
-  let TimeType;
-  let hour;
-
-  hour = date.getHours().toString();
-  let minutes = date.getMinutes().toString();
-
-  if (hour <= 12) {
-    TimeType = 'AM';
-  } else {
-    TimeType = 'PM';
-  }
-
-  if (hour > 12) {
-    hour = hour - 12;
-  }
-
-  if (hour == 0) {
-    hour = 12;
-  }
-
-  function makeTwoDigits(time) {
-    const timeString = `${time}`;
-    if (timeString.length === 2) return time;
-    return `0${time}`;
-  }
-
-  const messageId = uuid()
 
   const sendMessage = () => {
     messageCollection
@@ -106,7 +75,7 @@ const ChatScreen = ({ navigation, route }) => {
         createdAt: new Date(),
         id: messageId,
         time:
-          makeTwoDigits(hour) + ':' + makeTwoDigits(minutes) + ` ${TimeType}`,
+          CustomDate()
       })
       .then(() => {
         messageCollection
@@ -116,11 +85,7 @@ const ChatScreen = ({ navigation, route }) => {
             message: input,
             createdAt: new Date(),
             id: messageId,
-            time:
-              makeTwoDigits(hour) +
-              ':' +
-              makeTwoDigits(minutes) +
-              ` ${TimeType}`,
+            time: CustomDate()
           });
           setInput('');
       });
@@ -187,7 +152,6 @@ const ChatScreen = ({ navigation, route }) => {
         <View
           style={{
             flex: 1,
-            marginBottom: 53,
           }}
         >
           <FlatList
@@ -202,14 +166,16 @@ const ChatScreen = ({ navigation, route }) => {
                   key={message.id}
                   message={message.message}
                   setcolor={'#E04D5C'}
+                  borderLeftColor={'#E04D5C'}
                   text={'Me'}
                   time={message.time}
                 />
               ) : (
-                <ReciverMessage
+                <SenderMessage
                   key={message.id}
                   message={message.message}
                   setcolor={'#4FAAF9'}
+                  borderLeftColor={'#4FAAF9'}
                   text={route.params.name}
                   time={message.time}
                 />
@@ -220,13 +186,12 @@ const ChatScreen = ({ navigation, route }) => {
 
         <View
           style={{
-            flex: 1,
             justifyContent: 'space-between',
             flexDirection: 'row',
             backgroundColor: 'white',
             bottom: 0,
             borderColor: 'gray',
-            position: 'absolute',
+            height: '7%',
             width: '100%',
             paddingLeft: 10,
           }}
@@ -235,7 +200,7 @@ const ChatScreen = ({ navigation, route }) => {
             placeholder="Send Message..."
             onChangeText={(text) => setInput(text)}
             value={input}
-            style={{ height: 50, width: '85%' }}
+            style={{ height: '50%', width: '85%', bottom: 0 }}
             multiline={true}
             onSubmitEditing={disable === true ? null : sendMessage}
             keyboardAppearance="dark"
