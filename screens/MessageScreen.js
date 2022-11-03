@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, ScrollView, FlatList } from 'react-native';
+import { StyleSheet, View, ScrollView, FlatList } from 'react-native';
 import Header from '../components/Header';
 import MessageRow from '../components/MessageRow';
-import { auth, db, messageCollection, usersCollection } from '../firebase';
+import { auth, messageCollection, usersCollection } from '../firebase';
 import { v4 as uuid } from 'uuid';
+import RandomStreak from '../components/RandomStreak';
 
 const MessageScreen = ({ navigation, route }) => {
   const [users, setUsers] = useState([]);
-
+  const roomId = uuid.v4();
 
   useEffect(() => {
     const subscriber = usersCollection
@@ -28,15 +29,6 @@ const MessageScreen = ({ navigation, route }) => {
 
     return () => subscriber();
   }, [setUsers]);
-
-  const UpdateStreak = (string) => {
-    const num = parseInt(string);
-    const newText = num.toLocaleString();
-
-    return newText;
-  };
-
-  const roomId = uuid.v4();
 
   const addRommId = () => {
     messageCollection.doc(auth.currentUser.uid).set({
@@ -60,7 +52,7 @@ const MessageScreen = ({ navigation, route }) => {
             <MessageRow
               name={item.name}
               image={'https://picsum.photos/200/300'}
-              streak={UpdateStreak(Math.floor(Math.random() * 1000000) + 10000)}
+              streak={RandomStreak()}
               onPress={() => {
                 navigation.navigate('Chat', {
                   name: item.name,
