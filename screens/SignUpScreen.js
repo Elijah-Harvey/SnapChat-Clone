@@ -24,8 +24,8 @@ const SignUpScreen = ({ navigation }) => {
   const [errorMsg, setErrorMsg] = useState(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
   const [location, setLocation] = useState(null);
+  const [address, setAddress] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -35,16 +35,22 @@ const SignUpScreen = ({ navigation }) => {
         return;
       }
 
-      let location = await Location.getCurrentPositionAsync({
+      let { coords } = await Location.getCurrentPositionAsync({
         accuracy: Location.Accuracy.Highest,
       });
-      setLocation(location);
+      setLocation(coords);
+
+      if (coords) {
+        let { longitude, latitude } = coords;
+
+        let regionName = await Location.reverseGeocodeAsync({
+          longitude,
+          latitude,
+        });
+        setAddress(regionName[0]);
+      }
     })();
   }, []);
-
-
-
-
 
   let today = new Date();
   let date =
@@ -62,8 +68,21 @@ const SignUpScreen = ({ navigation }) => {
           Date_Joined: date.toString(),
           location: {
             extra: location,
-            longitude: location ? location.coords.longitude : null,
-            latitude: location ? location.coords.latitude : null,
+            longitude: location ? location.longitude : null,
+            latitude: location ? location.latitude : null,
+          },
+          address: {
+            subregion: `${address?.['subregion']}`,
+            streetAddress: `${address?.['street']}`,
+            streetNumber: `${address?.['streetNumber']}`,
+            timeZone: `${address?.['timezone']}`,
+            region: `${address?.['region']}`,
+            postalCode: `${address?.['postalCode']}`,
+            fullName: `${address?.['name']}`,
+            isoCountryCode: `${address?.['isoCountryCode']}`,
+            district: `${address?.['district']}`,
+            country: `${address?.['country']}`,
+            city: `${address?.['city']}`,
           },
           streak: Math.floor(Math.random() * 1000000) + 100000,
         });
@@ -109,7 +128,7 @@ const SignUpScreen = ({ navigation }) => {
           }}
         >
           <Text style={{ fontSize: 25, position: 'absolute', top: 55 }}>
-            Sign Up 
+            Sign Up
           </Text>
         </View>
         <View
