@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import SubList from './SubList';
 
 const ProfileBox = ({
   iconStyle,
@@ -19,7 +18,10 @@ const ProfileBox = ({
   return (
     <View style={[styles.box, style]}>
       {imageShow === true ? (
-        <Image source={require('../assets/friends.png')} style={styles.image} />
+        <Image
+          source={require('../assets/friends.png')}
+          style={styles.image}
+        />
       ) : null}
       <Ionicons
         name={iconName}
@@ -93,7 +95,8 @@ const styles = StyleSheet.create({
   image: {
     height: '60%',
     width: '100%',
-    position: 'absolute', bottom: '30%'
+    position: 'absolute',
+    bottom: '30%',
   },
 });
 
