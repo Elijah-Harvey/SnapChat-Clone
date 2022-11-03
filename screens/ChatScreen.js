@@ -57,7 +57,7 @@ const ChatScreen = ({ navigation, route }) => {
     return () => subscriber();
   }, [messageCollection]);
 
-  useEffect((value) => {
+  useEffect(() => {
     if (input.trim()) {
       setDisable(false);
     } else {
@@ -237,7 +237,8 @@ const ChatScreen = ({ navigation, route }) => {
             value={input}
             style={{ height: 50, width: '85%' }}
             multiline={true}
-            onSubmitEditing={input.length === 0 ? null : sendMessage}
+            onSubmitEditing={disable === true ? null : sendMessage}
+            keyboardAppearance="dark"
           />
           <TouchableOpacity
             title="Send"
