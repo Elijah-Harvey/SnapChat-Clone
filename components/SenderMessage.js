@@ -2,7 +2,7 @@ import { View, Text } from 'react-native';
 import React from 'react';
 
 
-const SenderMessage = ({ message, text, setcolor, time }) => {
+const SenderMessage = ({ message, text, setcolor, time, borderLeftColor }) => {
   return (
     <View style={{ left: 10 }}>
       <View
@@ -10,7 +10,7 @@ const SenderMessage = ({ message, text, setcolor, time }) => {
           borderLeftWidth: 3,
           marginBottom: '1.5%',
           padding: '2.5%',
-          borderLeftColor: '#E04D5C',
+          borderLeftColor: borderLeftColor,
           backgroundColor: '#ededed',
           width: '70%',
           marginTop: '6%',
