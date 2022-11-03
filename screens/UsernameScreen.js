@@ -18,12 +18,12 @@ const { height } = Dimensions.get('window');
 
 const UsernameScreen = ({ navigation }) => {
   const [name, setName] = useState('');
-  const [disable, setDisable] = useState(false);
+  const [disable, setDisable] = useState(true);
 
   
 
   const update = {
-    displayName: `@${name}`,
+    displayName: `${name}`,
   };
 
   useEffect(() => {
@@ -32,13 +32,14 @@ const UsernameScreen = ({ navigation }) => {
     }
   }, [name]);
 
-  useEffect(() => {
-    if (name === '') {
-      setDisable(true)
-    } else {
-      setDisable(false)
-    }
-  }, [name])
+
+ useEffect(() => {
+  if (name.trim()) {
+    setDisable(false);
+  } else {
+    setDisable(true);
+  }
+}, [name]);
 
   const handleUsername = () => {
     auth.currentUser

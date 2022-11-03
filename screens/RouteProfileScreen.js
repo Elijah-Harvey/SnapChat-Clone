@@ -9,111 +9,40 @@ import {
   RefreshControl,
   ScrollView,
 } from 'react-native';
-import { auth, usersCollection } from '../firebase';
-import * as ImagePicker from 'expo-image-picker';
+import { auth } from '../firebase';
 import ProfileBox from '../components/ProfileBox';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import RandomStreak from '../components/RandomStreak';
 
-const ProfileScreen = ({ navigation }) => {
-  const [image, setImage] = useState(auth.currentUser.photoURL);
-  const [refreshing, setRefreshing] = useState(false);
-
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    console.log(result);
-
-    if (!result.cancelled) {
-      setImage(result.uri);
-    }
-  };
-
-  const update = {
-    photoURL: image,
-  };
-
-  useEffect(() => {
-    if (auth.currentUser) {
-      auth.currentUser.updateProfile(update).then(() => {
-        usersCollection
-          .doc(auth.currentUser.uid)
-          .update({
-            image: image,
-          })
-          .then(() => {
-            console.log('success');
-          });
-      });
-    }
-  }, [image]);
-
-  const wait = (timeout) => {
-    return new Promise((resolve) => setTimeout(resolve, timeout));
-  };
-
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    wait(200).then(() => setRefreshing(false));
-  }, []);
-
-  // const handleSignOut = () => {
-  //   auth
-  //     .signOut()
-  //     .then(() => navigation.replace('LogIn'))
-  //     .catch((error) => error.message);
-  // };
-
+const RouteProfileScreen = ({ navigation, route }) => {
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView
-        style={{ flex: 1 }}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
-        <View style={{ flex: 1, width: '100%' }}>
-          <TouchableOpacity
-            style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '35%',
-              alignSelf: 'center',
+      <ScrollView style={{ flex: 1 }}>
+        <View
+          style={{
+            flex: 1,
+            width: '100%',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '35%',
+            alignSelf: 'center',
+          }}
+        >
+          <Image
+            source={{
+              uri: route.params.image,
             }}
-            onPress={pickImage}
-          >
-            <Image
-              source={{
-                uri:
-                  image === null
-                    ? 'https://picsum.photos/200/300'
-                    : auth.currentUser.photoURL,
-              }}
-              style={{ height: 150, width: 150, borderRadius: 100 / 2 }}
-            />
-            <Image
-              source={require('../assets/pngwing.com.png')}
-              style={{ height: 150, width: 150, position: 'absolute' }}
-            />
-          </TouchableOpacity>
+            style={{ height: 150, width: 150, borderRadius: 100 / 2 }}
+          />
+          <Image
+            source={require('../assets/pngwing.com.png')}
+            style={{ height: 150, width: 150, position: 'absolute' }}
+          />
         </View>
         <View style={{ alignItems: 'center' }}>
-          <TouchableOpacity
-            style={{ alignItems: 'center' }}
-            onPress={() => navigation.navigate('Change')}
-          >
-            <Text style={{ fontSize: 20 }}>
-              {auth?.currentUser?.displayName
-                ? auth?.currentUser?.displayName
-                : auth?.currentUser?.email}
-            </Text>
-          </TouchableOpacity>
+          <Text style={{ fontSize: 20 }}>
+            {route.params.name ? route.params.name : route.params.email}
+          </Text>
         </View>
         <View
           style={{
@@ -123,12 +52,12 @@ const ProfileScreen = ({ navigation }) => {
             justifyContent: 'space-between',
             width: '100%',
             height: '5%',
-            paddingLeft: '20%',
-            paddingRight: '20%',
+            paddingLeft: '25%',
+            paddingRight: '25%',
           }}
         >
           <Text style={{ fontWeight: '600' }}>
-            {auth.currentUser.displayName ? `@${auth.currentUser.displayName}` : auth.currentUser.email}
+            {!route.params.name ? route.params.email : route.params.name}
           </Text>
           <Text style={{ color: 'gray' }}>-</Text>
           <Text style={{ fontWeight: '600' }}>{RandomStreak()}</Text>
@@ -223,4 +152,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileScreen;
+export default RouteProfileScreen;

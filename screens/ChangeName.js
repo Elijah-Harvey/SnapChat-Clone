@@ -18,7 +18,7 @@ const { height } = Dimensions.get('window');
 
 const UsernameScreen = ({ navigation }) => {
   const [name, setName] = useState('');
-
+  const [disable, setDisable] = useState(false);
 
   const update = {
     displayName: name,
@@ -27,6 +27,14 @@ const UsernameScreen = ({ navigation }) => {
   useEffect(() => {
     if (auth.currentUser) {
       auth.currentUser.updateProfile(update);
+    }
+  }, [name]);
+
+  useEffect(() => {
+    if (name.trim()) {
+      setDisable(false);
+    } else {
+      setDisable(true);
     }
   }, [name]);
 
@@ -92,7 +100,9 @@ const UsernameScreen = ({ navigation }) => {
         <TouchableButton
           text="Continue"
           onPress={() => navigation.goBack()}
-          onPressIn={handleUsername}
+          onPressIn={disable === true ? null : handleUsername}
+          disable={disable}
+          style={{backgroundColor: disable === true ? 'lightgray' : '#10ACFF'}}
         />
       </KeyboardAvoidingView>
     </SafeAreaView>

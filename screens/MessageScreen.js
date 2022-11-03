@@ -44,7 +44,7 @@ const MessageScreen = ({ navigation, route }) => {
          top={'10%'}
           rightIcon="chatbubbles-outline"
           title="Chat"
-          onPress={() => navigation.navigate('Profile')}
+          onPress={() => navigation.navigate('Profiles')}
         />
         <FlatList
           data={users}
@@ -59,7 +59,8 @@ const MessageScreen = ({ navigation, route }) => {
                   image: 'https://picsum.photos/200/300',
                   number: item.Number,
                   uid: item.UID,
-                  roomId: roomId
+                  roomId: roomId,
+                  email: item.Email
                 });
               }}
               onPressIn={addRommId}

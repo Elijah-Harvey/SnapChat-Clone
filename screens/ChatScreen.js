@@ -20,7 +20,7 @@ const ChatScreen = ({ navigation, route }) => {
   const [input, setInput] = useState('');
   const [disable, setDisable] = useState(false);
   const [messages, setMessages] = useState([]);
-  const messageId = uuid()
+  const messageId = uuid();
 
   useEffect(() => {
     messageCollection.doc(auth.currentUser.uid).update({
@@ -28,27 +28,26 @@ const ChatScreen = ({ navigation, route }) => {
     });
   });
 
-  
   useEffect(() => {
     const subscriber = messageCollection
-    .doc(auth.currentUser.uid)
-    .collection('Messages')
-    .orderBy('createdAt', 'desc')
-    .onSnapshot((querySnapshot) => {
-      const allSentMessages = [];
-      
-      querySnapshot.forEach((documentSnapshot) => {
-        allSentMessages.push({
-          ...documentSnapshot.data(),
-          key: documentSnapshot.id,
+      .doc(auth.currentUser.uid)
+      .collection('Messages')
+      .orderBy('createdAt', 'desc')
+      .onSnapshot((querySnapshot) => {
+        const allSentMessages = [];
+
+        querySnapshot.forEach((documentSnapshot) => {
+          allSentMessages.push({
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id,
+          });
         });
+
+        setMessages(allSentMessages);
       });
-      
-      setMessages(allSentMessages);
-    });
     return () => subscriber();
   }, [messageCollection]);
-  
+
   useEffect(() => {
     if (input.trim()) {
       setDisable(false);
@@ -63,7 +62,6 @@ const ChatScreen = ({ navigation, route }) => {
     return call;
   };
 
-
   const sendMessage = () => {
     messageCollection
       .doc(auth.currentUser.uid)
@@ -74,20 +72,16 @@ const ChatScreen = ({ navigation, route }) => {
         email: auth.currentUser.email,
         createdAt: new Date(),
         id: messageId,
-        time:
-          CustomDate()
+        time: CustomDate(),
       })
       .then(() => {
-        messageCollection
-          .doc(route.params.uid)
-          .collection('Messages')
-          .add({
-            message: input,
-            createdAt: new Date(),
-            id: messageId,
-            time: CustomDate()
-          });
-          setInput('');
+        messageCollection.doc(route.params.uid).collection('Messages').add({
+          message: input,
+          createdAt: new Date(),
+          id: messageId,
+          time: CustomDate(),
+        });
+        setInput('');
       });
   };
 
@@ -105,10 +99,16 @@ const ChatScreen = ({ navigation, route }) => {
           }}
         >
           <View style={styles.circle}>
-            <Image
-              source={{ uri: route.params.image }}
-              style={{ height: 45, width: 45, borderRadius: 45 / 2 }}
-            />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('Profile', { name: route.params.name,  image: route.params.image, email: route.params.email})
+              }
+            >
+              <Image
+                source={{ uri: route.params.image }}
+                style={{ height: 45, width: 45, borderRadius: 45 / 2 }}
+              />
+            </TouchableOpacity>
           </View>
           <Text style={{ fontSize: 20 }}>{route.params.name}</Text>
           <TouchableOpacity
