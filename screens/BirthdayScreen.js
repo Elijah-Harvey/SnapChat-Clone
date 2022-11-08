@@ -15,7 +15,7 @@ import {
 import TouchableButton from '../components/TouchableButton';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { auth, usersCollection } from '../firebase';
+import { AddFriendCollection, auth, usersCollection } from '../firebase';
 import CustomTextinput from '../components/CustomTextinput';
 
 const { height } = Dimensions.get('window');
@@ -33,7 +33,7 @@ const Birthday = ({ navigation }) => {
   
 useEffect(() => {
   if (date.getFullYear() >= today.getFullYear() - 12 ) {
-    Alert.alert('Must be 13 years of age')
+    // Alert.alert('Must be 13 years of age')
     setDisable(true)
   } else setDisable(false)
 }, [date])
@@ -50,7 +50,16 @@ console.log(auth.currentUser.uid)
               date.getDate() +
               '/' +
               date.getFullYear().toString(),
-          })
+          }).then(() => AddFriendCollection.doc(auth.currentUser.uid)
+          .update({
+            Date_Of_Birth:
+              date.getMonth() +
+              1 +
+              '/' +
+              date.getDate() +
+              '/' +
+              date.getFullYear().toString(),
+          }))
           .then( () => navigation.navigate('Name'))
   };
 
@@ -100,11 +109,10 @@ console.log(auth.currentUser.uid)
         <View
           style={{
             alignItems: 'center',
-            justifyContent: 'center',
             flex: 1,
           }}
         >
-          <Text style={{ fontSize: 25, position: 'absolute', top: '15%' }}>
+          <Text style={{ fontSize: 25,  top: '15%' }}>
             When's your birthday?
           </Text>
         </View>
@@ -136,7 +144,7 @@ console.log(auth.currentUser.uid)
           ) : null}
           {Platform.OS === 'ios' ? (
             <CustomTextinput
-              viewStyle={{ top: '54%' }}
+              viewStyle={{ top: '52%' }}
               text={'BIRTHDAY'}
               editable={false}
               textinputStyle={styles.inputIOS}
@@ -194,20 +202,19 @@ const styles = StyleSheet.create({
     width: '80%',
     alignSelf: 'center',
     paddingLeft: '3%',
+    fontSize: '15%'
   },
   inputIOS: {
     height: '15%',
     width: '80%',
     alignSelf: 'center',
     paddingLeft: '3%',
+    fontSize: '15%'
   },
   iosPicker: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'absolute',
-    left: '65%',
-    top: '46%',
-    width: 90,
+    right: '10%',
+    width: '20%'
+    ,position: 'absolute'
   },
 });
 

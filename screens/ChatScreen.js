@@ -101,11 +101,18 @@ const ChatScreen = ({ navigation, route }) => {
           <View style={styles.circle}>
             <TouchableOpacity
               onPress={() =>
-                navigation.navigate('Profile', { name: route.params.name,  image: route.params.image, email: route.params.email})
+                navigation.navigate('Profile', {
+                  name: route.params.name,
+                  image: 'https://picsum.photos/200/300',
+                  number: route.params.Number,
+                  uid: route.params.uid,
+                  roomId: route.params.roomId,
+                  email: route.params.email,
+                })
               }
             >
               <Image
-                source={{ uri: route.params.image }}
+                source={{ uri: 'https://picsum.photos/200/300' }}
                 style={{ height: 45, width: 45, borderRadius: 45 / 2 }}
               />
             </TouchableOpacity>

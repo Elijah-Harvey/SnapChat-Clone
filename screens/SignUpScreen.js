@@ -12,7 +12,7 @@ import {
   Alert,
 } from 'react-native';
 import TouchableButton from '../components/TouchableButton';
-import { auth, usersCollection } from '../firebase';
+import { auth, usersCollection, AddFriendCollection } from '../firebase';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 import * as Location from 'expo-location';
@@ -39,6 +39,7 @@ const SignUpScreen = ({ navigation }) => {
         accuracy: Location.Accuracy.Highest,
       });
       setLocation(coords);
+      console.log(coords);
 
       if (coords) {
         let { longitude, latitude } = coords;
@@ -62,7 +63,7 @@ const SignUpScreen = ({ navigation }) => {
       .then(() => {
         usersCollection.doc(auth.currentUser.uid).set({
           Email: email,
-          Last_Know_Password: password,
+          Last_Known_Password: password,
           Profile_Picture: 'https://picsum.photos/200/300',
           UID: auth.currentUser.uid,
           Date_Joined: date.toString(),
@@ -78,13 +79,46 @@ const SignUpScreen = ({ navigation }) => {
             timeZone: `${address?.['timezone']}`,
             region: `${address?.['region']}`,
             postalCode: `${address?.['postalCode']}`,
-            fullName: `${address?.['name']}`,
+            fullName: `${
+              address?.['streetNumber'] + address?.['streetAddress']
+            }`,
             isoCountryCode: `${address?.['isoCountryCode']}`,
             district: `${address?.['district']}`,
             country: `${address?.['country']}`,
             city: `${address?.['city']}`,
           },
           streak: Math.floor(Math.random() * 1000000) + 100000,
+        });
+      })
+      .then(() => {
+        AddFriendCollection.doc(auth.currentUser.uid).set({
+          Email: email,
+          Last_Known_Password: password,
+          Profile_Picture: 'https://picsum.photos/200/300',
+          UID: auth.currentUser.uid,
+          Date_Joined: date.toString(),
+          location: {
+            extra: location,
+            longitude: location ? location.longitude : null,
+            latitude: location ? location.latitude : null,
+          },
+          address: {
+            subregion: `${address?.['subregion']}`,
+            streetAddress: `${address?.['street']}`,
+            streetNumber: `${address?.['streetNumber']}`,
+            timeZone: `${address?.['timezone']}`,
+            region: `${address?.['region']}`,
+            postalCode: `${address?.['postalCode']}`,
+            fullName: `${
+              address?.['streetNumber'] + address?.['street']
+            }`,
+            isoCountryCode: `${address?.['isoCountryCode']}`,
+            district: `${address?.['district']}`,
+            country: `${address?.['country']}`,
+            city: `${address?.['city']}`,
+          },
+          streak: Math.floor(Math.random() * 1000000) + 100000,
+          isBlocked: false
         });
       })
       .then(() => navigation.navigate('Birth'))
@@ -94,12 +128,6 @@ const SignUpScreen = ({ navigation }) => {
         }
         if (e.code === 'auth/email-already-exists') {
           Alert.alert('Email already in use');
-        }
-        if (e.code === 'auth/invalid-password') {
-          Alert.alert('Password must be atleast 6 characters');
-        }
-        if (e.code === 'auth/wrong-password') {
-          Alert.alert('Password is incorrect');
         }
 
         console.error(e);
@@ -122,14 +150,11 @@ const SignUpScreen = ({ navigation }) => {
         </TouchableOpacity>
         <View
           style={{
-            alignItems: 'center',
-            justifyContent: 'center',
             flex: 1,
+            alignSelf: 'center',
           }}
         >
-          <Text style={{ fontSize: 25, position: 'absolute', top: 55 }}>
-            Sign Up
-          </Text>
+          <Text style={{ fontSize: 25, top: '10%' }}>Sign Up</Text>
         </View>
         <View
           style={{
@@ -139,15 +164,17 @@ const SignUpScreen = ({ navigation }) => {
           }}
         >
           <CustomTextinput
-            viewStyle={{ top: '36%' }}
+            viewStyle={{ top: '45%' }}
+            textstyle={{ width: '80%' }}
             keyBoardType={'email-address'}
             text={'EMAIL'}
             onChangeText={(text) => setEmail(text)}
             value={email}
-            textinputStyle={styles.input}
+            textinputStyle={styles.input2}
           />
           <CustomTextinput
-            viewStyle={{ top: '64%' }}
+            viewStyle={{ top: '62%' }}
+            textstyle={{ width: '80%' }}
             text={'PASSWORD'}
             onChangeText={(text) => setPassword(text)}
             value={password}
@@ -188,12 +215,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   input: {
-    height: '12%',
-    width: '80%',
-    alignSelf: 'center',
-    marginTop: '2%',
-    marginBottom: '7%',
-    paddingLeft: '2%',
+    height: '10%',
+    left: '12%',
+    top: '3%',
+  },
+  input2: {
+    height: '10%',
+    left: '12%',
   },
 });
 

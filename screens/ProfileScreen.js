@@ -128,7 +128,9 @@ const ProfileScreen = ({ navigation }) => {
           }}
         >
           <Text style={{ fontWeight: '600' }}>
-            {auth.currentUser.displayName ? `@${auth.currentUser.displayName}` : auth.currentUser.email}
+            {auth.currentUser.displayName
+              ? `@${auth.currentUser.displayName}`
+              : auth.currentUser.email}
           </Text>
           <Text style={{ color: 'gray' }}>-</Text>
           <Text style={{ fontWeight: '600' }}>{RandomStreak()}</Text>
@@ -193,7 +195,9 @@ const ProfileScreen = ({ navigation }) => {
             Friends
           </Text>
         </View>
+
         <ProfileBox
+          onPress={() => navigation.navigate('AddFriend')}
           style={{ top: '13%' }}
           iconName={'person-add-outline'}
           iconName2="chevron-forward-outline"
@@ -201,6 +205,7 @@ const ProfileScreen = ({ navigation }) => {
           styleTitle={{ alignSelf: 'center' }}
           iconStyle={{ transform: [{ rotateY: '180deg' }] }}
         />
+
         <ProfileBox
           style={{ top: '15%', height: '45%' }}
           iconName={'people-circle-outline'}

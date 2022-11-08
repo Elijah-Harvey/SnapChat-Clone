@@ -25,12 +25,10 @@ const LoginScreen = ({ navigation }) => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        navigation.navigate('HomeNav')
-        // .then(() => {
-        //   usersCollection.doc(auth.currentUser.uid).update({
-        //     Last_Know_Password: password
-        //   })
-        // });
+        navigation.navigate('HomeNav'),
+          usersCollection.doc(auth.currentUser.uid).update({
+            Last_Know_Password: password,
+          });
       }
     });
     return unsubscribe;

@@ -15,16 +15,12 @@ import * as Location from 'expo-location';
 const MapScreen = ({ navigation }) => {
   const [users, setUsers] = useState([]);
 
-
   const generateColor = () => {
     const randomColor = Math.floor(Math.random() * 16777215)
       .toString(16)
       .padStart(6, '0');
     return `#${randomColor}`;
   };
-
-
-
 
   useEffect(() => {
     const subscriber = usersCollection.onSnapshot((querySnapshot) => {
@@ -48,9 +44,10 @@ const MapScreen = ({ navigation }) => {
       <Header
         rightIcon="settings-outline"
         title="Map"
-        bgc='transparent'
+        bgc="transparent"
         color="ghostwhite"
         onPress={() => navigation.navigate('Profile')}
+        top={'10%'}
       />
       <MapView
         style={styles.map}
@@ -61,17 +58,13 @@ const MapScreen = ({ navigation }) => {
         followUserLocation={true}
         showsScale={true}
         customMapStyle={{}}
-        initialRegion={{
-          latitude: 30.3322,
-          longitude: -81.6557,
-          latitudeDelta: 0.1,
-          longitudeDelta: 0.1,
-        }}
       >
         {users.map((e, i) => (
           <Marker
             pinColor={`${generateColor()}`}
-            title={`${e.name === undefined || null ? e.Email : e.name}'s location`}
+            title={`${
+              e.name === undefined || null ? e.Email : e.name
+            }'s location`}
             key={i}
             coordinate={{
               latitude:
@@ -79,7 +72,6 @@ const MapScreen = ({ navigation }) => {
               longitude:
                 e.location.longitude != undefined ? e.location.longitude : 0,
             }}
-            
           />
         ))}
       </MapView>
@@ -88,8 +80,8 @@ const MapScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container:{
-    backgroundColor: 'transparent'
+  container: {
+    backgroundColor: 'transparent',
   },
   map: {
     width: Dimensions.get('window').width,

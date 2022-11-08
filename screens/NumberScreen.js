@@ -11,7 +11,7 @@ import {
   Platform,
 } from 'react-native';
 import TouchableButton from '../components/TouchableButton';
-import { auth, usersCollection } from '../firebase';
+import { AddFriendCollection, auth, usersCollection } from '../firebase';
 
 const { height } = Dimensions.get('window');
 
@@ -19,18 +19,25 @@ const NumberScreen = ({ navigation }) => {
   const [number, setNumber] = useState();
 
   const HandleNumber = () => {
-    usersCollection.doc(auth.currentUser.uid).update({
-      Number: number
-    })
+    usersCollection
+      .doc(auth.currentUser.uid)
+      .update({
+        Number: number,
+      })
       .then(() => {
         console.log('success');
       })
-
+      .then(() =>
+        AddFriendCollection.doc(auth.currentUser.uid).update({
+          Number: number,
+        })
+      )
+      .then(() => navigation.navigate('HomeNav'))
       .catch((error) => alert('Number is invalid'));
   };
   return (
     <SafeAreaView style={styles.container}>
-       <KeyboardAvoidingView
+      <KeyboardAvoidingView
         enabled={false}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{ flex: 1 }}
@@ -84,8 +91,9 @@ const NumberScreen = ({ navigation }) => {
                 maxLength={10}
                 keyboardType="phone-pad"
                 value={number}
-                onChangeText={text => setNumber(text)}
-                returnKeyType={ 'done' }               />
+                onChangeText={(text) => setNumber(text)}
+                returnKeyType={'done'}
+              />
             </TouchableOpacity>
           </View>
           <View
@@ -107,7 +115,12 @@ const NumberScreen = ({ navigation }) => {
           </View>
         </View>
 
-        <TouchableButton text="Continue" onPress={HandleNumber} onPressIn={() => navigation.navigate('HomeNav')} disable={number === '' ? true : false} style={{backgroundColor: number === '' ? 'gray': '#10ACFF'}}/>
+        <TouchableButton
+          text="Continue"
+          onPress={HandleNumber}
+          disable={number === '' ? true : false}
+          style={{ backgroundColor: number === '' ? 'gray' : '#10ACFF' }}
+        />
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -142,7 +155,7 @@ const styles = StyleSheet.create({
   },
   button: {
     bottom: 10,
-  }
+  },
 });
 
 export default NumberScreen;

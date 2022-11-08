@@ -14,14 +14,12 @@ const ProfileBox = ({
   styleTitle,
   iconStyle2,
   imageShow = false,
+  onPress,
 }) => {
   return (
-    <View style={[styles.box, style]}>
+    <TouchableOpacity style={[styles.box, style]} onPress={onPress}>
       {imageShow === true ? (
-        <Image
-          source={require('../assets/friends.png')}
-          style={styles.image}
-        />
+        <Image source={require('../assets/friends.png')} style={styles.image} />
       ) : null}
       <Ionicons
         name={iconName}
@@ -62,7 +60,7 @@ const ProfileBox = ({
           iconStyle2,
         ]}
       />
-    </View>
+    </TouchableOpacity>
   );
 };
 

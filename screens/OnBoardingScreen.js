@@ -34,11 +34,10 @@ function OnBoardingScreen({ navigation }) {
       <View style={styles.container}>
         <TouchableOpacity
           style={{
-            alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: '#E04D5C',
-            width: 450,
             height: 50,
+            width: '100%',
           }}
           onPress={() => navigation.navigate('LogIn')}
         >
@@ -49,7 +48,7 @@ function OnBoardingScreen({ navigation }) {
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: '#4FAAF9',
-            width: 450,
+            width: '100%',
             height: 50,
           }}
           onPress={() => navigation.navigate('SignUp')}
@@ -64,9 +63,7 @@ function OnBoardingScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
-    alignSelf: 'center',
     bottom: 0,
-    position: 'absolute',
   },
   text: {
     fontSize: 30,

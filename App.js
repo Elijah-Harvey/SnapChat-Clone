@@ -8,6 +8,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { navigationRef } from './navigation/rootNavigation';
 import AppNavigator from './navigation/AppNavigator';
 import Birthday from './screens/BirthdayScreen';
+import UsernameScreen from './screens/UsernameScreen';
 
 
 const Stack = createNativeStackNavigator();

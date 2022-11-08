@@ -5,6 +5,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 import CameraScreen from '../screens/CameraScreen';
 import OnBoardingScreen from '../screens/OnBoardingScreen';
 import ChangeName from '../screens/ChangeName';
+import AddFriendsScreen from '../screens/AddFriendsScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -19,6 +20,8 @@ const ProfileNavigator = (props) => {
       <Stack.Screen component={ProfileScreen} name="Profile" />
       <Stack.Screen component={OnBoardingScreen} name="OnBoard" />
       <Stack.Screen component={ChangeName} name="Change" />
+      <Stack.Screen component={AddFriendsScreen} name="AddFriend" /> 
+
     </Stack.Navigator>
   );
 };

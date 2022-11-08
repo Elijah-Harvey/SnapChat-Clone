@@ -23,7 +23,7 @@ const CustomTextinput = ({
             borderWidth: 1,
             width: '80%',
             alignSelf: 'center',
-            height: Platform.OS === 'ios' ? '2%' : '4%',
+            height: '3%',
             borderTopColor: 'transparent',
             position: 'absolute',
           },
@@ -33,7 +33,7 @@ const CustomTextinput = ({
       <Text
         style={[{
           fontSize: 15,
-          left: 40,
+          left: '10%',
           color: '#6CA6DC',
         }, textstyle]}
       >
@@ -56,8 +56,5 @@ const CustomTextinput = ({
   );
 };
 
-const styles = StyleSheet.create({
-  container: {},
-});
 
 export default CustomTextinput;

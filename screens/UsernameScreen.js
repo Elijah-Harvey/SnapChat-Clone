@@ -12,15 +12,14 @@ import {
   Button,
 } from 'react-native';
 import TouchableButton from '../components/TouchableButton';
-import { auth, usersCollection } from '../firebase';
+import { AddFriendCollection, auth, usersCollection } from '../firebase';
+import CustomTextinput from '../components/CustomTextinput';
 
 const { height } = Dimensions.get('window');
 
 const UsernameScreen = ({ navigation }) => {
   const [name, setName] = useState('');
   const [disable, setDisable] = useState(true);
-
-  
 
   const update = {
     displayName: `${name}`,
@@ -32,14 +31,13 @@ const UsernameScreen = ({ navigation }) => {
     }
   }, [name]);
 
-
- useEffect(() => {
-  if (name.trim()) {
-    setDisable(false);
-  } else {
-    setDisable(true);
-  }
-}, [name]);
+  useEffect(() => {
+    if (name.trim()) {
+      setDisable(false);
+    } else {
+      setDisable(true);
+    }
+  }, [name]);
 
   const handleUsername = () => {
     auth.currentUser
@@ -54,9 +52,14 @@ const UsernameScreen = ({ navigation }) => {
             console.log('success');
           });
       })
+      .then(() => {
+        AddFriendCollection.doc(auth.currentUser.uid).update({
+          name: `${name}`,
+        });
+      })
+      .then(() => navigation.navigate('Number'))
       .catch((error) => alert('Something went wrong try again'));
   };
-
 
   return (
     <SafeAreaView style={styles.container}>
@@ -76,38 +79,19 @@ const UsernameScreen = ({ navigation }) => {
           <Text style={{ fontSize: 25, position: 'absolute', top: 55 }}>
             Your Username?
           </Text>
-        </View>
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'column',
-            justifyContent: 'space-evenly',
-            bottom: '50%',
-            justifyContent: 'center',
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 15,
-              left: 40,
-              color: '#6CA6DC',
-            }}
-          >
-            Username
-          </Text>
-          <TouchableOpacity>
-            <TextInput
-              placeholderTextColor={'black'}
-              style={styles.input}
-              value={name}
-              onChangeText={(text) => setName(text)}
-            />
-          </TouchableOpacity>
+          <CustomTextinput
+            viewStyle={{ top: '32%', height: '1%' }}
+            textstyle={{ width: '80%', position: 'absolute', top: '25%' }}
+            keyBoardType={'email-address'}
+            text={'USERNAME'}
+            onChangeText={(text) => setName(text)}
+            value={name}
+            textinputStyle={styles.input}
+          />
         </View>
 
         <TouchableButton
           text="Continue"
-          onPressIn={() => navigation.navigate('Number')}
           onPress={handleUsername}
           disable={disable}
           style={{
@@ -124,17 +108,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   input: {
-    height: 40,
-    width: '80%',
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderTopColor: 'transparent',
-    borderLeftColor: 'transparent',
-    borderRightColor: 'transparent',
-    paddingLeft: 10,
-    alignSelf: 'center',
-    marginTop: 15,
-    marginBottom: 20,
+    position: 'absolute',
+    width: '76%',
+    top: '30.6%',
+    
+    
   },
 });
 

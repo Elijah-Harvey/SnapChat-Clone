@@ -2,19 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, ScrollView, FlatList } from 'react-native';
 import Header from '../components/Header';
 import MessageRow from '../components/MessageRow';
-import { auth, messageCollection, usersCollection } from '../firebase';
+import { auth, FriendCollection, messageCollection, usersCollection } from '../firebase';
 import { v4 as uuid } from 'uuid';
 import RandomStreak from '../components/RandomStreak';
 
-const MessageScreen = ({ navigation, route }) => {
+const MessageScreen = ({ navigation }) => {
   const [users, setUsers] = useState([]);
   const roomId = uuid.v4();
 
   useEffect(() => {
-    const subscriber = usersCollection
-      .where('UID', '!=', auth.currentUser.uid)
-      .orderBy('UID', 'desc')
-      .onSnapshot((querySnapshot) => {
+    const subscriber = FriendCollection
+    .doc(auth.currentUser.uid).collection('Friends')
+    // .where(('item.sentTo' || 'item.sentFrom'), '==', auth.currentUser.uid)
+    .onSnapshot((querySnapshot) => {
         const users = [];
 
         querySnapshot.forEach((documentSnapshot) => {
@@ -37,11 +37,12 @@ const MessageScreen = ({ navigation, route }) => {
     });
   };
 
+
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Header
-         top={'10%'}
+          top={'10%'}
           rightIcon="chatbubbles-outline"
           title="Chat"
           onPress={() => navigation.navigate('Profiles')}
@@ -50,17 +51,17 @@ const MessageScreen = ({ navigation, route }) => {
           data={users}
           renderItem={({ item }) => (
             <MessageRow
-              name={item.name}
+              name={item.item.item.name}
               image={'https://picsum.photos/200/300'}
               streak={RandomStreak()}
               onPress={() => {
                 navigation.navigate('Chat', {
-                  name: item.name,
+                  name: item.item.item.name,
                   image: 'https://picsum.photos/200/300',
-                  number: item.Number,
-                  uid: item.UID,
+                  number: item.item.item.Number,
+                  uid: item.item.item.UID,
                   roomId: roomId,
-                  email: item.Email
+                  email: item.item.item.email,
                 });
               }}
               onPressIn={addRommId}
@@ -73,7 +74,7 @@ const MessageScreen = ({ navigation, route }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {},
+  container: { flex: 1 },
 });
 
 export default MessageScreen;
