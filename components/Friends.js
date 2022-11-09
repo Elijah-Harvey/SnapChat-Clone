@@ -1,12 +1,12 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image } from 'react-native';
+import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
 
-const Friends = ({ name, image }) => {
+const Friends = ({ name, image, onPress, nav }) => {
   return (
     <View style={styles.column}>
-      <View style={styles.profile}>
+      <TouchableOpacity style={styles.profile} onPress={onPress}>
         <Image style={styles.image} source={{ uri: image }} />
-      </View>
+      </TouchableOpacity>
       <Text style={styles.name}>{name}</Text>
     </View>
   );

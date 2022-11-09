@@ -3,12 +3,12 @@ import { StyleSheet, View, Text, Image } from 'react-native';
 import FriendList from './FriendList';
 
 
-const FriendsRow = () => {
+const FriendsRow = ({nav}) => {
   return (
     <View style={styles.container}>
       <View style={{flexDirection: 'column'}}>
       <Text style={styles.text}>Friends</Text>
-        <FriendList />
+        <FriendList nav={nav}/>
       </View>
     </View>
   );

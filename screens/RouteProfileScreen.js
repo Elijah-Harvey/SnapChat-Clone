@@ -9,7 +9,7 @@ import {
   RefreshControl,
   ScrollView,
 } from 'react-native';
-import { auth, usersCollection } from '../firebase';
+import { auth, db, messageCollection, usersCollection } from '../firebase';
 import ProfileBox from '../components/ProfileBox';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import RandomStreak from '../components/RandomStreak';
@@ -18,8 +18,71 @@ import * as Location from 'expo-location';
 
 const RouteProfileScreen = ({ navigation, route }) => {
   const [user, setUser] = useState({});
-  const [seconds, setSeconds] = useState(4);
-  const [region, setRegion] = useState();
+  const [seconds, setSeconds] = useState(1);
+  const [region, setRegion] = useState('Waiting...');
+
+  const DUMMY_DATA = [
+    {
+      id: 1,
+      title: 'Tanks',
+      time: '2hr ago',
+      image: 'https://picsum.photos/200/300',
+    },
+    {
+      id: 2,
+      title: 'Wrestling',
+      time: '2hr ago',
+      image: 'https://picsum.photos/200/300',
+    },
+    {
+      id: 3,
+      title: 'War',
+      time: '2hr ago',
+      image: 'https://picsum.photos/200/300',
+    },
+    {
+      id: 4,
+      title: 'Long text about war',
+      time: '2hr ago',
+      image: 'https://picsum.photos/200/300',
+    },
+    {
+      id: 5,
+      title: 'HEllo',
+      time: '2hr ago',
+      image: 'https://picsum.photos/200/300',
+    },
+    {
+      id: 6,
+      title: 'WeIrD LoOkInG tExT',
+      time: '2hr ago',
+      image: 'https://picsum.photos/200/300',
+    },
+    {
+      id: 7,
+      title: 'plus',
+      time: '2hr ago',
+      image: 'https://picsum.photos/200/300',
+    },
+    {
+      id: 8,
+      title: 'a little',
+      time: '2hr ago',
+      image: 'https://picsum.photos/200/300',
+    },
+    {
+      id: 9,
+      title: 'More',
+      time: '2hr ago',
+      image: 'https://picsum.photos/200/300',
+    },
+    {
+      id: 10,
+      title: 'How does this look',
+      time: '2hr ago',
+      image: 'https://picsum.photos/200/300',
+    },
+  ];
 
   useEffect(() => {
     const subscriber = usersCollection
@@ -37,9 +100,6 @@ const RouteProfileScreen = ({ navigation, route }) => {
       if (seconds > 0) {
         setSeconds(seconds - 1);
       }
-      if (seconds === 4) {
-        setRegion('Waiting...');
-      }
       if (seconds === 0) {
         setRegion(user.address.city);
       }
@@ -49,11 +109,11 @@ const RouteProfileScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.containers}>
+      <ScrollView style={styles.containers}>
         <View style={{ paddingTop: 16, paddingBottom: 16, flex: 1 }}>
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate('Chat', {
+              navigation.goBack({
                 name: route.params.name,
                 image: 'https://picsum.photos/200/300',
                 number: route.params.Number,
@@ -67,13 +127,15 @@ const RouteProfileScreen = ({ navigation, route }) => {
             <Ionicons name="chevron-down-outline" size={'35%'} />
           </TouchableOpacity>
           <TouchableOpacity
-            style={{ position: 'absolute', right: '15%', alignItems: 'center'}}
+            style={{ position: 'absolute', right: '15%', alignItems: 'center' }}
           >
-            <Ionicons name="person-circle-outline" size={'40%'} color='#4FAAF9' />
+            <Ionicons
+              name="person-circle-outline"
+              size={'40%'}
+              color="#4FAAF9"
+            />
           </TouchableOpacity>
-          <TouchableOpacity
-            style={{ position: 'absolute', right: '3%' }}
-          >
+          <TouchableOpacity style={{ position: 'absolute', right: '3%' }}>
             <Ionicons name="ellipsis-vertical-outline" size={'35%'} />
           </TouchableOpacity>
           <View
@@ -82,6 +144,7 @@ const RouteProfileScreen = ({ navigation, route }) => {
               width: '100%',
               alignItems: 'center',
               justifyContent: 'center',
+              width: '35%',
               alignSelf: 'center',
             }}
           >
@@ -137,7 +200,9 @@ const RouteProfileScreen = ({ navigation, route }) => {
             }}
           >
             <MapView
-            mapType='terrain'
+              mapType="none"
+              zoomEnabled={false}
+              scrollEnabled={false}
               style={{ height: '100%', width: '100%' }}
               region={{
                 longitude: user?.location?.longitude,
@@ -188,7 +253,7 @@ const RouteProfileScreen = ({ navigation, route }) => {
               Seen 2m ago
             </Text>
           </View>
-          <View
+          <TouchableOpacity
             style={{
               backgroundColor: 'white',
               height: '30%',
@@ -203,6 +268,9 @@ const RouteProfileScreen = ({ navigation, route }) => {
               shadowOpacity: 0.3,
               shadowRadius: 5,
             }}
+            onPress={() => db.collection('TOLD YOU ZEKE').add({
+              toldYou: 'fuck you ZEKE'
+            })}
           >
             <Ionicons
               name="location-outline"
@@ -226,7 +294,7 @@ const RouteProfileScreen = ({ navigation, route }) => {
             >
               Send My Location
             </Text>
-          </View>
+          </TouchableOpacity>
           <View style={{ top: '7%', left: '5%' }}>
             <Text style={{ fontSize: '18%', fontWeight: '600' }}>
               Saved in Chat
@@ -243,7 +311,7 @@ const RouteProfileScreen = ({ navigation, route }) => {
             }}
           ></View>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

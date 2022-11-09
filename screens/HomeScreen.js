@@ -19,7 +19,7 @@ function HomeScreen({ navigation }) {
         onPress={() => navigation.navigate('Profile')}
       />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <FriendsRow />
+        <FriendsRow nav={navigation}/>
         <SubRow />
         <ForYouRow />
       </ScrollView>

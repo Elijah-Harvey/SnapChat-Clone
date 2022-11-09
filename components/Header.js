@@ -61,9 +61,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   Header: {
-    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
     top: Platform.OS === 'android' ? '5%' : '7%',
     marginBottom: '14%',
   },

@@ -18,6 +18,14 @@ const { height } = Dimensions.get('window');
 const NumberScreen = ({ navigation }) => {
   const [number, setNumber] = useState();
 
+  const addDashes = (input) => {
+    if (!input || isNaN(input))
+      return;
+    if (input.length === 10) {
+      return input.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+    }
+  };
+
   const HandleNumber = () => {
     usersCollection
       .doc(auth.currentUser.uid)
@@ -35,6 +43,8 @@ const NumberScreen = ({ navigation }) => {
       .then(() => navigation.navigate('HomeNav'))
       .catch((error) => alert('Number is invalid'));
   };
+
+  console.log(addDashes(number))
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
@@ -90,7 +100,7 @@ const NumberScreen = ({ navigation }) => {
                 style={styles.input}
                 maxLength={10}
                 keyboardType="phone-pad"
-                value={number}
+                value={addDashes(number)}
                 onChangeText={(text) => setNumber(text)}
                 returnKeyType={'done'}
               />

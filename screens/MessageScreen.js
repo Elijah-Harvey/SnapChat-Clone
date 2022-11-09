@@ -45,7 +45,7 @@ const MessageScreen = ({ navigation }) => {
           top={'10%'}
           rightIcon="chatbubbles-outline"
           title="Chat"
-          onPress={() => navigation.navigate('Profiles')}
+          onPress={() => navigation.navigate('Profile')}
         />
         <FlatList
           data={users}

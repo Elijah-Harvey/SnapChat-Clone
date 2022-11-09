@@ -1,70 +1,46 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, FlatList } from 'react-native';
+import { auth, usersCollection } from '../firebase';
 import Friends from './Friends';
 
-const FriendList = (props) => {
-  const DUMMY_DATA = [
-    {
-      id: 1,
-      name: 'Father Harvey',
-      image: 'https://picsum.photos/200/300',
-    },
-    {
-      id: 2,
-      name: 'Zeke Harvey',
-      image: 'https://picsum.photos/200/300',
-    },
-    {
-      id: 3,
-      name: 'Lizzy Harvey',
-      image: 'https://picsum.photos/200/300',
-    },
-    {
-      id: 4,
-      name: 'Ethan Harvey',
-      image: 'https://picsum.photos/200/300',
-    },
-    {
-      id: 5,
-      name: 'Elijah Harvey',
-      image: 'https://picsum.photos/200/300',
-    },
-    {
-      id: 6,
-      name: 'Father Harvey',
-      image: 'https://picsum.photos/200/300',
-    },
-    {
-      id: 7,
-      name: 'Zeke Harvey',
-      image: 'https://picsum.photos/200/300',
-    },
-    {
-      id: 8,
-      name: 'Lizzy Harvey',
-      image: 'https://picsum.photos/200/300',
-    },
-    {
-      id: 9,
-      name: 'Ethan Harvey',
-      image: 'https://picsum.photos/200/300',
-    },
-    {
-      id: 10,
-      name: 'Elijah Harvey',
-      image: 'https://picsum.photos/200/300',
-    },
-  ];
+const FriendList = ({navigation, nav}) => {
+ const [data, setData] = useState([])
+
+useEffect(() => {
+    const subscriber = usersCollection.where('UID', '==', auth.currentUser.uid)
+    .onSnapshot((querySnapshot) => {
+        const users = [];
+
+        querySnapshot.forEach((documentSnapshot) => {
+          users.push({
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id,
+          });
+        });
+
+        setData(users);
+      });
+
+    return () => subscriber();
+  }, [setData]);
+
   return (
     <View>
       <FlatList
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
         horizontal={true}
-        data={DUMMY_DATA}
+        data={data}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <Friends image={item.image} name={item.name} />
+          <Friends image={item.Profile_Picture} name={item.name} nav={nav} onPress={() =>
+            nav.navigate('RouteProfile', {
+              name: item.name,
+              image: item.Profile_Picture,
+              number: item.Number,
+              uid: item.UID,
+              email: item.Email,
+            })}/>
         )}
       />
     </View>

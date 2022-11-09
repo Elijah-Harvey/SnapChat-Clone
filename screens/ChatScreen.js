@@ -8,6 +8,8 @@ import {
   Image,
   FlatList,
   TextInput,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { auth, messageCollection } from '../firebase';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -62,6 +64,7 @@ const ChatScreen = ({ navigation, route }) => {
     return call;
   };
 
+
   const sendMessage = () => {
     messageCollection
       .doc(auth.currentUser.uid)
@@ -101,7 +104,7 @@ const ChatScreen = ({ navigation, route }) => {
           <View style={styles.circle}>
             <TouchableOpacity
               onPress={() =>
-                navigation.navigate('Profile', {
+                navigation.navigate('RouteProfile', {
                   name: route.params.name,
                   image: 'https://picsum.photos/200/300',
                   number: route.params.Number,
@@ -156,75 +159,71 @@ const ChatScreen = ({ navigation, route }) => {
             <Ionicons name="chevron-forward" size={40} />
           </TouchableOpacity>
         </View>
-        <View
-          style={{
-            flex: 1,
-          }}
-        >
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            data={messages}
-            inverted={-1}
-            style={{ top: '0.5%' }}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item: message }) =>
-              message.email === auth.currentUser.email ? (
-                <SenderMessage
-                  key={message.id}
-                  message={message.message}
-                  setcolor={'#E04D5C'}
-                  borderLeftColor={'#E04D5C'}
-                  text={'Me'}
-                  time={message.time}
-                />
-              ) : (
-                <SenderMessage
-                  key={message.id}
-                  message={message.message}
-                  setcolor={'#4FAAF9'}
-                  borderLeftColor={'#4FAAF9'}
-                  text={route.params.name}
-                  time={message.time}
-                />
-              )
-            }
-          />
-        </View>
 
-        <View
-          style={{
-            justifyContent: 'space-between',
-            flexDirection: 'row',
-            backgroundColor: 'white',
-            bottom: 0,
-            borderColor: 'gray',
-            height: '7%',
-            width: '100%',
-            paddingLeft: 10,
-          }}
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={messages}
+          inverted={-1}
+          style={{ top: '0.5%', bottom: '10%' }}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item: message }) =>
+            message.email === auth.currentUser.email ? (
+              <SenderMessage
+                key={message.id}
+                message={message.message}
+                setcolor={'#E04D5C'}
+                borderLeftColor={'#E04D5C'}
+                text={'Me'}
+                time={message.time}
+              />
+            ) : (
+              <SenderMessage
+                key={message.id}
+                message={message.message}
+                setcolor={'#4FAAF9'}
+                borderLeftColor={'#4FAAF9'}
+                text={route.params.name}
+                time={message.time}
+              />
+            )
+          }
+        />
+
+        <KeyboardAvoidingView
+          style={{ flex: 1, flexDirection: 'column-reverse' }}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
-          <TextInput
-            placeholder="Send Message..."
-            onChangeText={(text) => setInput(text)}
-            value={input}
-            style={{ height: '50%', width: '85%', bottom: 0 }}
-            multiline={true}
-            onSubmitEditing={disable === true ? null : sendMessage}
-            keyboardAppearance="dark"
-          />
-          <TouchableOpacity
-            title="Send"
-            onPress={sendMessage}
-            disabled={disable}
+          <View
+            style={{
+              backgroundColor: 'white',
+              bottom: 0,
+              borderColor: 'gray',
+              width: '100%',
+              paddingLeft: 10,
+              height: 54,
+            }}
           >
-            <Ionicons
-              name="send"
-              size={25}
-              style={{ top: '20%', right: 15, position: 'absolute' }}
-              color={disable === true ? 'gray' : '#40AFE5'}
+            <TextInput
+              placeholder="Send Message..."
+              onChangeText={(text) => setInput(text)}
+              value={input}
+              onSubmitEditing={disable === true ? null : sendMessage}
+              keyboardAppearance="dark"
             />
-          </TouchableOpacity>
-        </View>
+            <TouchableOpacity
+              title="Send"
+              onPress={sendMessage}
+              disabled={disable}
+            >
+              <Ionicons
+                name="send"
+                size={25}
+                style={{ top: '20%', right: 15, position: 'absolute' }}
+                color={disable === true ? 'gray' : '#40AFE5'}
+              />
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
       </View>
     </SafeAreaView>
   );

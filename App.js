@@ -9,6 +9,7 @@ import { navigationRef } from './navigation/rootNavigation';
 import AppNavigator from './navigation/AppNavigator';
 import Birthday from './screens/BirthdayScreen';
 import UsernameScreen from './screens/UsernameScreen';
+import NumberScreen from './screens/NumberScreen';
 
 
 const Stack = createNativeStackNavigator();

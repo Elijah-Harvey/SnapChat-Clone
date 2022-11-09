@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
@@ -8,11 +7,10 @@ import HomeScreen from '../screens/HomeScreen';
 import MapScreen from '../screens/MapScreen';
 import DiscoverScreen from '../screens/DiscoverScreen';
 
-
 import ProfileNavigator from './ProfileNavigation';
 import MessageNavigator from './MessageNavigator';
-
-
+import Lottie from 'lottie-react-native';
+import StoryNavigator from './StoryNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -26,8 +24,11 @@ const HomeNavigator = () => {
           let color;
 
           if (route.name === 'ProfileNav') {
-            iconName = focused ? 'camera' : 'camera-outline';
-            color = focused ? '#FFFC00' : '#6f7173';
+            // iconName = focused ? 'camera' : 'camera-outline';
+            // color = focused ? '#FFFC00' : '#6f7173';
+            return (
+              <Lottie source={require('../assets/Cam.json')} autoPlay loop />
+            );
           } else if (route.name === 'Message') {
             iconName = focused ? 'chatbox' : 'chatbox-outline';
             color = focused ? '#2386FF' : '#6f7173';
@@ -57,7 +58,7 @@ const HomeNavigator = () => {
       <Tab.Screen name="Map" component={MapScreen} />
       <Tab.Screen name="Message" component={MessageNavigator} />
       <Tab.Screen name="ProfileNav" component={ProfileNavigator} />
-      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Home" component={StoryNavigator} />
       <Tab.Screen name="Discover" component={DiscoverScreen} />
     </Tab.Navigator>
   );
