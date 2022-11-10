@@ -17,8 +17,10 @@ import * as Linking from 'expo-linking';
 import SenderMessage from '../components/SenderMessage';
 import { v4 as uuid } from 'uuid';
 import CustomDate from '../components/CustomDate';
+import MapView, { Marker } from 'react-native-maps';
+import CustomMapView from '../components/CustomMapView';
 
-const ChatScreen = ({ navigation, route }) => {
+const ChatScreen = ({ navigation, route, map }) => {
   const [input, setInput] = useState('');
   const [disable, setDisable] = useState(false);
   const [messages, setMessages] = useState([]);
@@ -26,7 +28,7 @@ const ChatScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     messageCollection.doc(auth.currentUser.uid).update({
-      userId2: route.params.uid,
+      room: [route.params.roomId, auth.currentUser.uid, route.params.uid],
     });
   });
 
@@ -34,6 +36,8 @@ const ChatScreen = ({ navigation, route }) => {
     const subscriber = messageCollection
       .doc(auth.currentUser.uid)
       .collection('Messages')
+      // .where('room', 'array-contains', auth.currentUser.uid)
+      .where('room', 'array-contains', route.params.uid)
       .orderBy('createdAt', 'desc')
       .onSnapshot((querySnapshot) => {
         const allSentMessages = [];
@@ -64,7 +68,6 @@ const ChatScreen = ({ navigation, route }) => {
     return call;
   };
 
-
   const sendMessage = () => {
     messageCollection
       .doc(auth.currentUser.uid)
@@ -76,6 +79,10 @@ const ChatScreen = ({ navigation, route }) => {
         createdAt: new Date(),
         id: messageId,
         time: CustomDate(),
+        map: false,
+        userId: route.params.uid,
+        roomId: route.params.roomId,
+        room: [route.params.roomId, auth.currentUser.uid, route.params.uid],
       })
       .then(() => {
         messageCollection.doc(route.params.uid).collection('Messages').add({
@@ -83,6 +90,10 @@ const ChatScreen = ({ navigation, route }) => {
           createdAt: new Date(),
           id: messageId,
           time: CustomDate(),
+          map: false,
+          roomId: route.params.roomId,
+          userId: route.params.uid,
+          room: [route.params.roomId, auth.currentUser.uid, route.params.uid],
         });
         setInput('');
       });
@@ -111,6 +122,9 @@ const ChatScreen = ({ navigation, route }) => {
                   uid: route.params.uid,
                   roomId: route.params.roomId,
                   email: route.params.email,
+                  long: route.params.long,
+                  lat: route.params.lat,
+                  region: route.params.region,
                 })
               }
             >
@@ -164,26 +178,51 @@ const ChatScreen = ({ navigation, route }) => {
           showsVerticalScrollIndicator={false}
           data={messages}
           inverted={-1}
-          style={{ top: '0.5%', bottom: '10%' }}
+          style={{ top: '0.5%', bottom: '10%', height: '75%' }}
           keyExtractor={(item) => item.id}
           renderItem={({ item: message }) =>
-            message.email === auth.currentUser.email ? (
+            message.map === false ? (
               <SenderMessage
                 key={message.id}
                 message={message.message}
-                setcolor={'#E04D5C'}
-                borderLeftColor={'#E04D5C'}
-                text={'Me'}
+                borderLeftColor={
+                  message.email === auth.currentUser.email
+                    ? '#E04D5C'
+                    : '#4FAAF9'
+                }
+                color={
+                  message.email === auth.currentUser.email
+                    ? '#E04D5C'
+                    : '#4FAAF9'
+                }
+                text={
+                  message.email === auth.currentUser.email
+                    ? 'ME'
+                    : route.params.name
+                }
                 time={message.time}
               />
             ) : (
-              <SenderMessage
+              <CustomMapView
                 key={message.id}
-                message={message.message}
-                setcolor={'#4FAAF9'}
-                borderLeftColor={'#4FAAF9'}
-                text={route.params.name}
-                time={message.time}
+                lat={message.lat}
+                long={message.long}
+                region={message.region}
+                borderLeftColor={
+                  message.user === auth.currentUser.uid
+                    ? '#E04D5C'
+                    : '#4FAAF9'
+                }
+                color={
+                  message.user === auth.currentUser.uid
+                    ? '#E04D5C'
+                    : '#4FAAF9'
+                }
+                user={
+                  message.user === auth.currentUser.uid
+                    ? 'ME'
+                    : route.params.name
+                }
               />
             )
           }
@@ -196,11 +235,14 @@ const ChatScreen = ({ navigation, route }) => {
           <View
             style={{
               backgroundColor: 'white',
-              bottom: 0,
               borderColor: 'gray',
               width: '100%',
               paddingLeft: 10,
               height: 54,
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              flexDirection: 'row',
+              paddingRight: 10,
             }}
           >
             <TextInput
@@ -212,13 +254,13 @@ const ChatScreen = ({ navigation, route }) => {
             />
             <TouchableOpacity
               title="Send"
-              onPress={sendMessage}
+              onPress={disable === true ? null : sendMessage}
               disabled={disable}
             >
               <Ionicons
                 name="send"
                 size={25}
-                style={{ top: '20%', right: 15, position: 'absolute' }}
+                style={{}}
                 color={disable === true ? 'gray' : '#40AFE5'}
               />
             </TouchableOpacity>
