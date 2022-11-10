@@ -15,74 +15,34 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import RandomStreak from '../components/RandomStreak';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
+import { v4 as uuid } from 'uuid';
 
 const RouteProfileScreen = ({ navigation, route }) => {
   const [user, setUser] = useState({});
+  const [otherU, setOtherU] = useState({});
   const [seconds, setSeconds] = useState(1);
   const [region, setRegion] = useState('Waiting...');
+  const [location, setLocation] = useState(null);
+  const [address, setAddress] = useState(null);
 
-  const DUMMY_DATA = [
-    {
-      id: 1,
-      title: 'Tanks',
-      time: '2hr ago',
-      image: 'https://picsum.photos/200/300',
-    },
-    {
-      id: 2,
-      title: 'Wrestling',
-      time: '2hr ago',
-      image: 'https://picsum.photos/200/300',
-    },
-    {
-      id: 3,
-      title: 'War',
-      time: '2hr ago',
-      image: 'https://picsum.photos/200/300',
-    },
-    {
-      id: 4,
-      title: 'Long text about war',
-      time: '2hr ago',
-      image: 'https://picsum.photos/200/300',
-    },
-    {
-      id: 5,
-      title: 'HEllo',
-      time: '2hr ago',
-      image: 'https://picsum.photos/200/300',
-    },
-    {
-      id: 6,
-      title: 'WeIrD LoOkInG tExT',
-      time: '2hr ago',
-      image: 'https://picsum.photos/200/300',
-    },
-    {
-      id: 7,
-      title: 'plus',
-      time: '2hr ago',
-      image: 'https://picsum.photos/200/300',
-    },
-    {
-      id: 8,
-      title: 'a little',
-      time: '2hr ago',
-      image: 'https://picsum.photos/200/300',
-    },
-    {
-      id: 9,
-      title: 'More',
-      time: '2hr ago',
-      image: 'https://picsum.photos/200/300',
-    },
-    {
-      id: 10,
-      title: 'How does this look',
-      time: '2hr ago',
-      image: 'https://picsum.photos/200/300',
-    },
-  ];
+  useEffect(() => {
+    (async () => {
+      let { coords } = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.Highest,
+      });
+      setLocation(coords);
+
+      if (coords) {
+        let { longitude, latitude } = coords;
+
+        let regionName = await Location.reverseGeocodeAsync({
+          longitude,
+          latitude,
+        });
+        setAddress(regionName[0]);
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     const subscriber = usersCollection
@@ -90,6 +50,17 @@ const RouteProfileScreen = ({ navigation, route }) => {
       .get()
       .then(function (doc) {
         doc.exists ? setUser(doc.data()) : `doc doesnt exist`;
+      });
+
+    return () => subscriber;
+  }, [usersCollection]);
+
+  useEffect(() => {
+    const subscriber = usersCollection
+      .doc(auth.currentUser.uid)
+      .get()
+      .then(function (doc) {
+        doc.exists ? setOtherU(doc.data()) : `doc doesnt exist`;
       });
 
     return () => subscriber;
@@ -107,6 +78,38 @@ const RouteProfileScreen = ({ navigation, route }) => {
     return () => clearInterval(interval);
   });
 
+  const mapId = uuid();
+
+  const sendMessage = () => {
+    messageCollection
+      .doc(auth.currentUser.uid)
+      .collection('Messages')
+      .add({
+        long: location ? location.longitude : 0,
+        lat: location ? location.latitude : 0,
+        region: `${address?.['city']}`,
+        createdAt: new Date(),
+        user: otherU.UID,
+        id: mapId,
+        room: [route.params.roomId, auth.currentUser.uid, route.params.uid],
+      })
+      .then(() => {
+        messageCollection
+          .doc(route.params.uid)
+          .collection('Messages')
+          .add({
+            long: location ? location.longitude : 0,
+            lat: location ? location.latitude : 0,
+            region: `${address?.['city']}`,
+            createdAt: new Date(),
+            user: otherU.UID,
+            room: [route.params.roomId, auth.currentUser.uid, route.params.uid],
+          });
+      });
+  };
+
+  console.log(otherU);
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.containers}>
@@ -120,23 +123,22 @@ const RouteProfileScreen = ({ navigation, route }) => {
                 uid: route.params.uid,
                 roomId: route.params.roomId,
                 email: route.params.email,
+                lat: route.params.lat,
+                long: route.params.long,
+                region: route.params.region,
               })
             }
             style={{ position: 'absolute', left: '5%', alignItems: 'center' }}
           >
-            <Ionicons name="chevron-down-outline" size={'35%'} />
+            <Ionicons name="chevron-down-outline" size={35} />
           </TouchableOpacity>
           <TouchableOpacity
             style={{ position: 'absolute', right: '15%', alignItems: 'center' }}
           >
-            <Ionicons
-              name="person-circle-outline"
-              size={'40%'}
-              color="#4FAAF9"
-            />
+            <Ionicons name="person-circle-outline" size={40} color="#4FAAF9" />
           </TouchableOpacity>
           <TouchableOpacity style={{ position: 'absolute', right: '3%' }}>
-            <Ionicons name="ellipsis-vertical-outline" size={'35%'} />
+            <Ionicons name="ellipsis-vertical-outline" size={35} />
           </TouchableOpacity>
           <View
             style={{
@@ -181,22 +183,22 @@ const RouteProfileScreen = ({ navigation, route }) => {
             <Text style={{ color: 'gray' }}>-</Text>
             <Ionicons
               name="reorder-three-outline"
-              size={'25%'}
+              size={25}
               style={{ bottom: '1%', fontWeight: '600' }}
             />
           </View>
           <View style={{ left: '5%', bottom: '3%' }}>
-            <Text style={{ fontWeight: '600', fontSize: '17%' }}>Snap Map</Text>
+            <Text style={{ fontWeight: '600', fontSize: 17 }}>Snap Map</Text>
           </View>
 
           <View
             style={{
               height: '55%',
               width: '90%',
-              borderTopEndRadius: '10%',
+              borderTopEndRadius: 10,
               overflow: 'hidden',
               alignSelf: 'center',
-              borderTopLeftRadius: '10%',
+              borderTopLeftRadius: 10,
             }}
           >
             <MapView
@@ -205,16 +207,16 @@ const RouteProfileScreen = ({ navigation, route }) => {
               scrollEnabled={false}
               style={{ height: '100%', width: '100%' }}
               region={{
-                longitude: user?.location?.longitude,
-                latitude: user?.location?.latitude,
+                longitude: location ? location.longitude : 0,
+                latitude: location ? location.latitude : 0,
                 latitudeDelta: 0.05,
                 longitudeDelta: 0.06,
               }}
             >
               <Marker
                 coordinate={{
-                  longitude: user?.location?.longitude,
-                  latitude: user?.location?.latitude,
+                  longitude: location ? location.longitude : 0,
+                  latitude: location ? location.latitude : 0,
                 }}
               >
                 <Image
@@ -259,22 +261,33 @@ const RouteProfileScreen = ({ navigation, route }) => {
               height: '30%',
               width: '90%',
               alignSelf: 'center',
-              borderBottomLeftRadius: '10%',
-              borderBottomRightRadius: '10%',
               justifyContent: 'center',
               flexDirection: 'row',
               shadowColor: 'gray',
               shadowOffset: { width: -0.1, height: 3 },
               shadowOpacity: 0.3,
               shadowRadius: 5,
+              borderBottomLeftRadius: 10
+              ,borderBottomRightRadius: 10
             }}
-            onPress={() => db.collection('TOLD YOU ZEKE').add({
-              toldYou: 'fuck you ZEKE'
-            })}
+            onPressIn={sendMessage}
+            onPress={() =>
+              navigation.goBack({
+                name: route.params.name,
+                image: 'https://picsum.photos/200/300',
+                number: route.params.Number,
+                uid: route.params.uid,
+                roomId: route.params.roomId,
+                email: route.params.email,
+                long: route.params.long,
+                lat: route.params.lat,
+                user: otherU.UID,
+              })
+            }
           >
             <Ionicons
               name="location-outline"
-              size={'60%'}
+              size={60}
               style={{
                 color: 'gray',
                 opacity: 0.6,
@@ -285,7 +298,7 @@ const RouteProfileScreen = ({ navigation, route }) => {
             />
             <Text
               style={{
-                fontSize: '18%',
+                fontSize: 18,
                 alignSelf: 'center',
                 left: '20%',
                 position: 'absolute',
@@ -296,7 +309,7 @@ const RouteProfileScreen = ({ navigation, route }) => {
             </Text>
           </TouchableOpacity>
           <View style={{ top: '7%', left: '5%' }}>
-            <Text style={{ fontSize: '18%', fontWeight: '600' }}>
+            <Text style={{ fontSize: 18, fontWeight: '600' }}>
               Saved in Chat
             </Text>
           </View>

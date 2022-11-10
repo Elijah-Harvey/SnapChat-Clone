@@ -2,7 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, ScrollView, FlatList } from 'react-native';
 import Header from '../components/Header';
 import MessageRow from '../components/MessageRow';
-import { auth, FriendCollection, messageCollection, usersCollection } from '../firebase';
+import {
+  auth,
+  FriendCollection,
+  messageCollection,
+  usersCollection,
+} from '../firebase';
 import { v4 as uuid } from 'uuid';
 import RandomStreak from '../components/RandomStreak';
 
@@ -11,10 +16,10 @@ const MessageScreen = ({ navigation }) => {
   const roomId = uuid.v4();
 
   useEffect(() => {
-    const subscriber = FriendCollection
-    .doc(auth.currentUser.uid).collection('Friends')
-    // .where(('item.sentTo' || 'item.sentFrom'), '==', auth.currentUser.uid)
-    .onSnapshot((querySnapshot) => {
+    const subscriber = usersCollection
+      // .where(('item.sentTo' || 'item.sentFrom'), '==', auth.currentUser.uid)
+      .where('UID', '!=', auth.currentUser.uid)
+      .onSnapshot((querySnapshot) => {
         const users = [];
 
         querySnapshot.forEach((documentSnapshot) => {
@@ -32,11 +37,9 @@ const MessageScreen = ({ navigation }) => {
 
   const addRommId = () => {
     messageCollection.doc(auth.currentUser.uid).set({
-      roomId: roomId,
-      userId: auth.currentUser.uid,
+      room: [roomId, auth.currentUser.uid],
     });
   };
-
 
   return (
     <View style={styles.container}>
@@ -51,17 +54,20 @@ const MessageScreen = ({ navigation }) => {
           data={users}
           renderItem={({ item }) => (
             <MessageRow
-              name={item.item.item.name}
+              name={item.name}
               image={'https://picsum.photos/200/300'}
               streak={RandomStreak()}
               onPress={() => {
                 navigation.navigate('Chat', {
-                  name: item.item.item.name,
+                  name: item.name,
                   image: 'https://picsum.photos/200/300',
-                  number: item.item.item.Number,
-                  uid: item.item.item.UID,
+                  number: item.Number,
+                  uid: item.UID,
                   roomId: roomId,
-                  email: item.item.item.email,
+                  email: item.email,
+                  long: item.location.longitude,
+                  lat: item.location.latitude,
+                  region: item.address.city,
                 });
               }}
               onPressIn={addRommId}
