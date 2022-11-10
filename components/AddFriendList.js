@@ -72,7 +72,7 @@ const AddFriendList = (props) => {
         <Text
           style={{
             fontWeight: '700',
-            fontSize: '20%',
+            fontSize: 20,
           }}
         >
           Quick Add
@@ -80,7 +80,7 @@ const AddFriendList = (props) => {
         <Text
           style={{
             right: '5%',
-            fontSize: '15%',
+            fontSize: 15,
             color: 'gray',
           }}
         >
@@ -114,6 +114,8 @@ const AddFriendList = (props) => {
                   sentFrom: auth.currentUser.uid,
                   sentTo: item.UID,
                 }).then(() => AddFriendCollection.doc(item.UID).update({
+                  isBlocked: true
+                })).then(() => AddFriendCollection.doc(auth.currentUser.uid).update({
                   isBlocked: true
                 }))
               }

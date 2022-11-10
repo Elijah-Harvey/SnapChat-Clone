@@ -1,25 +1,21 @@
 import React from 'react';
 import Constants from 'expo-constants';
-import {
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-} from 'react-native';
+import { Image, SafeAreaView, ScrollView, StyleSheet } from 'react-native';
 import Header from '../components/Header';
 import FriendsRow from '../components/FriendsRow';
 import SubRow from '../components/SubRow';
 import ForYouRow from '../components/ForYouRow';
 
-function HomeScreen({ navigation }) {
+function HomeScreen({ navigation, route }) {
   return (
     <SafeAreaView>
-      <Header 
+      <Header
         title="Stories"
         rightIcon="ellipsis-horizontal-outline"
         onPress={() => navigation.navigate('Profile')}
       />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <FriendsRow nav={navigation}/>
+        <FriendsRow nav={navigation} />
         <SubRow />
         <ForYouRow />
       </ScrollView>

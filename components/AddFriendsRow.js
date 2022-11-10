@@ -58,7 +58,7 @@ const AddFriendsRow = ({
         >
           <Ionicons
             name="person-add"
-            size={'20%'}
+            size={20}
             style={{
               fontWeight: 'bold',
               color: 'black',
@@ -71,7 +71,7 @@ const AddFriendsRow = ({
               {
                 fontWeight: '600',
                 right: '25%',
-                fontSize: '18%',
+                fontSize: 18,
                 position: 'absolute',
               },
               styleText,
@@ -95,7 +95,7 @@ const AddFriendsRow = ({
           <Text
             style={{
               fontWeight: '600',
-              fontSize: '18%',
+              fontSize: 18,
               // position: 'absolute',
             }}
           >
@@ -109,7 +109,7 @@ const AddFriendsRow = ({
       >
         <Ionicons
           name="close-outline"
-          size={'27%'}
+          size={27}
           style={{
             fontWeight: 'bold',
             color: 'gray',

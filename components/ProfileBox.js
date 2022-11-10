@@ -23,7 +23,7 @@ const ProfileBox = ({
       ) : null}
       <Ionicons
         name={iconName}
-        size={'40%'}
+        size={40}
         style={[
           {
             alignSelf: 'center',
@@ -48,7 +48,7 @@ const ProfileBox = ({
       ) : null}
       <Ionicons
         name={iconName2}
-        size={'35%'}
+        size={35}
         style={[
           {
             alignSelf: 'center',

@@ -57,13 +57,12 @@ const MapScreen = ({ navigation }) => {
         showsUserLocation={true}
         followUserLocation={true}
         showsScale={true}
-        customMapStyle={{}}
       >
         {users.map((e, i) => (
           <Marker
             pinColor={`${generateColor()}`}
             title={`${
-              e.name === undefined || null ? e.Email : e.name
+              e.name === undefined ? e.Email : e.name
             }'s location`}
             key={i}
             coordinate={{

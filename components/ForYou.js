@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
+
 const ForYou = ({ title, time, image }) => {
   return (
     <TouchableOpacity style={styles.bigBox}>

@@ -8,12 +8,14 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Platform,
+  ActivityIndicator,
 } from 'react-native';
 import { Camera, CameraType, Constants } from 'expo-camera';
 import * as MedialLibrary from 'expo-media-library';
+import * as Permission from 'expo-permissions';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { auth } from '../firebase';
+import { auth, Storage, usersCollection } from '../firebase';
 
 export default function CameraScreen({ navigation }) {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
@@ -21,12 +23,21 @@ export default function CameraScreen({ navigation }) {
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
   const cameraRef = useRef(null);
+  const [file, setFile] = useState('');
+  const [url, setURL] = useState('');
+
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     (async () => {
       MedialLibrary.requestPermissionsAsync();
       const cameraStatus = await Camera.requestCameraPermissionsAsync();
       setHasCameraPermission(cameraStatus.status === 'granted');
+      if (cameraStatus.status === 'granted') {
+        setLoaded(false);
+      } else {
+        setLoaded(true);
+      }
     })();
   }, []);
 
@@ -42,15 +53,39 @@ export default function CameraScreen({ navigation }) {
     }
   };
 
+  let substringTest = function (str) {
+    return str.substring(str.lastIndexOf('/') + 1);
+  };
+
   const savePicture = async () => {
-    if (image) {
+    if (image != null) {
       try {
-        await MedialLibrary.createAssetAsync(image);
-        alert('Success');
-        setImage(null);
+        const response = await fetch(image);
+        console.log(response);
+
+        const blob = response.blob();
+        const filename = substringTest(image);
+        Storage.ref()
+          .child(`/images/${filename}`)
+          .put(blob)
+          .on('state_changed', () => {
+            Storage.ref()
+              .child(`/images/${filename}`)
+              .getDownloadURL()
+              .then((url) => {
+                setURL(url);
+              });
+          });
       } catch (e) {
         console.log(e);
       }
+      usersCollection.doc(auth.currentUser.uid).collection('Pics').add({
+        pics: url,
+      });
+      setImage(null);
+      setURL('');
+    } else {
+      <ActivityIndicator />;
     }
   };
 

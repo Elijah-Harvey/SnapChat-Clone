@@ -69,8 +69,8 @@ const SignUpScreen = ({ navigation }) => {
           Date_Joined: date.toString(),
           location: {
             extra: location,
-            longitude: location ? location.longitude : null,
-            latitude: location ? location.latitude : null,
+            longitude: location ? location.longitude : 0,
+            latitude: location ? location.latitude : 0,
           },
           address: {
             subregion: `${address?.['subregion']}`,

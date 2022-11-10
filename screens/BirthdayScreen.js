@@ -38,7 +38,6 @@ useEffect(() => {
   } else setDisable(false)
 }, [date])
 
-console.log(auth.currentUser.uid)
   const addBirthday = async () => {
      usersCollection
           .doc(auth.currentUser.uid)
@@ -202,14 +201,14 @@ const styles = StyleSheet.create({
     width: '80%',
     alignSelf: 'center',
     paddingLeft: '3%',
-    fontSize: '15%'
+    fontSize: 15
   },
   inputIOS: {
     height: '15%',
     width: '80%',
     alignSelf: 'center',
     paddingLeft: '3%',
-    fontSize: '15%'
+    fontSize: 15
   },
   iosPicker: {
     right: '10%',

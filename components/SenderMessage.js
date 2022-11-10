@@ -1,10 +1,30 @@
-import { View, Text } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import React from 'react';
+import MapView, { Marker } from 'react-native-maps';
 
-
-const SenderMessage = ({ message, text, setcolor, time, borderLeftColor }) => {
+const SenderMessage = ({
+  message,
+  text,
+  setcolor,
+  time,
+  borderLeftColor,
+  map,
+  long,
+  lat,
+  region,
+  color,
+}) => {
   return (
-    <View style={{ left: 10 }}>
+    <View
+      style={{
+        left: 10,
+        alignItems: 'flex-start',
+        marginTop: '5%',
+      }}
+    >
+      <Text style={{ fontWeight: '600', fontSize: 17, color, bottom: '4%' }}>
+        {text}
+      </Text>
       <View
         style={{
           borderLeftWidth: 3,
@@ -13,18 +33,8 @@ const SenderMessage = ({ message, text, setcolor, time, borderLeftColor }) => {
           borderLeftColor: borderLeftColor,
           backgroundColor: '#ededed',
           width: '70%',
-          marginTop: '6%',
         }}
       >
-        <Text
-          style={{
-            fontSize: 17,
-            color: setcolor,
-            bottom: '10%'
-          }}
-        >
-          {text}
-        </Text>
         <Text
           style={{ color: 'black', fontSize: 20, flex: 1, flexWrap: 'wrap' }}
         >

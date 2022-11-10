@@ -137,7 +137,7 @@ const ProfileScreen = ({ navigation }) => {
           <Text style={{ color: 'gray' }}>-</Text>
           <Ionicons
             name="reorder-three-outline"
-            size={'25%'}
+            size={25}
             style={{ bottom: '1%', fontWeight: '600' }}
           />
         </View>
@@ -150,7 +150,7 @@ const ProfileScreen = ({ navigation }) => {
           styleTitle={true}
         />
         <View style={{ top: '3%', left: '5%', flexDirection: 'row' }}>
-          <Text style={{ fontSize: '20%', fontWeight: '600' }}>Stories</Text>
+          <Text style={{ fontSize: 20, fontWeight: '600' }}>Stories</Text>
           <View
             style={{
               top: '3%',
@@ -169,7 +169,7 @@ const ProfileScreen = ({ navigation }) => {
               size={20}
               style={{ left: '20%', color: '#4FAAF9' }}
             />
-            <Text style={{ fontSize: '15%', fontWeight: '600', left: '20%' }}>
+            <Text style={{ fontSize: 15, fontWeight: '600', left: '20%' }}>
               New Story
             </Text>
           </View>
@@ -191,7 +191,7 @@ const ProfileScreen = ({ navigation }) => {
           styleTitle={{ alignSelf: 'center' }}
         />
         <View style={{ top: '3%', left: '5%', flexDirection: 'row' }}>
-          <Text style={{ fontSize: '20%', fontWeight: '600', top: '8%' }}>
+          <Text style={{ fontSize: 20, fontWeight: '600', top: '8%' }}>
             Friends
           </Text>
         </View>

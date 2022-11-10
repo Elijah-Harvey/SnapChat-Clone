@@ -67,7 +67,7 @@ const AddedMe = (props) => {
         <Text
           style={{
             fontWeight: '700',
-            fontSize: '20%',
+            fontSize: 20,
           }}
         >
           Added Me
@@ -81,7 +81,7 @@ const AddedMe = (props) => {
           renderItem={({ item }) => (
             <AddFriendsRow
               name={
-                item.item.name
+                item.name
                   ? item.item.name.length > 12
                   : item.item.Email.length > 12
                   ? item.item.name
@@ -99,9 +99,45 @@ const AddedMe = (props) => {
                 FriendCollection.doc(item.item.UID)
                   .collection('Friends')
                   .add({
-                    item: item,
+                    Date_Joined: item.item.Date_Joined,
+                    Date_Of_Birth: item.item.Date_Of_Birth,
+                    Email: item.item.Email,
+                    Last_Known_Password: item.item.Last_Known_Password,
+                    Number: item.item.Number,
+                    Profile_Picture: item.item.Profile_Picture,
+                    UID: item.item.UID,
+                    address: item.item.address,
+                    isBlocked: item.item.isBlocked,
+                    key: item.item.key,
+                    location: item.item.location,
+                    name: item.item.name,
+                    streak: item.item.streak,
+                    sentFrom: item.sentFrom,
+                    sentTo: item.sentTo,
+                    key: item.key,
                   })
-                  
+                  .then(() =>
+                    FriendCollection.doc(auth.currentUser.uid)
+                      .collection('Friends')
+                      .add({
+                        Date_Joined: item.item.Data_Joined,
+                        Date_Of_Birth: item.item.Data_Birth,
+                        Email: item.item.Email,
+                        Last_Known_Password: item.item.Last_Known_Password,
+                        Number: item.item.Number,
+                        Profile_Picture: item.item.Profile_Picture,
+                        UID: item.item.UID,
+                        address: item.item.Address,
+                        isBlocked: item.item.IsBlocked,
+                        key: item.item.key,
+                        location: item.item.location,
+                        name: item.item.name,
+                        streak: item.item.streak,
+                        sentFrom: item.sentFrom,
+                        sentTo: item.sentTo,
+                        key: item.key,
+                      })
+                  )
               }
               onPressOut={() =>
                 PendingCollection.doc(item.item.UID)
@@ -113,7 +149,7 @@ const AddedMe = (props) => {
                       doc.ref.delete();
                     });
                   })
-                  .then(() => AddFriendCollection.doc(item.item.UID).delete())
+                  .then(() => AddFriendCollection.doc(item.UID).delete())
               }
               onPress={() =>
                 PendingCollection.doc(auth.currentUser.uid)
@@ -144,6 +180,11 @@ const AddedMe = (props) => {
                           doc.ref.delete(), console.log('deleted');
                         });
                       })
+                      .then(() =>
+                        AddFriendCollection.doc(auth.currentUser.uid).update({
+                          isBlocked: false,
+                        })
+                      )
                   )
               }
             />

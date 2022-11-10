@@ -2,7 +2,9 @@ import React from 'react';
 import { StyleSheet, View, Text, FlatList } from 'react-native';
 import ForYou from './ForYou';
 
-const ForYouList = (props) => {
+const ForYouList =  (props) => {
+ 
+  
   const DUMMY_DATA = [
     {
       id: 1,
@@ -74,7 +76,7 @@ const ForYouList = (props) => {
     <View>
       <FlatList
         ListFooterComponent={ListFooter}
-        showsVerticalScrollIndicator={false} 
+        showsVerticalScrollIndicator={false}
         numColumns={2}
         data={DUMMY_DATA}
         keyExtractor={(item) => item.id}

@@ -42,16 +42,16 @@ const AddFriends = () => {
           }}
         >
           <TouchableOpacity>
-            <Ionicons name="chevron-down-outline" size={'35%'} />
+            <Ionicons name="chevron-down-outline" size={35} />
           </TouchableOpacity>
 
           <Text
-            style={{ alignSelf: 'center', fontWeight: '600', fontSize: '20%' }}
+            style={{ alignSelf: 'center', fontWeight: '600', fontSize: 20}}
           >
             Add Friends
           </Text>
           <TouchableOpacity>
-            <Ionicons name="ellipsis-vertical-outline" size={'35%'} />
+            <Ionicons name="ellipsis-vertical-outline" size={35} />
           </TouchableOpacity>
         </View>
         <View
@@ -69,7 +69,7 @@ const AddFriends = () => {
         >
           <Ionicons
             name="search-outline"
-            size={'27%'}
+            size={27}
             style={{
               left: '1%',
               position: 'absolute',
@@ -88,7 +88,7 @@ const AddFriends = () => {
           />
           <Ionicons
             name="stop-outline"
-            size={'27%'}
+            size={27}
             style={{
               right: '4%',
               position: 'absolute',
