@@ -27,10 +27,16 @@ const ChatScreen = ({ navigation, route, map }) => {
   const messageId = uuid();
 
   useEffect(() => {
-    messageCollection.doc(auth.currentUser.uid).update({
-      room: [route.params.roomId, auth.currentUser.uid, route.params.uid],
+    messageCollection.doc(auth.currentUser.uid).set({
+      room: [route.params.roomId, auth.currentUser.email, route.params.email],
     });
-  });
+  }, []);
+
+  useEffect(() => {
+    messageCollection.doc(route.params.uid).set({
+      room: [route.params.roomId, auth.currentUser.email, route.params.email],
+    });
+  }, [messageCollection]);
 
   useEffect(() => {
     const subscriber = messageCollection
@@ -85,188 +91,227 @@ const ChatScreen = ({ navigation, route, map }) => {
         room: [route.params.roomId, auth.currentUser.uid, route.params.uid],
       })
       .then(() => {
-        messageCollection.doc(route.params.uid).collection('Messages').add({
-          message: input,
-          createdAt: new Date(),
-          id: messageId,
-          time: CustomDate(),
-          map: false,
-          roomId: route.params.roomId,
-          userId: route.params.uid,
-          room: [route.params.roomId, auth.currentUser.uid, route.params.uid],
-        });
+        messageCollection
+          .doc(route.params.uid)
+          .collection('Messages')
+          .add({
+            message: input,
+            createdAt: new Date(),
+            id: messageId,
+            time: CustomDate(),
+            map: false,
+            roomId: route.params.roomId,
+            userId: route.params.uid,
+            room: [route.params.roomId, auth.currentUser.uid, route.params.uid],
+          });
         setInput('');
       });
   };
 
+  const ListFooter = () => {
+    return <View style={styles.headerFooterStyle} />;
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ flex: 1, flexDirection: 'column' }}>
-        <View
-          style={{
-            flexDirection: 'row',
-            borderTopColor: 'transparent',
-            borderColor: 'lightgray',
-            height: '10%',
-            alignItems: 'center',
-            width: '100%',
-          }}
-        >
-          <View style={styles.circle}>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('RouteProfile', {
-                  name: route.params.name,
-                  image: 'https://picsum.photos/200/300',
-                  number: route.params.Number,
-                  uid: route.params.uid,
-                  roomId: route.params.roomId,
-                  email: route.params.email,
-                  long: route.params.long,
-                  lat: route.params.lat,
-                  region: route.params.region,
-                })
-              }
-            >
-              <Image
-                source={{ uri: 'https://picsum.photos/200/300' }}
-                style={{ height: 45, width: 45, borderRadius: 45 / 2 }}
-              />
-            </TouchableOpacity>
-          </View>
-          <Text style={{ fontSize: 20 }}>{route.params.name}</Text>
+      <View
+        style={{
+          flexDirection: 'row',
+          borderTopColor: 'transparent',
+          borderColor: 'lightgray',
+          height: '10%',
+          alignItems: 'center',
+          width: '100%',
+        }}
+      >
+        <View style={styles.circle}>
           <TouchableOpacity
-            onPress={handleCall}
-            style={{
-              right: '30.5%',
-              backgroundColor: 'lightgray',
-              width: 50,
-              height: 35,
-              position: 'absolute',
-              borderTopLeftRadius: 10,
-              borderBottomLeftRadius: 10,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
+            onPress={() =>
+              navigation.navigate('RouteProfile', {
+                name: route.params.name,
+                image: 'https://picsum.photos/200/300',
+                number: route.params.Number,
+                uid: route.params.uid,
+                roomId: route.params.roomId,
+                email: route.params.email,
+                long: route.params.long,
+                lat: route.params.lat,
+                region: route.params.region,
+              })
+            }
           >
-            <Ionicons name="call" size={25} />
-          </TouchableOpacity>
-          <View
-            style={{
-              right: '18%',
-              backgroundColor: 'lightgray',
-              width: 50,
-              height: 35,
-              position: 'absolute',
-              borderTopRightRadius: 10,
-              borderBottomRightRadius: 10,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Ionicons name="videocam" size={25} />
-          </View>
-          <TouchableOpacity
-            style={{ right: '5%', position: 'absolute' }}
-            onPress={() => navigation.goBack()}
-          >
-            <Ionicons name="chevron-forward" size={40} />
+            <Image
+              source={{ uri: 'https://picsum.photos/200/300' }}
+              style={{ height: 45, width: 45, borderRadius: 45 / 2 }}
+            />
           </TouchableOpacity>
         </View>
-
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={messages}
-          inverted={-1}
-          style={{ top: '0.5%', bottom: '10%', height: '75%' }}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item: message }) =>
-            message.map === false ? (
-              <SenderMessage
-                key={message.id}
-                message={message.message}
-                borderLeftColor={
-                  message.email === auth.currentUser.email
-                    ? '#E04D5C'
-                    : '#4FAAF9'
-                }
-                color={
-                  message.email === auth.currentUser.email
-                    ? '#E04D5C'
-                    : '#4FAAF9'
-                }
-                text={
-                  message.email === auth.currentUser.email
-                    ? 'ME'
-                    : route.params.name
-                }
-                time={message.time}
-              />
-            ) : (
-              <CustomMapView
-                key={message.id}
-                lat={message.lat}
-                long={message.long}
-                region={message.region}
-                borderLeftColor={
-                  message.user === auth.currentUser.uid
-                    ? '#E04D5C'
-                    : '#4FAAF9'
-                }
-                color={
-                  message.user === auth.currentUser.uid
-                    ? '#E04D5C'
-                    : '#4FAAF9'
-                }
-                user={
-                  message.user === auth.currentUser.uid
-                    ? 'ME'
-                    : route.params.name
-                }
-              />
-            )
-          }
-        />
-
-        <KeyboardAvoidingView
-          style={{ flex: 1, flexDirection: 'column-reverse' }}
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        <Text style={{ fontSize: 20 }}>{route.params.name}</Text>
+        <TouchableOpacity
+          onPress={handleCall}
+          style={{
+            right: '30.5%',
+            backgroundColor: 'lightgray',
+            width: 50,
+            height: 35,
+            position: 'absolute',
+            borderTopLeftRadius: 10,
+            borderBottomLeftRadius: 10,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
         >
-          <View
+          <Ionicons name="call" size={25} />
+        </TouchableOpacity>
+        <View
+          style={{
+            right: '18%',
+            backgroundColor: 'lightgray',
+            width: 50,
+            height: 35,
+            position: 'absolute',
+            borderTopRightRadius: 10,
+            borderBottomRightRadius: 10,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Ionicons name="videocam" size={25} />
+        </View>
+        <TouchableOpacity
+          style={{ right: '5%', position: 'absolute' }}
+          onPress={() => navigation.goBack()}
+        >
+          <Ionicons name="chevron-forward" size={40} />
+        </TouchableOpacity>
+      </View>
+
+      <FlatList
+        ListFooterComponent={ListFooter}
+        showsVerticalScrollIndicator={false}
+        data={messages}
+        inverted={-1}
+        style={{ height: '80%', marginBottom: '15%', top: '1%' }}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item: message }) =>
+          message.map === false ? (
+            <SenderMessage
+              key={message.id}
+              message={message.message}
+              borderLeftColor={
+                message.email === auth.currentUser.email ? '#E04D5C' : '#4FAAF9'
+              }
+              color={
+                message.email === auth.currentUser.email ? '#E04D5C' : '#4FAAF9'
+              }
+              text={
+                message.email === auth.currentUser.email
+                  ? 'ME'
+                  : route.params.name
+              }
+              time={message.time}
+            />
+          ) : (
+            <CustomMapView
+              key={message.id}
+              lat={message.lat}
+              long={message.long}
+              region={message.region}
+              borderLeftColor={
+                message.user === auth.currentUser.uid ? '#E04D5C' : '#4FAAF9'
+              }
+              color={
+                message.user === auth.currentUser.uid ? '#E04D5C' : '#4FAAF9'
+              }
+              user={
+                message.user === auth.currentUser.uid ? 'ME' : route.params.name
+              }
+            />
+          )
+        }
+      />
+
+      <KeyboardAvoidingView
+        style={{ flex: 1, flexDirection: 'column-reverse' }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        <View
+          style={{
+            backgroundColor: 'white',
+            borderColor: 'black',
+            width: '100%',
+            height: 54,
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexDirection: 'row',
+            paddingRight: 5,
+            paddingLeft: 5,
+          }}
+        >
+          <TouchableOpacity
             style={{
-              backgroundColor: 'white',
-              borderColor: 'gray',
-              width: '100%',
-              paddingLeft: 10,
-              height: 54,
-              justifyContent: 'space-between',
+              borderRadius: 50 / 2,
+              backgroundColor: 'lightgray',
+              height: 43,
+              width: 43,
               alignItems: 'center',
-              flexDirection: 'row',
-              paddingRight: 10,
+              justifyContent: 'center',
             }}
           >
-            <TextInput
-              placeholder="Send Message..."
-              onChangeText={(text) => setInput(text)}
-              value={input}
-              onSubmitEditing={disable === true ? null : sendMessage}
-              keyboardAppearance="dark"
-            />
-            <TouchableOpacity
-              title="Send"
-              onPress={disable === true ? null : sendMessage}
-              disabled={disable}
-            >
-              <Ionicons
-                name="send"
-                size={25}
-                style={{}}
-                color={disable === true ? 'gray' : '#40AFE5'}
-              />
-            </TouchableOpacity>
-          </View>
-        </KeyboardAvoidingView>
-      </View>
+            <Ionicons name="camera" size={30} style={{}} color={'black'} />
+          </TouchableOpacity>
+
+          <TextInput
+            placeholder="Send Message..."
+            onChangeText={(text) => setInput(text)}
+            value={input}
+            onSubmitEditing={disable === true ? null : sendMessage}
+            keyboardAppearance="dark"
+            style={{
+              width: '50%',
+              height: '80%',
+              borderRadius: 30,
+              backgroundColor: 'lightgray',
+              paddingLeft: '3%'
+            }}
+            returnKeyType="send"
+          />
+
+          <TouchableOpacity
+            style={{
+              borderRadius: 50 / 2,
+              height: 40,
+              width: 40,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Ionicons name="happy-outline" size={30} color={'black'} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              borderRadius: 50 / 2,
+              height: 40,
+              width: 40,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Ionicons name="image-outline" size={30} color={'black'} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              borderRadius: 50 / 2,
+              height: 40,
+              width: 40,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Ionicons name="rocket-outline" size={30} color={'black'} />
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
@@ -284,6 +329,9 @@ const styles = StyleSheet.create({
     marginRight: 10,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  headerFooterStyle: {
+    height: 65,
   },
 });
 

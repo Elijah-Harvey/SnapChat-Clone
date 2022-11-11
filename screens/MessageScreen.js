@@ -16,9 +16,8 @@ const MessageScreen = ({ navigation }) => {
   const roomId = uuid.v4();
 
   useEffect(() => {
-    const subscriber = usersCollection
-      // .where(('item.sentTo' || 'item.sentFrom'), '==', auth.currentUser.uid)
-      .where('UID', '!=', auth.currentUser.uid)
+    const subscriber = FriendCollection.doc(auth.currentUser.uid)
+      .collection('Friends')
       .onSnapshot((querySnapshot) => {
         const users = [];
 
@@ -34,12 +33,6 @@ const MessageScreen = ({ navigation }) => {
 
     return () => subscriber();
   }, [setUsers]);
-
-  const addRommId = () => {
-    messageCollection.doc(auth.currentUser.uid).set({
-      room: [roomId, auth.currentUser.uid],
-    });
-  };
 
   return (
     <View style={styles.container}>
@@ -64,13 +57,12 @@ const MessageScreen = ({ navigation }) => {
                   number: item.Number,
                   uid: item.UID,
                   roomId: roomId,
-                  email: item.email,
+                  email: item.Email,
                   long: item.location.longitude,
                   lat: item.location.latitude,
                   region: item.address.city,
                 });
               }}
-              onPressIn={addRommId}
             />
           )}
         />

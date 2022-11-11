@@ -26,6 +26,7 @@ import AddFriendsRow from '../components/AddFriendsRow';
 
 const AddFriendList = (props) => {
   const [users, setUsers] = useState([]);
+  const [user, setUser] = useState({});
 
   useEffect(() => {
     const subscriber = AddFriendCollection.where(
@@ -48,6 +49,19 @@ const AddFriendList = (props) => {
 
     return () => subscriber();
   }, [setUsers]);
+
+  useEffect(() => {
+    const subscriber = usersCollection
+      .doc(auth.currentUser.uid)
+      .get()
+      .then(function (doc) {
+        doc.exists ? setUser(doc.data()) : `doc doesnt exist`;
+      });
+
+    return () => subscriber;
+  }, [usersCollection]);
+
+  
 
   const ListFooter = () => {
     return <View style={styles.headerFooterStyle}></View>;
@@ -110,7 +124,22 @@ const AddFriendList = (props) => {
               text={'Add'}
               onPress={() =>
                 PendingCollection.doc(item.UID).collection('Pending').add({
-                  item: item,
+                  Date_Joined: user.Date_Joined,
+                  Date_Of_Birth: user.Date_Of_Birth,
+                  Email: user.Email,
+                  Last_Known_Password: user.Last_Known_Password,
+                  Number: user.Number,
+                  Profile_Picture: user.Profile_Picture,
+                  UID: user.UID,
+                  address: user.address,
+                  isBlocked: item.isBlocked,
+                  key: user.key,
+                  location: user.location,
+                  name: user.name,
+                  streak: user.streak,
+                  sentFrom: item.sentFrom,
+                  sentTo: item.sentTo,
+                  key: item.key,
                   sentFrom: auth.currentUser.uid,
                   sentTo: item.UID,
                 }).then(() => AddFriendCollection.doc(item.UID).update({

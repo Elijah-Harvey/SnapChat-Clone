@@ -8,6 +8,7 @@ import {
   Image,
   RefreshControl,
   ScrollView,
+  FlatList,
 } from 'react-native';
 import { auth, db, messageCollection, usersCollection } from '../firebase';
 import ProfileBox from '../components/ProfileBox';
@@ -16,8 +17,73 @@ import RandomStreak from '../components/RandomStreak';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { v4 as uuid } from 'uuid';
+import ForYou from '../components/ForYou';
+import SavedInChat from '../components/SavedInChat';
 
 const RouteProfileScreen = ({ navigation, route }) => {
+  const DUMMY_DATA = [
+    {
+      id: 1,
+      title: 'Tanks',
+      time: '2hr ago',
+      image: 'https://picsum.photos/200/300',
+    },
+    {
+      id: 2,
+      title: 'Wrestling',
+      time: '2hr ago',
+      image: 'https://picsum.photos/200/300',
+    },
+    {
+      id: 3,
+      title: 'War',
+      time: '2hr ago',
+      image: 'https://picsum.photos/200/300',
+    },
+    {
+      id: 4,
+      title: 'Long text about war',
+      time: '2hr ago',
+      image: 'https://picsum.photos/200/300',
+    },
+    {
+      id: 5,
+      title: 'HEllo',
+      time: '2hr ago',
+      image: 'https://picsum.photos/200/300',
+    },
+    {
+      id: 6,
+      title: 'WeIrD LoOkInG tExT',
+      time: '2hr ago',
+      image: 'https://picsum.photos/200/300',
+    },
+    {
+      id: 7,
+      title: 'plus',
+      time: '2hr ago',
+      image: 'https://picsum.photos/200/300',
+    },
+    {
+      id: 8,
+      title: 'a little',
+      time: '2hr ago',
+      image: 'https://picsum.photos/200/300',
+    },
+    {
+      id: 9,
+      title: 'More',
+      time: '2hr ago',
+      image: 'https://picsum.photos/200/300',
+    },
+    {
+      id: 10,
+      title: 'How does this look',
+      time: '2hr ago',
+      image: 'https://picsum.photos/200/300',
+    },
+  ];
+
   const [user, setUser] = useState({});
   const [otherU, setOtherU] = useState({});
   const [seconds, setSeconds] = useState(1);
@@ -187,13 +253,13 @@ const RouteProfileScreen = ({ navigation, route }) => {
               style={{ bottom: '1%', fontWeight: '600' }}
             />
           </View>
-          <View style={{ left: '5%', bottom: '3%' }}>
+          <View style={{ left: '5%', bottom: 5}}>
             <Text style={{ fontWeight: '600', fontSize: 17 }}>Snap Map</Text>
           </View>
 
           <View
             style={{
-              height: '55%',
+              height: 150,
               width: '90%',
               borderTopEndRadius: 10,
               overflow: 'hidden',
@@ -228,7 +294,7 @@ const RouteProfileScreen = ({ navigation, route }) => {
           </View>
           <View
             style={{
-              height: '17%',
+              height: 50,
               width: '90%',
               alignSelf: 'center',
               flexDirection: 'column',
@@ -242,7 +308,7 @@ const RouteProfileScreen = ({ navigation, route }) => {
           >
             <Text
               style={{ left: '3%', fontWeight: '600', top: '10%' }}
-            >{`${route.params.name} is in ${region}`}</Text>
+            >{`${route.params.name} is in ${address?.['city']}`}</Text>
             <Text
               style={{
                 left: '3%',
@@ -258,7 +324,7 @@ const RouteProfileScreen = ({ navigation, route }) => {
           <TouchableOpacity
             style={{
               backgroundColor: 'white',
-              height: '30%',
+              height: 80,
               width: '90%',
               alignSelf: 'center',
               justifyContent: 'center',
@@ -267,8 +333,8 @@ const RouteProfileScreen = ({ navigation, route }) => {
               shadowOffset: { width: -0.1, height: 3 },
               shadowOpacity: 0.3,
               shadowRadius: 5,
-              borderBottomLeftRadius: 10
-              ,borderBottomRightRadius: 10
+              borderBottomLeftRadius: 10,
+              borderBottomRightRadius: 10,
             }}
             onPressIn={sendMessage}
             onPress={() =>
@@ -308,21 +374,32 @@ const RouteProfileScreen = ({ navigation, route }) => {
               Send My Location
             </Text>
           </TouchableOpacity>
-          <View style={{ top: '7%', left: '5%' }}>
-            <Text style={{ fontSize: 18, fontWeight: '600' }}>
-              Saved in Chat
-            </Text>
-          </View>
           <View
             style={{
-              borderWidth: 1,
-              top: '10%',
+              top: 50,
               height: '100%',
               alignSelf: 'center',
               width: '90%',
               backgroundColor: 'white',
             }}
-          ></View>
+          >
+            <View style={{ left: '5%', bottom: 10 }}>
+              <Text style={{ fontSize: 18, fontWeight: '600' }}>
+                Saved in Chat
+              </Text>
+            </View>
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              horizontal={true}
+              data={DUMMY_DATA}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <SavedInChat
+                  image={item.image}
+                />
+              )}
+            />
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
