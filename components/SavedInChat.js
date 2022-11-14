@@ -10,8 +10,10 @@ import {
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 const SavedInChat = ({ title, time, image }) => {
+
+
   return (
-    <View style={{width: '100%'}}>
+    <View style={{width: 130, marginRight: 3}}>
       <TouchableOpacity style={styles.bigBox}>
         <View>
           <Image style={styles.image} source={{ uri: image }} />
@@ -33,10 +35,10 @@ const styles = StyleSheet.create({
   },
   bigBox: {
     height: Platform.OS === 'android' ? 210 : 250,
-    width: Platform.OS === 'android' ? 168 : '100%',
     marginRight: 10,
     borderRadius: 10,
     // marginBottom: 15,
+    borderWidth: 1
   },
   bigTitle: {
     color: 'white',
@@ -54,8 +56,8 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   image: {
-    height: Platform.OS === 'android' ? 210 : 250,
-    width: Platform.OS === 'android' ? 168 : '100%',
+    height: '100%',
+    width: '100%',
     borderRadius: 10,
   },
 });

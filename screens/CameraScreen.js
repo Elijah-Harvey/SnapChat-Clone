@@ -12,10 +12,10 @@ import {
 } from 'react-native';
 import { Camera, CameraType, Constants } from 'expo-camera';
 import * as MedialLibrary from 'expo-media-library';
-import * as Permission from 'expo-permissions';
+import {v4 as uuid} from 'uuid'
 
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { auth, Storage, usersCollection } from '../firebase';
+import { auth, PictureCollection, Storage, usersCollection } from '../firebase';
 
 export default function CameraScreen({ navigation }) {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
@@ -23,8 +23,7 @@ export default function CameraScreen({ navigation }) {
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
   const cameraRef = useRef(null);
-  const [file, setFile] = useState('');
-  const [url, setURL] = useState('');
+  const [disable, setDisable] = useState(false);
 
   const [loaded, setLoaded] = useState(false);
 
@@ -53,39 +52,47 @@ export default function CameraScreen({ navigation }) {
     }
   };
 
-  let substringTest = function (str) {
-    return str.substring(str.lastIndexOf('/') + 1);
-  };
-
   const savePicture = async () => {
     if (image != null) {
       try {
-        const response = await fetch(image);
-        console.log(response);
+        const blob = await new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.onload = function () {
+            resolve(xhr.response);
+          };
+          xhr.onerror = function (e) {
+            console.log(e);
+            reject(new TypeError('Network request failed'));
+          };
+          xhr.responseType = 'blob';
+          xhr.open('GET', image, true);
+          xhr.send(null);
+        });
+        const imageNameBefore = image.split('/');
+        const imageName = imageNameBefore[imageNameBefore.length - 1];
 
-        const blob = response.blob();
-        const filename = substringTest(image);
-        Storage.ref()
-          .child(`/images/${filename}`)
-          .put(blob)
-          .on('state_changed', () => {
-            Storage.ref()
-              .child(`/images/${filename}`)
-              .getDownloadURL()
-              .then((url) => {
-                setURL(url);
-              });
-          });
+        const ref = Storage.ref().child(
+          `${auth.currentUser.uid}/images/${imageName}`
+        );
+        const snapshot = await ref.put(blob);
+        blob.close();
+        return usersCollection
+          .doc(auth.currentUser.uid)
+          .collection('Pics')
+          .add({
+            pic: (await snapshot.ref.getDownloadURL()).toString(),
+            id: uuid()
+          }).then(() => {
+            PictureCollection.add({
+              
+            })
+          })
+          .then(await snapshot.ref.getDownloadURL())
+          .then(() => setImage(null))
+          .then(() => setDisable(false));
       } catch (e) {
         console.log(e);
       }
-      usersCollection.doc(auth.currentUser.uid).collection('Pics').add({
-        pics: url,
-      });
-      setImage(null);
-      setURL('');
-    } else {
-      <ActivityIndicator />;
     }
   };
 
@@ -175,7 +182,7 @@ export default function CameraScreen({ navigation }) {
               </TouchableOpacity>
             </View>
             <View>
-              <TouchableOpacity onPress={savePicture}>
+              <TouchableOpacity onPress={savePicture} onPressOut={() => setDisable(true)} disabled={disable}>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -185,7 +192,11 @@ export default function CameraScreen({ navigation }) {
                     left: '85%',
                   }}
                 >
-                  <Ionicons name="arrow-redo-outline" size={45} color="white" />
+                  <Ionicons
+                    name="arrow-redo-outline"
+                    size={45}
+                    color={disable === true ? 'red' : 'white'}
+                  />
                 </View>
               </TouchableOpacity>
             </View>

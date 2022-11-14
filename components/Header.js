@@ -13,7 +13,7 @@ import {
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { auth } from '../firebase';
 
-const Header = ({ title, rightIcon, color, onPress, navigation, bgc, top }) => {
+const Header = ({ title, rightIcon, color, onPress, navigation, bgc, top, middleIconOnPress }) => {
   return (
     <View
       style={[
@@ -45,7 +45,7 @@ const Header = ({ title, rightIcon, color, onPress, navigation, bgc, top }) => {
           <Ionicons name="search-outline" size={25} color={color} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.addFriend}>
-          <Ionicons name="person-add-outline" size={25} color={color} />
+          <Ionicons name="person-add-outline" size={25} color={color} onPress={middleIconOnPress}/>
         </TouchableOpacity>
         <TouchableOpacity style={styles.ellipsis}>
           <Ionicons name={rightIcon} size={25} color={color} />

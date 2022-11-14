@@ -93,7 +93,7 @@ const AddedMe = (props) => {
           renderItem={({ item }) => (
             <AddFriendsRow
               name={
-                item.name
+                !item.name
                   ? item.name.length > 12
                   : item.Email.length > 12
                   ? item.name
@@ -162,9 +162,9 @@ const AddedMe = (props) => {
                   .then(() => AddFriendCollection.doc(item.UID).update({isBlocked: true}))
               }
               onPress={() =>
-                PendingCollection.doc(auth.currentUser.uid)
+                PendingCollection.doc(item.UID)
                   .collection('Pending')
-                  .where('sentTo', '==', item.UID)
+                  .where('sentFrom', '==', auth.currentUser.uid)
                   .get()
                   .then(function (querySnapshot) {
                     querySnapshot.forEach(function (doc) {
@@ -181,9 +181,9 @@ const AddedMe = (props) => {
                     isBlocked: false,
                   })
                   .then(() =>
-                    PendingCollection.doc(item.UID)
+                    PendingCollection.doc(auth.currentUser.uid)
                       .collection('Pending')
-                      .where('sentTo', '==', auth.currentUser.uid)
+                      .where('sentFrom', '==', item.UID)
                       .get()
                       .then(function (querySnapshot) {
                         querySnapshot.forEach(function (doc) {

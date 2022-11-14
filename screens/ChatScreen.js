@@ -10,6 +10,9 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
+  Share,
+  Modal,
+  Pressable,
 } from 'react-native';
 import { auth, messageCollection } from '../firebase';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -17,14 +20,50 @@ import * as Linking from 'expo-linking';
 import SenderMessage from '../components/SenderMessage';
 import { v4 as uuid } from 'uuid';
 import CustomDate from '../components/CustomDate';
-import MapView, { Marker } from 'react-native-maps';
 import CustomMapView from '../components/CustomMapView';
+import * as MailComposer from 'expo-mail-composer';
+import { Alert } from 'react-native';
 
 const ChatScreen = ({ navigation, route, map }) => {
   const [input, setInput] = useState('');
   const [disable, setDisable] = useState(false);
   const [messages, setMessages] = useState([]);
   const messageId = uuid();
+  const [mId, setMId] = useState({});
+  const [bodySMS, setBodySMS] = useState();
+  const [status, setStatus] = useState();
+
+
+
+  //   const sendEmail = async(file) => {
+  //     var options = {}
+  //     if(file.length < 1){
+  //       options = {
+  //         subject: "",
+  //         recipients: ["zekeharvey16@gmail.com"],
+  //         body: "56 saint crox st.augstine florida"
+  //       }
+  //     }else{
+  //       options = {
+  //       subject: "",
+  //       recipients: ["lizzy220188@gmail.com"],
+  //       body: "56 saint crox st.augstine florida",
+  //     }
+  //     let promise = new Promise((resolve, reject) => {
+  //       MailComposer.composeAsync(options)
+  //         .then((result) => {
+  //           resolve(result)
+  //         })
+  //         .catch((error) => {
+  //           reject(error)
+  //         })
+  //       })
+  //     promise.then(
+  //       result => setStatus("Status: email " + result.status),
+  //       error => setStatus("Status: email " + error.status)
+  //      )
+  //   }
+  // }
 
   useEffect(() => {
     messageCollection.doc(auth.currentUser.uid).set({
@@ -42,7 +81,6 @@ const ChatScreen = ({ navigation, route, map }) => {
     const subscriber = messageCollection
       .doc(auth.currentUser.uid)
       .collection('Messages')
-      // .where('room', 'array-contains', auth.currentUser.uid)
       .where('room', 'array-contains', route.params.uid)
       .orderBy('createdAt', 'desc')
       .onSnapshot((querySnapshot) => {
@@ -111,6 +149,33 @@ const ChatScreen = ({ navigation, route, map }) => {
   const ListFooter = () => {
     return <View style={styles.headerFooterStyle} />;
   };
+
+  const onDelete = () => {
+    messageCollection
+      .doc(auth.currentUser.uid)
+      .collection('Messages')
+      .where('id', '==', mId)
+      .get()
+      .then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          doc.ref.delete(), console.log('deleted');
+        });
+      })
+      .then(() =>
+        messageCollection
+          .doc(route.params.uid)
+          .collection('Messages')
+          .where('id', '==', mId)
+          .get()
+          .then(function (querySnapshot) {
+            querySnapshot.forEach(function (doc) {
+              doc.ref.delete(), console.log('deleted');
+            });
+          })
+      );
+  };
+
+  console.log(mId)
 
   return (
     <SafeAreaView style={styles.container}>
@@ -210,6 +275,24 @@ const ChatScreen = ({ navigation, route, map }) => {
                   : route.params.name
               }
               time={message.time}
+              test={message.message}
+              Msg={message.message}
+              MsgNumber={route.params.number}
+              onPress={() => setMId(message.id)}
+              onDelete={() =>
+                Alert.alert(
+                  'Alert Title',
+                  'alertMessage',
+                  [
+                    {
+                      text: 'Cancel',
+                      onPress: () => console.log('didnt work'),
+                    },
+                    { text: 'OK', onPress: onDelete},
+                  ],
+                  { cancelable: false }
+                )
+              }
             />
           ) : (
             <CustomMapView
@@ -272,7 +355,7 @@ const ChatScreen = ({ navigation, route, map }) => {
               height: '80%',
               borderRadius: 30,
               backgroundColor: 'lightgray',
-              paddingLeft: '3%'
+              paddingLeft: '3%',
             }}
             returnKeyType="send"
           />
@@ -332,6 +415,47 @@ const styles = StyleSheet.create({
   },
   headerFooterStyle: {
     height: 65,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
   },
 });
 

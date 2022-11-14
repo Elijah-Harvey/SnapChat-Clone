@@ -32,6 +32,9 @@ const ProfileScreen = ({ navigation }) => {
 
     if (!result.cancelled) {
       setImage(result.uri);
+      usersCollection.doc(auth.currentUser.uid).update({
+        testing: result. uri
+      })
     }
   };
 

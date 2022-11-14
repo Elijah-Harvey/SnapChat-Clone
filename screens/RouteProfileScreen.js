@@ -169,16 +169,19 @@ const RouteProfileScreen = ({ navigation, route }) => {
             region: `${address?.['city']}`,
             createdAt: new Date(),
             user: otherU.UID,
+            id: mapId,
             room: [route.params.roomId, auth.currentUser.uid, route.params.uid],
           });
       });
   };
 
-  console.log(otherU);
+  const ListFooter = () => {
+    return <View style={styles.headerFooterStyle} />;
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.containers}>
+      <ScrollView style={styles.containers} showsVerticalScrollIndicator={false}>
         <View style={{ paddingTop: 16, paddingBottom: 16, flex: 1 }}>
           <TouchableOpacity
             onPress={() =>
@@ -253,7 +256,7 @@ const RouteProfileScreen = ({ navigation, route }) => {
               style={{ bottom: '1%', fontWeight: '600' }}
             />
           </View>
-          <View style={{ left: '5%', bottom: 5}}>
+          <View style={{ left: '5%', bottom: 5 }}>
             <Text style={{ fontWeight: '600', fontSize: 17 }}>Snap Map</Text>
           </View>
 
@@ -336,7 +339,7 @@ const RouteProfileScreen = ({ navigation, route }) => {
               borderBottomLeftRadius: 10,
               borderBottomRightRadius: 10,
             }}
-            onPressIn={sendMessage}
+            onLongPress={sendMessage}
             onPress={() =>
               navigation.goBack({
                 name: route.params.name,
@@ -348,6 +351,7 @@ const RouteProfileScreen = ({ navigation, route }) => {
                 long: route.params.long,
                 lat: route.params.lat,
                 user: otherU.UID,
+                mapId: mapId
               })
             }
           >
@@ -374,30 +378,26 @@ const RouteProfileScreen = ({ navigation, route }) => {
               Send My Location
             </Text>
           </TouchableOpacity>
+              <View style={{ left: '5%', marginTop: 20, marginBottom: 20}}>
+                <Text style={{ fontSize: 18, fontWeight: '600' }}>
+                  Saved in Chat
+                </Text>
+              </View>
           <View
             style={{
-              top: 50,
               height: '100%',
               alignSelf: 'center',
               width: '90%',
               backgroundColor: 'white',
             }}
           >
-            <View style={{ left: '5%', bottom: 10 }}>
-              <Text style={{ fontSize: 18, fontWeight: '600' }}>
-                Saved in Chat
-              </Text>
-            </View>
             <FlatList
-              showsVerticalScrollIndicator={false}
-              horizontal={true}
+              ListFooterComponent={ListFooter}
+              showsHorizontalScrollIndicator={false}
+              horizontal
               data={DUMMY_DATA}
               keyExtractor={(item) => item.id}
-              renderItem={({ item }) => (
-                <SavedInChat
-                  image={item.image}
-                />
-              )}
+              renderItem={({ item }) => <SavedInChat image={item.image} />}
             />
           </View>
         </View>
@@ -408,13 +408,16 @@ const RouteProfileScreen = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: '#fafafa',
+    height: '100%',
+    
   },
   containers: {
     flex: 1,
   },
-  contentContainer: {},
+  headerFooterStyle: {
+    height: 100,
+  },
 });
 
 export default RouteProfileScreen;

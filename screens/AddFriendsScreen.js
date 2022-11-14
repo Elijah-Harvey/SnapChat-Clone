@@ -24,7 +24,7 @@ import AddFriendsRow from '../components/AddFriendsRow';
 import AddFriendList from '../components/AddFriendList';
 import AddedMe from '../components/AddedMe';
 
-const AddFriends = () => {
+const AddFriendsScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -60,7 +60,7 @@ const AddFriends = () => {
             width: '90%',
             height: 50,
             top: 10,
-            borderRadius: '20%',
+            borderRadius: 20,
             backgroundColor: '#E8E8E8',
             justifyContent: 'center',
             flexDirection: 'row',
@@ -109,4 +109,4 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#F2F2F2' },
 });
 
-export default AddFriends;
+export default AddFriendsScreen;

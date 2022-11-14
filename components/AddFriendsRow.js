@@ -42,7 +42,7 @@ const AddFriendsRow = ({
             {
               right: '15%',
               position: 'absolute',
-              borderRadius: '20%',
+              borderRadius: 20,
               height: '50%',
               width: '28%',
               alignItems: 'center',
@@ -85,7 +85,7 @@ const AddFriendsRow = ({
           style={{
             right: '15%',
             position: 'absolute',
-            borderRadius: '20%',
+            borderRadius: 20,
             height: '50%',
             width: '28%',
             alignItems: 'center',
