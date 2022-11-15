@@ -33,8 +33,8 @@ const ProfileScreen = ({ navigation }) => {
     if (!result.cancelled) {
       setImage(result.uri);
       usersCollection.doc(auth.currentUser.uid).update({
-        testing: result. uri
-      })
+        testing: result.uri,
+      });
     }
   };
 
@@ -82,6 +82,18 @@ const ProfileScreen = ({ navigation }) => {
         }
       >
         <View style={{ flex: 1, width: '100%' }}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={{ position: 'absolute', left: '5%', alignItems: 'center' }}
+          >
+            <Ionicons name="chevron-down-outline" size={35} />
+          </TouchableOpacity>
+          <TouchableOpacity
+          onPress={() => navigation.navigate('settings')}
+            style={{ position: 'absolute', right: '5%', alignItems: 'center' }}
+          >
+            <Ionicons name="settings-outline" size={35} />
+          </TouchableOpacity>
           <TouchableOpacity
             style={{
               alignItems: 'center',

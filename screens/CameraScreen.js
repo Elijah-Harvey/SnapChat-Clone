@@ -12,19 +12,17 @@ import {
 } from 'react-native';
 import { Camera, CameraType, Constants } from 'expo-camera';
 import * as MedialLibrary from 'expo-media-library';
-import {v4 as uuid} from 'uuid'
-
+import { v4 as uuid } from 'uuid';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { auth, PictureCollection, Storage, usersCollection } from '../firebase';
 
-export default function CameraScreen({ navigation }) {
+export default function CameraScreen({ navigation, text, onOK }) {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [image, setImage] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
   const cameraRef = useRef(null);
   const [disable, setDisable] = useState(false);
-
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
@@ -76,16 +74,20 @@ export default function CameraScreen({ navigation }) {
         );
         const snapshot = await ref.put(blob);
         blob.close();
+        const downloadedURL = (await snapshot.ref.getDownloadURL()).toString();
         return usersCollection
           .doc(auth.currentUser.uid)
           .collection('Pics')
           .add({
-            pic: (await snapshot.ref.getDownloadURL()).toString(),
-            id: uuid()
-          }).then(() => {
+            pic: downloadedURL,
+            id: uuid(),
+          })
+          .then(() => {
             PictureCollection.add({
-              
-            })
+              pic: downloadedURL,
+              id: uuid(),
+              owner: auth.currentUser.uid,
+            });
           })
           .then(await snapshot.ref.getDownloadURL())
           .then(() => setImage(null))
@@ -110,7 +112,7 @@ export default function CameraScreen({ navigation }) {
           ref={cameraRef}
           ratio={'16:9'}
         >
-          <View style={styles.Header}>
+          <SafeAreaView style={styles.Header}>
             <TouchableOpacity
               style={styles.profilePic}
               onPress={() => navigation.navigate('Profile')}
@@ -124,24 +126,41 @@ export default function CameraScreen({ navigation }) {
                 style={{ width: 45, height: 45, borderRadius: 45 / 2 }}
               />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.search}>
-              <Ionicons name="search-outline" size={35} color={'white'} />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.addFriend}>
-              <Ionicons name="person-add-outline" size={35} color={'white'} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.ellipsis}
-              onPress={() => {
-                setType(
-                  type === CameraType.back ? CameraType.front : CameraType.back
-                );
+            <View
+              style={{
+                flexDirection: 'row',
+                paddingRight: '3%',
+                flex: 1,
+                justifyContent: 'flex-end',
               }}
             >
-              <Ionicons name={'repeat-outline'} size={35} color={'white'} />
-            </TouchableOpacity>
+              <TouchableOpacity style={styles.search}>
+                <Ionicons name="search-outline" size={35} color={'white'} />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.addFriend}>
+                <Ionicons name="person-add-outline" size={35} color={'white'} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.ellipsis}
+                onPress={() => {
+                  setType(
+                    type === CameraType.back
+                      ? CameraType.front
+                      : CameraType.back
+                  );
+                }}
+              >
+                <Ionicons name={'repeat-outline'} size={35} color={'white'} />
+              </TouchableOpacity>
+            </View>
+          </SafeAreaView>
+          <View
+            style={{
+              alignSelf: 'flex-end',
+              paddingRight: '3%',
+            }}
+          >
             <TouchableOpacity
-              style={styles.flash}
               onPress={() => {
                 setFlash(
                   flash === Camera.Constants.FlashMode.off
@@ -161,40 +180,44 @@ export default function CameraScreen({ navigation }) {
               )}
             </TouchableOpacity>
           </View>
-
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              padding: 30,
-            }}
-          ></View>
         </Camera>
       ) : (
-        <Image source={{ uri: image }} style={styles.camera} />
+        // <Image source={{ uri: image }} style={styles.camera} />
+
+        <Image
+          resizeMode={'cover'}
+          style={styles.camera}
+          source={{ uri: image }}
+        ></Image>
       )}
       <View>
         {image ? (
-          <View style={{ flex: 1 }}>
-            <View style={{ bottom: '10%', left: '43%', position: 'absolute' }}>
+          <View
+            style={{
+              bottom: 0,
+              flexDirection: 'row',
+              alignItems: 'center',
+              position: 'absolute',
+              width: '100%',
+              justifyContent: 'space-between',
+              paddingLeft: '43%',
+            }}
+          >
+            <View>
               <TouchableOpacity onPress={() => setImage(null)}>
                 <Ionicons name="reload-outline" size={60} color="white" />
               </TouchableOpacity>
             </View>
             <View>
-              <TouchableOpacity onPress={savePicture} onPressOut={() => setDisable(true)} disabled={disable}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    position: 'absolute',
-                    bottom: 7,
-                    left: '85%',
-                  }}
-                >
+              <TouchableOpacity
+                onPress={savePicture}
+                onPressOut={() => setDisable(true)}
+                disabled={disable}
+              >
+                <View style={{}}>
                   <Ionicons
                     name="arrow-redo-outline"
-                    size={45}
+                    size={50}
                     color={disable === true ? 'red' : 'white'}
                   />
                 </View>
@@ -204,18 +227,21 @@ export default function CameraScreen({ navigation }) {
         ) : (
           <View
             style={{
-              flex: 1,
               flexDirection: 'row',
+              bottom: '20%',
+              width: '100%',
+              justifyContent: 'space-between',
               alignItems: 'center',
-              justifyContent: 'center',
+              paddingLeft: '20%',
+              paddingRight: '20%',
             }}
           >
-            <TouchableOpacity style={styles.picture} onPress={takePicture} />
             <TouchableOpacity style={styles.pictureIcon}>
-              <Ionicons name="images-outline" size={30} color="white" />
+              <Ionicons name="images-outline" size={40} color="white" />
             </TouchableOpacity>
+            <TouchableOpacity style={styles.picture} onPress={takePicture} />
             <TouchableOpacity style={styles.happy}>
-              <Ionicons name="happy-outline" size={33} color="white" />
+              <Ionicons name="happy-outline" size={45} color="white" />
             </TouchableOpacity>
           </View>
         )}
@@ -229,7 +255,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   camera: {
-    flex: 1,
+    width: '100%',
+    height: '100%',
   },
   picture: {
     width: 80,
@@ -237,24 +264,14 @@ const styles = StyleSheet.create({
     borderRadius: 80 / 2,
     borderColor: 'white',
     borderWidth: 3,
-    position: 'absolute',
-    bottom: 30,
-    flex: 1,
-    alignSelf: 'center',
   },
   pictureIcon: {
-    position: 'absolute',
-    bottom: Platform.OS === 'android' ? 50 : 50,
-    left: Platform.OS === 'android' ? 85 : 110,
-    flex: 1,
-    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   happy: {
-    position: 'absolute',
-    bottom: Platform.OS === 'android' ? 50 : 50,
-    right: Platform.OS === 'android' ? 85 : 110,
-    flex: 1,
-    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   toggleCamera: {
     position: 'absolute',
@@ -264,25 +281,22 @@ const styles = StyleSheet.create({
   Header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    top: Platform.OS === 'android' ? 45 : '15%',
+    paddingLeft: '2%',
+    marginBottom: '2%',
   },
   search: {
     width: 45,
     height: 45,
     borderRadius: 45 / 2,
-    position: 'absolute',
-    left: 70,
+    backgroundColor: 'transparent',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'transparent',
+    marginRight: '7%',
   },
   profilePic: {
     width: 50,
     height: 50,
     borderRadius: 50 / 2,
-    position: 'absolute',
-    left: 10,
     backgroundColor: 'transparent',
     borderWidth: 1,
     borderColor: 'white',
@@ -290,32 +304,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   addFriend: {
-    width: 45,
-    height: 45,
-    borderRadius: 45 / 2,
-    position: 'absolute',
-    right: 80,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'transparent',
+    marginRight: '7%',
   },
   ellipsis: {
-    width: 45,
-    height: 45,
-    borderRadius: 45 / 2,
-    position: 'absolute',
-    right: 25,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-  },
-  flash: {
-    width: 45,
-    height: 45,
-    borderRadius: 45 / 2,
-    position: 'absolute',
-    right: 25,
-    top: 25,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'transparent',
