@@ -10,7 +10,7 @@ import {
 import Header from '../components/Header';
 import MapView, { Marker } from 'react-native-maps';
 import { db, usersCollection } from '../firebase';
-import * as Location from 'expo-location';
+import Lottie from 'lottie-react-native';
 
 const MapScreen = ({ navigation }) => {
   const [users, setUsers] = useState([]);
@@ -60,10 +60,9 @@ const MapScreen = ({ navigation }) => {
       >
         {users.map((e, i) => (
           <Marker
-            pinColor={`${generateColor()}`}
-            title={`${
-              e.name === undefined ? e.Email : e.name
-            }'s location`}
+            title={`${e.name === undefined ? e.Email : e.name}'s 
+            location Seen 
+            at ${e.address.region}`}
             key={i}
             coordinate={{
               latitude:
@@ -71,7 +70,16 @@ const MapScreen = ({ navigation }) => {
               longitude:
                 e.location.longitude != undefined ? e.location.longitude : 0,
             }}
-          />
+          >
+            <Lottie
+              source={{
+                uri: 'https://assets5.lottiefiles.com/packages/lf20_JT7eJlHqgH.json',
+              }}
+              style={{ width: 150, height: 150, bottom: 20 }}
+              autoPlay
+              loop
+            />
+          </Marker>
         ))}
       </MapView>
     </View>
