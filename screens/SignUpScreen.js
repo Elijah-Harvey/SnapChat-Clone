@@ -80,7 +80,7 @@ const SignUpScreen = ({ navigation }) => {
             region: `${address?.['region']}`,
             postalCode: `${address?.['postalCode']}`,
             fullName: `${
-              address?.['streetNumber'] + address?.['streetAddress']
+              address?.['streetNumber'] +''+  address?.['street']
             }`,
             isoCountryCode: `${address?.['isoCountryCode']}`,
             district: `${address?.['district']}`,
@@ -171,7 +171,7 @@ const SignUpScreen = ({ navigation }) => {
             textinputStyle={styles.input2}
           />
           <CustomTextinput
-            viewStyle={{ top: '62%' }}
+            viewStyle={{ top: '65%' }}
             textstyle={{ width: '80%' }}
             text={'PASSWORD'}
             onChangeText={(text) => setPassword(text)}

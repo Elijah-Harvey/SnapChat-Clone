@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, FlatList } from 'react-native';
-import { auth, usersCollection } from '../firebase';
+import { auth, FriendCollection, usersCollection } from '../firebase';
 import Friends from './Friends';
+import { v4 as uuid } from 'uuid';
 
-const FriendList = ({navigation, nav}) => {
- const [data, setData] = useState([])
+const FriendList = ({ navigation, nav }) => {
+  const [data, setData] = useState([]);
+  const roomId = uuid();
 
-useEffect(() => {
-    const subscriber = usersCollection.where('UID', '==', auth.currentUser.uid)
-    .onSnapshot((querySnapshot) => {
+  useEffect(() => {
+    const subscriber = FriendCollection.doc(auth.currentUser.uid).collection('Friends')
+      .onSnapshot((querySnapshot) => {
         const users = [];
 
         querySnapshot.forEach((documentSnapshot) => {
@@ -33,14 +35,24 @@ useEffect(() => {
         data={data}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <Friends image={item.Profile_Picture} name={item.name} nav={nav} onPress={() =>
-            nav.navigate('RouteProfile', {
-              name: item.name,
-              image: item.Profile_Picture,
-              number: item.Number,
-              uid: item.UID,
-              email: item.Email,
-            })}/>
+          <Friends
+            image={item.Profile_Picture}
+            name={item.name}
+            nav={nav}
+            onPress={() =>
+              nav.navigate('RouteProfile', {
+                name: item.name,
+                image: 'https://picsum.photos/200/300',
+                number: item.Number,
+                uid: item.UID,
+                roomId: roomId,
+                email: item.Email,
+                long: item.location.longitude,
+                lat: item.location.latitude,
+                region: item.address.city,
+              })
+            }
+          />
         )}
       />
     </View>

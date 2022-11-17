@@ -17,63 +17,72 @@ import TouchableButton from '../components/TouchableButton';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { AddFriendCollection, auth, usersCollection } from '../firebase';
 import CustomTextinput from '../components/CustomTextinput';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 const { height } = Dimensions.get('window');
 
 const Birthday = ({ navigation }) => {
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(
+    new Date(
+      new Date().getFullYear(),
+      new Date().getMonth(),
+      new Date().getDate()
+    )
+  );
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
   const [showIos, setShowIos] = useState(false);
   const [disable, setDisable] = useState(false);
+  const [error, setError] = useState(false);
 
-  let today = new Date();
+  let today = new Date(
+    new Date().getFullYear() - 13,
+    new Date().getMonth(),
+    new Date().getDate()
+  );
 
-  //((today.getMonth()+1)+'/'+ today.getDate() +'/'+ (today.getFullYear()) > (date.getMonth()+1)+'/'+ date.getDate() +'/'+ (date.getFullYear()-13))
-  
-useEffect(() => {
-  if (date.getFullYear() >= today.getFullYear() - 12 ) {
-    // Alert.alert('Must be 13 years of age')
-    setDisable(true)
-  } else setDisable(false)
-}, [date])
+  useEffect(() => {
+    if (date > today) {
+      setError(true);
+      setDisable(true);
+    } else setDisable(false), setError(false);
+  }, [date]);
 
   const addBirthday = async () => {
-     usersCollection
-          .doc(auth.currentUser.uid)
-          .update({
-            Date_Of_Birth:
-              date.getMonth() +
-              1 +
-              '/' +
-              date.getDate() +
-              '/' +
-              date.getFullYear().toString(),
-          }).then(() => AddFriendCollection.doc(auth.currentUser.uid)
-          .update({
-            Date_Of_Birth:
-              date.getMonth() +
-              1 +
-              '/' +
-              date.getDate() +
-              '/' +
-              date.getFullYear().toString(),
-          }))
-          .then( () => navigation.navigate('Name'))
+    usersCollection
+      .doc(auth.currentUser.uid)
+      .update({
+        Date_Of_Birth:
+          date.getMonth() +
+          1 +
+          '/' +
+          date.getDate() +
+          '/' +
+          date.getFullYear(),
+      })
+      .then(() =>
+        AddFriendCollection.doc(auth.currentUser.uid).update({
+          Date_Of_Birth:
+            date.getMonth() +
+            1 +
+            '/' +
+            date.getDate() +
+            '/' +
+            date.getFullYear(),
+        })
+      )
+      .then(() => navigation.navigate('Name'));
   };
-
   const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate;
     setShow(false);
-    setDate(currentDate);
+    setDate(selectedDate);
   };
 
   const onChangeIos = (event, selectedDate) => {
-    const currentDate = selectedDate;
     setShowIos(false);
-    setDate(currentDate);
+    setDate(selectedDate);
   };
-
+ 
   const showMode = (currentMode) => {
     if (Platform.OS == 'android') {
       setShow(true);
@@ -84,7 +93,6 @@ useEffect(() => {
   const showModeIOS = (currentMode) => {
     if (Platform.OS === 'ios') {
       setShow(true);
-      // for iOS, add a button that closes the picker
     }
     setMode(currentMode);
   };
@@ -111,7 +119,7 @@ useEffect(() => {
             flex: 1,
           }}
         >
-          <Text style={{ fontSize: 25,  top: '15%' }}>
+          <Text style={{ fontSize: 25, top: '15%' }}>
             When's your birthday?
           </Text>
         </View>
@@ -136,7 +144,7 @@ useEffect(() => {
                   '/' +
                   date.getDate() +
                   '/' +
-                  date.getFullYear().toString()
+                  date.getFullYear()
                 }
               />
             </TouchableOpacity>
@@ -153,7 +161,7 @@ useEffect(() => {
                 '/' +
                 date.getDate() +
                 '/' +
-                date.getFullYear().toString()
+                date.getFullYear()
               }
               onPressIn={showDatepickerIOS}
             />
@@ -175,6 +183,7 @@ useEffect(() => {
             ? show && (
                 <DateTimePicker
                   testID="dateTimePicker"
+                  dateFormat="longdate"
                   value={date}
                   mode={mode}
                   is24Hour={true}
@@ -185,8 +194,60 @@ useEffect(() => {
               )
             : null}
         </View>
+        {error === true ? (
+          <>
+            <View
+              style={{
+                alignSelf: 'center',
+                height: '5%',
 
-        <TouchableButton text="Continue" onPressIn={addBirthday} disable={disable} style={{backgroundColor: disable === true ? 'gray' : '#10ACFF'}}/>
+                width: '50%',
+                flexDirection: 'row',
+                position: 'absolute',
+                bottom: '18%',
+              }}
+            >
+              <View
+                style={{
+                  alignSelf: 'center',
+                  height: '100%',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '20%',
+                }}
+              >
+                <Ionicons
+                  name="alert-circle-outline"
+                  size={40}
+                  color={'rgba(240,210,0,0.50)'}
+                />
+              </View>
+              <View
+                style={{
+                  alignSelf: 'center',
+                  borderWidth: 0.5,
+                  height: '100%',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '80%',
+                  borderColor: 'orangeyellow',
+                  backgroundColor: 'rgba(255,255,0,0.20)',
+                }}
+              >
+                <Text style={{ fontWeight: 'bold' }}>
+                  Must Be Over 18 Years Of Age
+                </Text>
+              </View>
+            </View>
+          </>
+        ) : null}
+
+        <TouchableButton
+          text="Continue"
+          onPressIn={addBirthday}
+          disable={disable}
+          style={{ backgroundColor: disable === true ? 'gray' : '#10ACFF' }}
+        />
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -201,19 +262,19 @@ const styles = StyleSheet.create({
     width: '80%',
     alignSelf: 'center',
     paddingLeft: '3%',
-    fontSize: 15
+    fontSize: 15,
   },
   inputIOS: {
     height: '15%',
     width: '80%',
     alignSelf: 'center',
     paddingLeft: '3%',
-    fontSize: 15
+    fontSize: 15,
   },
   iosPicker: {
     right: '10%',
-    width: '20%'
-    ,position: 'absolute'
+    width: '50%',
+    position: 'absolute',
   },
 });
 

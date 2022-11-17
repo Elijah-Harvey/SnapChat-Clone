@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 
-const SettingsView = ({ text, style }) => {
+const SettingsView = ({ text, style, onPress }) => {
   return (
     <View>
-      <TouchableOpacity
+      <TouchableOpacity onPress={onPress}
         style={[
           {
             width: '100%',

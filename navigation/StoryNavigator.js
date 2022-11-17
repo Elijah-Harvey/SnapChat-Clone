@@ -8,6 +8,7 @@ import RouteProfileScreen from '../screens/RouteProfileScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import HomeScreen from '../screens/HomeScreen';
 
+
 const Stack = createStackNavigator();
 
 const StoryNavigator = () => {
@@ -22,6 +23,7 @@ const StoryNavigator = () => {
       <Stack.Screen component={HomeScreen} name="Home" />
       <Stack.Screen component={RouteProfileScreen} name="RouteProfile" />
       <Stack.Screen component={ProfileScreen} name="Profile" />
+      <Stack.Screen component={ChatScreen} name="Chat" />
     </Stack.Navigator>
   );
 };

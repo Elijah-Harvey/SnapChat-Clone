@@ -38,7 +38,6 @@ export default {
     web: {
       favicon: './assets/favicon.png',
     },
-    permissions: ['ACCESS_BACKGROUND_LOCATION'],
     extra: {
       apiKey: process.env.API_KEY,
       authDomain: process.env.AUTH_DOMAIN,

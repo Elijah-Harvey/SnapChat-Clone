@@ -228,7 +228,7 @@ const RouteProfileScreen = ({ navigation, route }) => {
           </View>
           <View style={{ alignItems: 'center' }}>
             <Text style={{ fontSize: 20 }}>
-              {user?.name ? user?.name : user?.email}
+              {user?.name ? user.name : user?.email}
             </Text>
           </View>
           <View
@@ -341,7 +341,7 @@ const RouteProfileScreen = ({ navigation, route }) => {
             }}
             onLongPress={sendMessage}
             onPress={() =>
-              navigation.goBack({
+              navigation.navigate('Chat',{
                 name: route.params.name,
                 image: 'https://picsum.photos/200/300',
                 number: route.params.Number,

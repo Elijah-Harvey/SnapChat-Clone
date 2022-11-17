@@ -66,12 +66,7 @@ const ProfileScreen = ({ navigation }) => {
     wait(200).then(() => setRefreshing(false));
   }, []);
 
-  // const handleSignOut = () => {
-  //   auth
-  //     .signOut()
-  //     .then(() => navigation.replace('LogIn'))
-  //     .catch((error) => error.message);
-  // };
+ 
 
   return (
     <SafeAreaView style={styles.container}>

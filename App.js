@@ -18,7 +18,7 @@ export default function App() {
   return (
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Feed" component={AppNavigator} />
+        <Stack.Screen name="Feed" component={Birthday} />
       </Stack.Navigator>
     </NavigationContainer>
   );

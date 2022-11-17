@@ -9,18 +9,18 @@ import {
 } from 'react-native';
 import Header from '../components/Header';
 import MapView, { Marker } from 'react-native-maps';
-import { db, usersCollection } from '../firebase';
+import { auth, db, usersCollection } from '../firebase';
 import Lottie from 'lottie-react-native';
 
 const MapScreen = ({ navigation }) => {
   const [users, setUsers] = useState([]);
 
-  const generateColor = () => {
-    const randomColor = Math.floor(Math.random() * 16777215)
-      .toString(16)
-      .padStart(6, '0');
-    return `#${randomColor}`;
-  };
+  // const generateColor = () => {
+  //   const randomColor = Math.floor(Math.random() * 16777215)
+  //     .toString(16)
+  //     .padStart(6, '0');
+  //   return `#${randomColor}`;
+  // };
 
   useEffect(() => {
     const subscriber = usersCollection.onSnapshot((querySnapshot) => {
@@ -60,9 +60,7 @@ const MapScreen = ({ navigation }) => {
       >
         {users.map((e, i) => (
           <Marker
-            title={`${e.name === undefined ? e.Email : e.name}'s 
-            location Seen 
-            at ${e.address.region}`}
+            title={`${e.name === `@${auth.currentUser.displayName}` ? 'Me' : `${e.name}'s`} ${e.name === `@${auth.currentUser.displayName}` ? `` : `Located in ${e.address.region}`}`}
             key={i}
             coordinate={{
               latitude:

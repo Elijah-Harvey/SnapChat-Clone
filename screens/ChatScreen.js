@@ -278,11 +278,11 @@ const ChatScreen = ({ navigation, route, map }) => {
               test={message.message}
               Msg={message.message}
               MsgNumber={route.params.number}
-              onPress={() => setMId(message.id)}
+              onPress={() => setMId(message.mapId)}
               onDelete={() =>
                 Alert.alert(
-                  'Alert Title',
-                  'alertMessage',
+                  'Delete',
+                  'Would you like to delete this message',
                   [
                     {
                       text: 'Cancel',
@@ -296,7 +296,7 @@ const ChatScreen = ({ navigation, route, map }) => {
             />
           ) : (
             <CustomMapView
-              key={message.id}
+              key={message.mapId}
               lat={message.lat}
               long={message.long}
               region={message.region}

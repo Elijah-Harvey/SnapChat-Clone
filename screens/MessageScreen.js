@@ -13,7 +13,7 @@ import RandomStreak from '../components/RandomStreak';
 
 const MessageScreen = ({ navigation }) => {
   const [users, setUsers] = useState([]);
-  const roomId = uuid.v4();
+  const roomId = uuid();
 
   useEffect(() => {
     const subscriber = FriendCollection.doc(auth.currentUser.uid)

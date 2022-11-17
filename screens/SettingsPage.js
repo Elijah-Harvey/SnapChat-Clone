@@ -5,14 +5,18 @@ import {
   Text,
   TouchableOpacity,
   SafeAreaView,
+  Alert,
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import SettingsView from '../components/SettingsView';
+import { auth } from '../firebase';
 
 const SettingsPage = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 15 }}>
+      <View
+        style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 15 }}
+      >
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={{ left: '5%', alignItems: 'flex-start' }}
@@ -67,7 +71,32 @@ const SettingsPage = ({ navigation }) => {
       <SettingsView text="Customize Emojis" />
       <SettingsView text="Ads" />
       <SettingsView text="Data Server" />
-      <SettingsView text="Scan" />
+      <SettingsView
+        text="Scan"
+        onPress={() =>
+          Alert.alert(
+            'Sign Out?',
+            'Would you like to sign out?',
+            [
+              {
+                text: 'Cancel',
+                onPress: () => alert('Canceled'),
+                style: 'cancel',
+              },
+              {
+                text: 'Yes',
+                style: 'defualt',
+                onPress: () =>
+                  auth
+                    .signOut()
+                    .then(() => navigation.replace('LogIn'))
+                    .catch((error) => error.message),
+              },
+            ],
+            { cancelable: false }
+          )
+        }
+      />
       <View
         style={{
           backgroundColor: '#eaeaea',
@@ -87,7 +116,7 @@ const SettingsPage = ({ navigation }) => {
           Support
         </Text>
       </View>
-      <SettingsView text="Contact Us"/>
+      <SettingsView text="Contact Us" />
     </SafeAreaView>
   );
 };
