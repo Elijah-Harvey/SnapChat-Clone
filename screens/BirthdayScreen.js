@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
   iosPicker: {
     right: '10%',
     width: '50%',
-    position: 'absolute',
+    position: 'absolute',height: '10%'
   },
 });
 

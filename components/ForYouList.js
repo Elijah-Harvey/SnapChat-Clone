@@ -81,7 +81,7 @@ const ForYouList =  (props) => {
         data={DUMMY_DATA}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <ForYou image={item.image} title={item.title} time={item.time} />
+          <ForYou image={item.image} title={item.title} time={item.time} key={item.id}/>
         )}
       />
     </View>

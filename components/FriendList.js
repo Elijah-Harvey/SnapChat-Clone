@@ -9,7 +9,8 @@ const FriendList = ({ navigation, nav }) => {
   const roomId = uuid();
 
   useEffect(() => {
-    const subscriber = FriendCollection.doc(auth.currentUser.uid).collection('Friends')
+    const subscriber = FriendCollection.doc(auth.currentUser.uid)
+      .collection('Friends')
       .onSnapshot((querySnapshot) => {
         const users = [];
 
@@ -36,6 +37,7 @@ const FriendList = ({ navigation, nav }) => {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <Friends
+            key={item.id}
             image={item.Profile_Picture}
             name={item.name}
             nav={nav}

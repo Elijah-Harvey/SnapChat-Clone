@@ -181,7 +181,10 @@ const RouteProfileScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.containers} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.containers}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={{ paddingTop: 16, paddingBottom: 16, flex: 1 }}>
           <TouchableOpacity
             onPress={() =>
@@ -276,16 +279,20 @@ const RouteProfileScreen = ({ navigation, route }) => {
               scrollEnabled={false}
               style={{ height: '100%', width: '100%' }}
               region={{
-                longitude: location ? location.longitude : 0,
-                latitude: location ? location.latitude : 0,
+                longitude: user.location.longitude
+                  ? user.location.longitude
+                  : 0,
+                latitude: user.location.latitude ? user.location.latitude : 0,
                 latitudeDelta: 0.05,
                 longitudeDelta: 0.06,
               }}
             >
               <Marker
                 coordinate={{
-                  longitude: location ? location.longitude : 0,
-                  latitude: location ? location.latitude : 0,
+                  longitude: user.location.longitude
+                    ? user.location.longitude
+                    : 0,
+                  latitude: user.location.latitude ? user.location.latitude : 0,
                 }}
               >
                 <Image
@@ -311,7 +318,7 @@ const RouteProfileScreen = ({ navigation, route }) => {
           >
             <Text
               style={{ left: '3%', fontWeight: '600', top: '10%' }}
-            >{`${route.params.name} is in ${address?.['city']}`}</Text>
+            >{`${route.params.name} is located in ${user.address.city}`}</Text>
             <Text
               style={{
                 left: '3%',
@@ -341,7 +348,7 @@ const RouteProfileScreen = ({ navigation, route }) => {
             }}
             onLongPress={sendMessage}
             onPress={() =>
-              navigation.navigate('Chat',{
+              navigation.navigate('Chat', {
                 name: route.params.name,
                 image: 'https://picsum.photos/200/300',
                 number: route.params.Number,
@@ -351,7 +358,7 @@ const RouteProfileScreen = ({ navigation, route }) => {
                 long: route.params.long,
                 lat: route.params.lat,
                 user: otherU.UID,
-                mapId: mapId
+                mapId: mapId,
               })
             }
           >
@@ -378,11 +385,11 @@ const RouteProfileScreen = ({ navigation, route }) => {
               Send My Location
             </Text>
           </TouchableOpacity>
-              <View style={{ left: '5%', marginTop: 20, marginBottom: 20}}>
-                <Text style={{ fontSize: 18, fontWeight: '600' }}>
-                  Saved in Chat
-                </Text>
-              </View>
+          <View style={{ left: '5%', marginTop: 20, marginBottom: 20 }}>
+            <Text style={{ fontSize: 18, fontWeight: '600' }}>
+              Saved in Chat
+            </Text>
+          </View>
           <View
             style={{
               height: '100%',
@@ -410,7 +417,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fafafa',
     height: '100%',
-    
   },
   containers: {
     flex: 1,

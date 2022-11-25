@@ -7,9 +7,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { navigationRef } from './navigation/rootNavigation';
 import AppNavigator from './navigation/AppNavigator';
-import Birthday from './screens/BirthdayScreen';
-import UsernameScreen from './screens/UsernameScreen';
-import NumberScreen from './screens/NumberScreen';
+// import Birthday from './screens/BirthdayScreen';
+// import UsernameScreen from './screens/UsernameScreen';
+// import NumberScreen from './screens/NumberScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -18,7 +18,7 @@ export default function App() {
   return (
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Feed" component={Birthday} />
+        <Stack.Screen name="Feed" component={AppNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
   );

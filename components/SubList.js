@@ -37,6 +37,7 @@ const FriendList = (props) => {
             image={item.pic}
             // subTitle={item.subTitle}
             // time={item.time}
+            key={item.id}
           />
         )}
       />

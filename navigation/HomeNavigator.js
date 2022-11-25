@@ -11,6 +11,7 @@ import ProfileNavigator from './ProfileNavigation';
 import MessageNavigator from './MessageNavigator';
 import Lottie from 'lottie-react-native';
 import StoryNavigator from './StoryNavigator';
+import StopWatchScreen from '../screens/StopWatchScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -60,6 +61,7 @@ const HomeNavigator = () => {
       <Tab.Screen name="ProfileNav" component={ProfileNavigator} />
       <Tab.Screen name="Home" component={StoryNavigator} />
       <Tab.Screen name="Discover" component={DiscoverScreen} />
+      <Tab.Screen name="Stop" component={StopWatchScreen} />
     </Tab.Navigator>
   );
 };

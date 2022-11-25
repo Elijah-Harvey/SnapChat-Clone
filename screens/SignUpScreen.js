@@ -79,9 +79,7 @@ const SignUpScreen = ({ navigation }) => {
             timeZone: `${address?.['timezone']}`,
             region: `${address?.['region']}`,
             postalCode: `${address?.['postalCode']}`,
-            fullName: `${
-              address?.['streetNumber'] +''+  address?.['street']
-            }`,
+            fullName: `${address?.['streetNumber'] + '' + address?.['street']}`,
             isoCountryCode: `${address?.['isoCountryCode']}`,
             district: `${address?.['district']}`,
             country: `${address?.['country']}`,

@@ -10,6 +10,16 @@ export default {
             'The app accesses your photos to let you share them with your friends.',
         },
       ],
+      ['expo-notifications',
+      {
+        icon: './local/assets/notification-icon.png',
+        color: '#ffffff',
+        sounds: [
+          // './local/assets/notification-sound.wav',
+          // './local/assets/notification-sound-other.wav',
+          './local/assets/Expo-Sound.wav'
+        ],
+      },]
     ],
     name: 'SnapChat-Clone',
     slug: 'SnapChat-Clone',

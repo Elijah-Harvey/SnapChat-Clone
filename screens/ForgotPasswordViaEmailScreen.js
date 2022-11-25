@@ -12,10 +12,10 @@ import TouchableButton from '../components/TouchableButton';
 import { auth } from '../firebase';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-const ForgotPasswordViaEmailScreen = ({ navigation}) => {
+const ForgotPasswordViaEmailScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [disable, setDisable] = useState(false);
-  const [seconds, setSeconds] = useState(60);
+  const [seconds, setSeconds] = useState(30);
 
   const forgotPassword = () => {
     if (email === '') {
@@ -29,7 +29,7 @@ const ForgotPasswordViaEmailScreen = ({ navigation}) => {
 
   Check your trash
        `
-          )
+          ); 
         })
         .catch((error) => {
           if (error.code === 'auth/invalid-email') {
@@ -48,7 +48,7 @@ const ForgotPasswordViaEmailScreen = ({ navigation}) => {
       if (seconds === 0) {
         setDisable(false);
       }
-      if (seconds === 60) {
+      if (seconds === 30) {
         setEmail('');
       }
     }, 1000);
@@ -59,12 +59,12 @@ const ForgotPasswordViaEmailScreen = ({ navigation}) => {
 
   return (
     <View style={styles.container}>
-        <TouchableOpacity
-          style={{position: 'absolute', top: '5%', left: '3%' }}
-          onPress={() => navigation.goBack()}
-        >
-          <Ionicons name="chevron-back-outline" size={30} />
-        </TouchableOpacity>
+      <TouchableOpacity
+        style={{ position: 'absolute', top: '5%', left: '3%' }}
+        onPress={() => navigation.goBack()}
+      >
+        <Ionicons name="chevron-back-outline" size={30} />
+      </TouchableOpacity>
       <View>
         <Text style={{ fontSize: 30, bottom: 30, alignSelf: 'center' }}>
           Enter Your Email
@@ -83,7 +83,7 @@ const ForgotPasswordViaEmailScreen = ({ navigation}) => {
         <TouchableOpacity
           onPress={forgotPassword}
           onPressOut={() => setDisable(true)}
-          onPressIn={() => setSeconds(60)}
+          onPressIn={() => setSeconds(30)}
           style={{
             marginBottom: 90,
             backgroundColor: disable === false ? '#4FAAF9' : 'lightgray',

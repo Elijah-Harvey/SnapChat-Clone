@@ -60,7 +60,15 @@ const MapScreen = ({ navigation }) => {
       >
         {users.map((e, i) => (
           <Marker
-            title={`${e.name === `@${auth.currentUser.displayName}` ? 'Me' : `${e.name}'s`} ${e.name === `@${auth.currentUser.displayName}` ? `` : `Located in ${e.address.region}`}`}
+            title={`${
+              e.name === `@${auth.currentUser.displayName}`
+                ? 'Me'
+                : `${e.name}'s`
+            } ${
+              e.name === `@${auth.currentUser.displayName}`
+                ? ``
+                : `Located in ${e.address.region}`
+            }`}
             key={i}
             coordinate={{
               latitude:
