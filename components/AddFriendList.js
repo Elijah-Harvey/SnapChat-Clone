@@ -98,7 +98,7 @@ const AddFriendList = (props) => {
             color: 'gray',
           }}
         >
-          All Contacts >
+          All Contacts {'>'}
         </Text>
       </View>
 

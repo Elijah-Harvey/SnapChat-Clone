@@ -11,6 +11,8 @@ function ControlPanel({
   isRunning,
   handleLeftButtonPress,
   handleRightButtonPress,
+  handleGoBack,
+  handleCheckPoint,
 }) {
   return (
     <View style={styles.container}>
@@ -23,7 +25,7 @@ function ControlPanel({
           alignItems: 'center',
         }}
       >
-         <TouchableOpacity
+        <TouchableOpacity
           style={{
             backgroundColor: 'transparent',
             width: 70,
@@ -32,10 +34,11 @@ function ControlPanel({
             justifyContent: 'center',
             borderRadius: 70,
             borderWidth: 1,
-            borderColor: 'white'
+            borderColor: 'white',
           }}
         >
-          <TouchableOpacity onPress={handleLeftButtonPress}
+          <TouchableOpacity
+            onPress={handleLeftButtonPress}
             style={{
               backgroundColor: 'lightgreen',
               width: 60,
@@ -57,10 +60,11 @@ function ControlPanel({
             justifyContent: 'center',
             borderRadius: 70,
             borderWidth: 1,
-            borderColor: 'white'
+            borderColor: 'white',
           }}
         >
-          <TouchableOpacity onPress={handleRightButtonPress}
+          <TouchableOpacity
+            onPress={handleRightButtonPress}
             style={{
               backgroundColor: 'lightgreen',
               width: 60,
@@ -73,6 +77,69 @@ function ControlPanel({
             <Text>{isRunning ? 'Stop' : 'Start'}</Text>
           </TouchableOpacity>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            backgroundColor: 'transparent',
+            width: 70,
+            height: 70,
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: 70,
+            borderWidth: 1,
+            borderColor: 'white',
+          }}
+        >
+          <TouchableOpacity
+            onPress={handleGoBack}
+            style={{
+              backgroundColor: 'lightgreen',
+              width: 60,
+              height: 60,
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: 60,
+            }}
+          >
+            <Text>{'GoBack'}</Text>
+          </TouchableOpacity>
+        </TouchableOpacity>
+      </View>
+      <View
+        style={{
+          top: 30,
+          width: '95%',
+          borderRadius: 40,
+          overflow: 'hidden',
+          borderWidth: 1,
+          borderColor: 'white',
+          alignItems: 'center',
+        }}
+      >
+        <TouchableOpacity
+          style={{
+            backgroundColor: 'transparent',
+            width: '97%',
+            height: 70,
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderColor: 'white',
+          }}
+        >
+          <TouchableOpacity
+            onPress={handleCheckPoint}
+            style={{
+              backgroundColor: 'lightgreen',
+              width: '100%',
+              height: 60,
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: 60,
+              borderWidth: StyleSheet.hairlineWidth
+            }}
+          >
+            <Text>{'CheckPoint'}</Text>
+          </TouchableOpacity>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -80,11 +147,14 @@ function ControlPanel({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
+    // flex: 1,
+    backgroundColor: 'black',
     alignItems: 'center',
-    justifyContent: 'center',
-    bottom: 10,
+    // justifyContent: 'center',
+    // bottom: 10,
+    borderWidth: 1,
+    borderColor: 'white',
+    height: 200,
   },
 });
 
