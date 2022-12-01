@@ -26,7 +26,7 @@ During the period of this project we created a clone of Snapchat with the follow
 *   Geolocation
 
 \## 👤 Contact us  
-\[Contact-Us\](https://moreality.dev/contact-us/ "https://moreality.dev/contact-us/")
+\[test\](https://moreality.dev/contact-us/ "https://moreality.dev/contact-us/")
 
 ## ℹ️ Getting Started
 
