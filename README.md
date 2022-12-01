@@ -1,8 +1,5 @@
 SnapChat Clone
 
-  
- 
-
 ## Table Contents
 
 *   [About The Project](https://github.com/Elijah-Harvey/SnapChat-Clone/edit/main/README.md/about-project)
@@ -26,12 +23,10 @@ During the period of this project we created a clone of Snapchat with the follow
 *   Messaging 
 *   Getting friends location
 *   Authentication
-*   Geolocation   
-      
-     
+*   Geolocation
 
 \## 👤 Contact us  
-\[Contact-Us\](https://moreality.dev/contact-us/ "test" )
+\[Contact-Us\](https://moreality.dev/contact-us/ "https://moreality.dev/contact-us/")
 
 ## ℹ️ Getting Started
 
