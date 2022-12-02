@@ -1,25 +1,20 @@
 ## Table Contents
 
 *   [About The Project](https://github.com/Elijah-Harvey/SnapChat-Clone/edit/main/README.md/about-project)
-*   [Getting Started](https://github.com/Moreality/MeSquared/edit/main/README.md#%E2%84%B9%EF%B8%8F-getting-started)
+*   [Getting Started](https://github.com/Elijah-Harvey/SnapChat-Clone/edit/main/README.md/Getting-Started)
+*   [Main Packages](https://github.com/Elijah-Harvey/SnapChat-Clone/edit/main/README.md/main-packages)
 
 ## ℹ️  About The Project
 
-During the period of this project we created a clone of Snapchat with the following features:
+During the period for this project I created a clone of Snapchat with the following features:
 
-*   Taking and saving pictures to the database which can be used for stories 
+*   Taking and saving pictures to the database
 *   Sending location
 *   Messaging 
 *   Getting friends location
 *   Authentication
 *   Geolocation
-*   Friends 
-
-\<div align="center">
-
-\<img name="Screen" src="https://picsum.photos/200/300" width="300"  height="600" />
-
-\</div>
+*   Friends
 
 ## ℹ️  Getting Started
 
@@ -31,4 +26,12 @@ During the period of this project we created a clone of Snapchat with the follow
 
 Clone repo then run yarn and start expo
 
-## ℹ️  Getting Started
+## ℹ️  Main Packages
+
+*   Expo Location
+*   Firebase Authentication 
+*   Firebase Storage
+*   Firebase Firestore
+*   React Native Navigation 
+
+## ℹ️  Main Packages
