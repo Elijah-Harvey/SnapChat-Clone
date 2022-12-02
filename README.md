@@ -1,8 +1,8 @@
 ## Table Contents
 
-*   [About The Project](https://github.com/Elijah-Harvey/SnapChat-Clone/edit/main/README.md/about-project)
-*   [Getting Started](https://github.com/Elijah-Harvey/SnapChat-Clone/edit/main/README.md/Getting-Started)
-*   [Main Packages](https://github.com/Elijah-Harvey/SnapChat-Clone/edit/main/README.md/main-packages)
+*   [About The Project](https://github.com/Elijah-Harvey/SnapChat-Clone/blob/main/README.md#%E2%84%B9%EF%B8%8F-about-the-project)
+*   [Getting Started](https://github.com/Elijah-Harvey/SnapChat-Clone#%E2%84%B9%EF%B8%8F-getting-started)
+*   [Main Packages](https://github.com/Elijah-Harvey/SnapChat-Clone#%E2%84%B9%EF%B8%8F-main-packages)
 
 ## ℹ️  About The Project
 
@@ -32,6 +32,4 @@ Clone repo then run yarn and start expo
 *   Firebase Authentication 
 *   Firebase Storage
 *   Firebase Firestore
-*   React Native Navigation 
-
-## ℹ️  Main Packages
+*   React Native Navigation
