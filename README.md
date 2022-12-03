@@ -1,3 +1,5 @@
+![](https://user-images.githubusercontent.com/89748790/205443637-62bc0650-ce8a-4636-b14c-785befecb4a5.jpeg)
+
 ## Table Contents
 
 *   [About The Project](https://github.com/Elijah-Harvey/SnapChat-Clone/blob/main/README.md#%E2%84%B9%EF%B8%8F-about-the-project)
@@ -50,10 +52,14 @@ Clone repo then run yarn and start expo
 
 ### Main Screens
 <div align="center">
+<img name="Map" src="https://user-images.githubusercontent.com/89748790/205442854-ac68edb2-ac27-45b6-ab61-7a8acd06ac0a.png" width="100"  height="200" />
+
+<img name="Home" src="https://user-images.githubusercontent.com/89748790/205443962-e1188fe5-41dc-4ae9-985b-da1ba9a98f2f.png" width="100"  height="200" />
+  
 <img name="Home" src="https://user-images.githubusercontent.com/89748790/205442850-a20dc911-d1a5-4414-bd0c-7dbaad40035a.png" width="100"  height="200" />
 
+<img name="Stories" src="https://user-images.githubusercontent.com/89748790/205443707-0e3de5bd-25ec-4326-bb5b-39a284ca953c.jpeg" width="100"  height="200" />
 <img name="Discover" src="https://user-images.githubusercontent.com/89748790/205442849-ad6f5f13-706c-4740-8db2-c7f49c07fb90.png" width="100"  height="200" />
 
-<img name="Map" src="https://user-images.githubusercontent.com/89748790/205442854-ac68edb2-ac27-45b6-ab61-7a8acd06ac0a.png" width="100"  height="200" />
   
 </div>
