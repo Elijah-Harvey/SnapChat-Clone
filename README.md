@@ -1,10 +1,15 @@
 ## Table Contents
 
-*   [About The Project](https://github.com/Elijah-Harvey/SnapChat-Clone/blob/main/README.md#%E2%84%B9%EF%B8%8F-about-the-project)
-*   [Getting Started](https://github.com/Elijah-Harvey/SnapChat-Clone#%E2%84%B9%EF%B8%8F-getting-started)
-*   [Main Packages](https://github.com/Elijah-Harvey/SnapChat-Clone#%E2%84%B9%EF%B8%8F-main-packages)
+1. [About The Project](https://github.com/Elijah-Harvey/SnapChat-Clone#%E2%84%B9%EF%B8%8F-features)
+2. [Getting Started](https://github.com/Elijah-Harvey/SnapChat-Clone#%E2%84%B9%EF%B8%8F-getting-started)
+3. [Main Packages](https://github.com/Elijah-Harvey/SnapChat-Clone#%E2%84%B9%EF%B8%8F-main-packages)
+4. [Pictures](https://github.com/Elijah-Harvey/SnapChat-Clone#%E2%84%B9%EF%B8%8F-pictures)
+   - [Signup Process](https://github.com/Elijah-Harvey/SnapChat-Clone#signup)  
+   - [Main Screens](https://github.com/Elijah-Harvey/SnapChat-Clone#main-screens)
+   - [Login Process](https://github.com/Elijah-Harvey/SnapChat-Clone#login)
 
-## ℹ️  About The Project
+
+## ℹ️  Features
 
 During the period of this project I created a clone of Snapchat with the following features:
 
@@ -18,7 +23,7 @@ During the period of this project I created a clone of Snapchat with the followi
 
 ## ℹ️  Getting Started
 
-### Prerequisites
+##### Prerequisites
 
 *   React Native
 *   Expo
