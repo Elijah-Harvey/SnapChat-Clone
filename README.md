@@ -7,7 +7,7 @@
    - [Signup Process](https://github.com/Elijah-Harvey/SnapChat-Clone#signup)  
    - [Main Screens](https://github.com/Elijah-Harvey/SnapChat-Clone#main-screens)
    - [Login Process](https://github.com/Elijah-Harvey/SnapChat-Clone#login)
-5. [License](https://github.com/Elijah-Harvey/SnapChat-Clone#%E2%84%B9%EF%B8%8F-License)
+5. [License](https://github.com/Elijah-Harvey/SnapChat-Clone#license)
 
 
 ## ℹ️  Features
