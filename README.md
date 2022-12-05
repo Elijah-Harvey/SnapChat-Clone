@@ -1,12 +1,13 @@
 ## Table Contents
 
-1. [About The Project](https://github.com/Elijah-Harvey/SnapChat-Clone#%E2%84%B9%EF%B8%8F-features)
+1. [Features](https://github.com/Elijah-Harvey/SnapChat-Clone#%E2%84%B9%EF%B8%8F-features)
 2. [Getting Started](https://github.com/Elijah-Harvey/SnapChat-Clone#%E2%84%B9%EF%B8%8F-getting-started)
 3. [Main Packages](https://github.com/Elijah-Harvey/SnapChat-Clone#%E2%84%B9%EF%B8%8F-main-packages)
 4. [Pictures](https://github.com/Elijah-Harvey/SnapChat-Clone#%E2%84%B9%EF%B8%8F-pictures)
    - [Signup Process](https://github.com/Elijah-Harvey/SnapChat-Clone#signup)  
    - [Main Screens](https://github.com/Elijah-Harvey/SnapChat-Clone#main-screens)
    - [Login Process](https://github.com/Elijah-Harvey/SnapChat-Clone#login)
+5. [License](https://github.com/Elijah-Harvey/SnapChat-Clone#%E2%84%B9%EF%B8%8F-License)
 
 
 ## ℹ️  Features
@@ -70,3 +71,15 @@ Clone repo then run yarn and start expo
 <div align="center">
 <img name="Login" src="https://user-images.githubusercontent.com/89748790/205598307-bf1c7265-58fe-41c0-8be7-74c1a1f9f510.png" width="100"  height="200" />
 </div>
+
+
+## License
+MIT License
+
+Copyright (c) 2022 Elijah Harvey
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
