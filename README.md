@@ -1,5 +1,3 @@
-![](https://user-images.githubusercontent.com/89748790/205443637-62bc0650-ce8a-4636-b14c-785befecb4a5.jpeg)
-
 ## Table Contents
 
 *   [About The Project](https://github.com/Elijah-Harvey/SnapChat-Clone/blob/main/README.md#%E2%84%B9%EF%B8%8F-about-the-project)
@@ -8,15 +6,15 @@
 
 ## ℹ️  About The Project
 
-During the period for this project I created a clone of Snapchat with the following features:
+During the period of this project I created a clone of Snapchat with the following features:
 
-*   Taking and saving pictures to the database
+*   Taking & saving pictures
 *   Sending location
 *   Messaging 
-*   Getting friends location
+*   Friends location
 *   Authentication
 *   Geolocation
-*   Friends
+*   Friending
 
 ## ℹ️  Getting Started
 
@@ -60,6 +58,10 @@ Clone repo then run yarn and start expo
 
 <img name="Stories" src="https://user-images.githubusercontent.com/89748790/205443707-0e3de5bd-25ec-4326-bb5b-39a284ca953c.jpeg" width="100"  height="200" />
 <img name="Discover" src="https://user-images.githubusercontent.com/89748790/205442849-ad6f5f13-706c-4740-8db2-c7f49c07fb90.png" width="100"  height="200" />
+</div>
 
-  
+### Login
+
+<div align="center">
+<img name="Login" src="https://user-images.githubusercontent.com/89748790/205598307-bf1c7265-58fe-41c0-8be7-74c1a1f9f510.png" width="100"  height="200" />
 </div>
