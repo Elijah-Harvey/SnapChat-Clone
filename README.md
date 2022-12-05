@@ -21,7 +21,7 @@
 *   Geolocation
 *   Friending
 
-## ℹ️  Up Coming Functionality
+## ℹ️  UpComing Features
 - Stories
 - Filters
 - Open / Deliver Notice
