@@ -1,13 +1,14 @@
 ## Table Contents
 
 1. [Features](https://github.com/Elijah-Harvey/SnapChat-Clone#%E2%84%B9%EF%B8%8F-features)
-2. [Getting Started](https://github.com/Elijah-Harvey/SnapChat-Clone#%E2%84%B9%EF%B8%8F-getting-started)
-3. [Main Packages](https://github.com/Elijah-Harvey/SnapChat-Clone#%E2%84%B9%EF%B8%8F-main-packages)
-4. [Pictures](https://github.com/Elijah-Harvey/SnapChat-Clone#%E2%84%B9%EF%B8%8F-pictures)
+2. [Upcoming Features](https://github.com/Elijah-Harvey/SnapChat-Clone#%E2%84%B9%EF%B8%8F-upcoming-features)
+3. [Getting Started](https://github.com/Elijah-Harvey/SnapChat-Clone#%E2%84%B9%EF%B8%8F-getting-started)
+4. [Main Packages](https://github.com/Elijah-Harvey/SnapChat-Clone#%E2%84%B9%EF%B8%8F-main-packages)
+5. [Pictures](https://github.com/Elijah-Harvey/SnapChat-Clone#%E2%84%B9%EF%B8%8F-pictures)
    - [Signup Process](https://github.com/Elijah-Harvey/SnapChat-Clone#signup)  
    - [Main Screens](https://github.com/Elijah-Harvey/SnapChat-Clone#main-screens)
    - [Login Process](https://github.com/Elijah-Harvey/SnapChat-Clone#login)
-5. [License](https://github.com/Elijah-Harvey/SnapChat-Clone#license)
+6. [License](https://github.com/Elijah-Harvey/SnapChat-Clone#license)
 
 
 ## ℹ️  Features
@@ -19,6 +20,15 @@
 *   Authentication
 *   Geolocation
 *   Friending
+
+## ℹ️  Up Coming Functionality
+- Stories
+- Filters
+- Open / Deliver Notice
+- Opened / Delivered notice
+- Profile Customization
+- Discover swapped for Spotlight
+- and more...
 
 ## ℹ️  Getting Started
 
