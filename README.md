@@ -12,8 +12,6 @@
 
 ## ℹ️  Features
 
-During the period of this project I created a clone of Snapchat with the following features:
-
 *   Taking & saving pictures
 *   Sending location
 *   Messaging 
@@ -41,7 +39,6 @@ Clone repo then run yarn and start expo
 *   React Native Navigation
 
 ## ℹ️  Pictures
-
 
 ### Signup
 <div align="center">
