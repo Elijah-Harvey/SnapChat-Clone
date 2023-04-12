@@ -374,7 +374,6 @@ class IndeedJobSpider(scrapy.Spider):
 
 
 
-
 import re
 import json
 import scrapy
@@ -439,7 +438,7 @@ class IndeedJobSpider(scrapy.Spider):
         if script_tag is not None:
             json_blob = json.loads(script_tag[0])
             job = json_blob["jobInfoWrapperModel"]["jobInfoModel"]
-            yield {
+            output = {
                 'keyword': keyword,
                 'location': location,
                 'page': page,
@@ -449,4 +448,17 @@ class IndeedJobSpider(scrapy.Spider):
                 'jobTitle': job.get('jobTitle'),
                 'jobDescription': job.get('sanitizedJobDescription').get('content') if job.get('sanitizedJobDescription') is not None else '',
             }
-    
+    def closed(self, reason):
+        print(f"\n\nFinished spider with reason: {reason}\n\n")
+        self.save_json_file()
+        
+    def save_json_file(self):
+        jobs = []
+        for file_name in os.listdir(self.output_folder):
+            with open(os.path.join(self.output_folder, file_name), "r", encoding="utf-8") as f:
+                jobs += json.load(f)
+        
+        output_file = os.path.join(self.output_folder, f"{self.name}.json")
+        with open(output_file, "w", encoding="utf-8") as f:
+            json.dump(jobs, f, indent=4)
+
