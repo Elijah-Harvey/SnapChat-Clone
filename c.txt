@@ -252,3 +252,6 @@ def extract_link_cwjobs(job_elem):
     return link
 
 def extract_date_cwjobs(job_elem):
+    link_elem = job_elem.find('li', class_='date-posted')
+    link = link_elem.text.strip()
+    return link
