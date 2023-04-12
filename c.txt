@@ -268,3 +268,9 @@ def extract_date_cwjobs(job_elem):
     'Accept-Encoding': 'gzip, deflate, br',
     'Referer': 'https://www.google.com/'
 }
+
+
+div_elems = soup.find_all('div')
+for div in div_elems:
+    if 'data-tn-component' in div.attrs and 'jobsearch-SerpJobCard' in div.attrs['class']:
+        print(div)
