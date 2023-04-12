@@ -274,3 +274,12 @@ div_elems = soup.find_all('div')
 for div in div_elems:
     if 'data-tn-component' in div.attrs and 'jobsearch-SerpJobCard' in div.attrs['class']:
         print(div)
+
+
+def parse_search_page(html: str):
+    data = re.findall(r'window.mosaic.providerData\["mosaic-provider-jobcards"\]=(\{.+?\});', html)
+    data = json.loads(data[0])
+    return {
+        "results": data["metaData"]["mosaicProviderJobCardsModel"]["results"],
+        "meta": data["metaData"]["mosaicProviderJobCardsModel"]["tierSummaries"],
+    }
